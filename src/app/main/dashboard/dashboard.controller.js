@@ -12,8 +12,12 @@
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
-
+    vm.role_label = [];
     vm.currentUser = $cookieStore.get('currentUser');
+    
+    angular.forEach(ROLE, function(r, k) {
+      vm.role_label[r] = k;
+    });
 
     // Data
     vm.dtOptions = {

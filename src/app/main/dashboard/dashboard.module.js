@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.dashboard', [])
+    .module('app.dashboard', ['datatables'])
     .config(config);
 
   /** @ngInject */
