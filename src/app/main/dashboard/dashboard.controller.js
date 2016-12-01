@@ -14,7 +14,7 @@
     vm.users = [];
     vm.role_label = [];
     vm.currentUser = $cookieStore.get('currentUser');
-    
+
     angular.forEach(ROLE, function(r, k) {
       vm.role_label[r] = k;
     });
@@ -42,6 +42,14 @@
       }).error(function(error) {
         console.log('login error : ', error);
       });
+    }
+
+    vm.edit = function(key) {
+      alert('edit : ' + key);
+    }
+
+    vm.delete = function(key) {
+      alert('delete : ' + key);
     }
 
     // Methods

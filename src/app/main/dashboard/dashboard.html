@@ -12,6 +12,12 @@
     <div class="content">
       <div class="white-bg md-whiteframe-4dp">
         <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
+        	<colgroup>
+        		<col width="35%">
+        		<col width="35%">
+        		<col width="15%">
+        		<col width="15%">
+        	</colgroup>
           <thead>
             <tr>
               <th class="secondary-text">
@@ -29,13 +35,18 @@
                   <span class="column-title">role</span>
                 </div>
               </th>
+              <th class="secondary-text"></th>
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="user in vm.users">
+            <tr ng-repeat="(key, user) in vm.users">
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
               <td>{{ vm.role_label[user.role] }}</td>
+              <td>
+              	<button ng-click="vm.edit(key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
+              	<button ng-click="vm.delete(key);"><i class="icon s24 icon-close" style="color:red"></i></button>
+              </td>
             </tr>
           </tbody>
         </table>
