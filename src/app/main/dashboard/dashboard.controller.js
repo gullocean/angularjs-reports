@@ -1,21 +1,23 @@
-(function ()
-{
-    'use strict';
+(function() {
+  'use strict';
 
-    angular
-        .module('app.dashboard')
-        .controller('DashboardController', DashboardController);
+  angular
+    .module('app.dashboard')
+    .controller('DashboardController', DashboardController);
 
-    /** @ngInject */
-    function DashboardController(DashboardData)
-    {
-        var vm = this;
+  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE'];
 
-        // Data
-        vm.helloText = DashboardData.data.helloText;
+  /** @ngInject */
+  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE) {
+    var vm = this;
 
-        // Methods
+    // Data
+    vm.helloText = DashboardData.data.helloText;
 
-        //////////
-    }
+    vm.currentUser = $cookieStore.get('currentUser');
+
+    // Methods
+
+    //////////
+  }
 })();

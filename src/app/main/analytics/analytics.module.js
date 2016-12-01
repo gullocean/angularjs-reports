@@ -33,7 +33,7 @@
     // Navigation
     msNavigationServiceProvider.saveItem('fuse.analytics', {
       title: 'Analytics',
-      icon: 'icon-tile-four',
+      icon: 'icon-poll',
       state: 'app.analytics',
       /*stateParams: {
           'param1': 'page'

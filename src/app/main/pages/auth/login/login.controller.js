@@ -5,10 +5,10 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$scope', '$state', '$http'];
+  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE'];
 
   /** @ngInject */
-  function LoginController($scope, $state, $http) {
+  function LoginController($scope, $state, $http, $cookieStore, ROLE) {
     var vm = this;
 
     $scope.login = function() {
@@ -18,14 +18,17 @@
       };
       $http({
         method: 'POST',
-        url: 'http://jdpower.trafficdev.net/api/index.php/users/auth',
+        url: 'http://reports.trafficdev.net/api/index.php/users/auth',
         data: $.param(data),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).success(function(response) {
         console.log('login response : ', response);
-        if (response.code == 0) $state.go('app.dashboard');
+        if (response.code == 0) {
+          $cookieStore.put('currentUser', response.data);
+          $state.go('app.dashboard');
+        }
         else $state.go('app.pages_auth_login');
       }).error(function(error) {
         console.log('login error : ', error);
