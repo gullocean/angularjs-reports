@@ -79,7 +79,10 @@
       // Select the first status as a default
       vm.userStatus = vm.userStatusOptions[0];
 
-      vm.userName = $cookieStore.get('currentUser').username;
+      vm.currentUser = $cookieStore.get('currentUser');
+      if (angular.isUndefined(vm.currentUser) || vm.currentUser === null) {
+        logout();
+      }
 
       // Get the selected language directly from angular-translate module setting
       vm.selectedLanguage = vm.languages[$translate.preferredLanguage()];
@@ -107,7 +110,7 @@
      * Logout Function
      */
     function logout() {
-      // Do logout here..
+      $state.go('app.pages_auth_login');
     }
 
     /**

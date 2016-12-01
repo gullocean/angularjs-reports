@@ -1,6 +1,54 @@
-<h1>
-  {{vm.helloText}}
-</h1>
-<h3>
-	user role : {{vm.currentUser.role}}
-</h3>
+<!-- admin div -->
+<div ng-if="vm.currentUser.role == vm.ROLE.ADMIN">
+  <div id="simple-table" class="page-layout simple fullwidth doc-page element-doc-page">
+    <!-- HEADER -->
+    <div class="header md-accent-bg" layout="row" layout-align="space-between">
+      <div layout="column" layout-align="center start">
+        <div class="title">Users</div>
+      </div>
+    </div>
+    <!-- / HEADER -->
+    <!-- CONTENT -->
+    <div class="content">
+      <div class="white-bg md-whiteframe-4dp">
+        <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
+          <thead>
+            <tr>
+              <th class="secondary-text">
+                <div class="table-header">
+                  <span class="column-title">Name</span>
+                </div>
+              </th>
+              <th class="secondary-text">
+                <div class="table-header">
+                  <span class="column-title">email</span>
+                </div>
+              </th>
+              <th class="secondary-text">
+                <div class="table-header">
+                  <span class="column-title">role</span>
+                </div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="user in vm.users">
+              <td>{{ user.username }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- / CONTENT -->
+  </div>
+</div>
+<!-- project manager div -->
+<div ng-if="vm.currentUser.role == vm.ROLE.PM">
+  pm div
+</div>
+<!-- client div -->
+<div ng-if="vm.currentUser.role == vm.ROLE.CLIENT">
+  client div
+</div>

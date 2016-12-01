@@ -10,6 +10,8 @@
   /** @ngInject */
   function LoginController($scope, $state, $http, $cookieStore, ROLE) {
     var vm = this;
+    
+    $cookieStore.remove('currentUser');
 
     $scope.login = function() {
       var data = {
@@ -24,7 +26,6 @@
           'Content-Type': 'application/x-www-form-urlencoded'
         }
       }).success(function(response) {
-        console.log('login response : ', response);
         if (response.code == 0) {
           $cookieStore.put('currentUser', response.data);
           $state.go('app.dashboard');

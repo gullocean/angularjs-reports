@@ -5,7 +5,7 @@
     .module('fuse')
     .constant('ROLE', {
       ADMIN: 0,
-      PROJECT_MANAGER: 1,
+      PM: 1,
       CLIENT: 2
     });
 })();
