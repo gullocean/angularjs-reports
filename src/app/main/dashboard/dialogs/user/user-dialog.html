@@ -14,8 +14,8 @@
       <!-- TOOLBAR MIDDLE -->
       <div class="md-toolbar-tools md-toolbar-tools-middle" flex layout="column" layout-align="center center">
         <div layout="column" layout-align="center center">
-          <img ng-src="{{vm.user.avatar}}" class="md-avatar avatar user-avatar huge" alt="{{vm.user.name}}" />
-          <div class="user-name">{{vm.user.name}}</div>
+          <img ng-src="{{vm.user.avatar}}" class="md-avatar avatar user-avatar huge" alt="{{vm.user.username}}" />
+          <div class="user-name">{{vm.user.username}}</div>
         </div>
       </div>
       <!-- / TOOLBAR MIDDLE -->
@@ -31,7 +31,7 @@
       <md-input-container class="md-icon-float md-block">
         <label>Name</label>
         <md-icon></md-icon>
-        <input ng-model="vm.user.name" type="text" required>
+        <input ng-model="vm.user.username" type="text" required>
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
         <label>Role : {{vm.role_label[vm.user.role]}}</label>
@@ -46,26 +46,26 @@
       <md-input-container class="md-icon-float md-block">
         <label>Password</label>
         <md-icon></md-icon>
-        <input name="newPassword" ng-model="vm.user.newPassword" type="password" required>
+        <input name="newPassword" ng-model="vm.user.newPassword" type="password">
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
         <label>Confirm Password</label>
         <md-icon></md-icon>
-        <input name="confirmPassword" match-password="newPassword" ng-model="vm.user.confirmPassword" type="password" required>
+        <input name="confirmPassword" match-password="newPassword" ng-model="vm.user.confirmPassword" type="password">
       </md-input-container>
     </md-dialog-content>
     <!-- / DIALOG CONTENT -->
     <!-- DIALOG ACTIONS -->
     <md-dialog-actions layout="row" layout-align="space-between center">
       <div layout="row" layout-align="start center">
-        <md-button type="submit" ng-if="!vm.newUser" ng-click="vm.saveContact()" class="send-button md-accent md-raised" ng-disabled="userForm.$invalid || userForm.$pristine" aria-label="SAVE">
+        <md-button type="submit" ng-if="!vm.newUser" ng-click="vm.saveUser()" class="send-button md-accent md-raised" ng-disabled="userForm.$invalid || userForm.$pristine" aria-label="SAVE">
           SAVE
         </md-button>
-        <md-button type="submit" ng-if="vm.newUser" ng-click="vm.addNewContact()" class="send-button md-accent md-raised" ng-disabled="userForm.$invalid || userForm.$pristine" aria-label="Add Task">
+        <md-button type="submit" ng-if="vm.newUser" ng-click="vm.addNewUser()" class="send-button md-accent md-raised" ng-disabled="userForm.$invalid || userForm.$pristine" aria-label="Add Task">
           ADD USER
         </md-button>
       </div>
-      <div ng-if="!vm.user" layout="row">
+      <div ng-if="!vm.newUser" layout="row">
         <md-button class="md-icon-button" ng-click="vm.deleteUserConfirm($event)" aria-label="Delete">
           <md-icon md-font-icon="icon-delete"></md-icon>
           <md-tooltip><span>DELETE</span></md-tooltip>

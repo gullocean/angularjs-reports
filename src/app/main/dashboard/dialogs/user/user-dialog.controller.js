@@ -6,7 +6,7 @@
     .controller('UserDialogController', UserDialogController);
 
   /** @ngInject */
-  function UserDialogController($mdDialog, msUtils, ROLE) {
+  function UserDialogController($mdDialog, msUtils, ROLE, User) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.role_label = [];
@@ -17,31 +17,27 @@
 
     // Data
     vm.title = 'Edit User';
-    // vm.user = angular.copy(User);
-    // vm.users = Contacts;
-    // vm.user = User;
+    vm.user = angular.copy(User);
+    
     vm.newUser = false;
     vm.allFields = false;
 
     if (!vm.user) {
       vm.user = {
-        'id': msUtils.guidGenerator(),
-        'name': '',
-        'lastName': '',
+        'username': '',
         'avatar': 'assets/images/avatars/profile.jpg',
-        'nickname': '',
-        'company': '',
-        'jobTitle': '',
         'email': '',
-        'phone': '',
-        'address': '',
-        'birthday': null,
-        'notes': ''
+        'role': ROLE.CLIENT
       };
 
       vm.title = 'New User';
       vm.newUser = true;
       vm.user.tags = [];
+    }
+
+    if (!vm.newUser) {
+      vm.user.role = +vm.user.role;
+      vm.user.avatar = 'assets/images/avatars/profile.jpg';
     }
 
     // Methods
@@ -58,24 +54,24 @@
      * Add new user
      */
     function addNewUser() {
-      // vm.users.unshift(vm.user);
-
-      closeDialog();
+      var newUser = {};
+      newUser.username  = vm.user.username;
+      newUser.email     = vm.user.email;
+      newUser.role      = vm.user.role;
+      newUser.password  = vm.user.newPassword;
+      closeDialog(newUser);
     }
 
     /**
      * Save user
      */
     function saveUser() {
-      // Dummy save action
-      for (var i = 0; i < vm.users.length; i++) {
-        if (vm.users[i].id === vm.user.id) {
-          vm.users[i] = angular.copy(vm.user);
-          break;
-        }
-      }
-
-      closeDialog();
+      var editedUser = {};
+      editedUser.username  = vm.user.username;
+      editedUser.email     = vm.user.email;
+      editedUser.role      = vm.user.role;
+      editedUser.password  = vm.user.newPassword;
+      closeDialog(editedUser);
     }
 
     /**
@@ -100,8 +96,8 @@
     /**
      * Close dialog
      */
-    function closeDialog() {
-      $mdDialog.hide();
+    function closeDialog(data) {
+      $mdDialog.hide(data);
     }
 
   }
