@@ -1,23 +1,29 @@
 <!-- admin div -->
 <div ng-if="vm.currentUser.role == vm.ROLE.ADMIN">
-  <div id="simple-table" class="page-layout simple fullwidth doc-page element-doc-page">
-    <!-- HEADER -->
+  <div id="dashboard-admin" class="page-layout simple fullwidth doc-page element-doc-page">
     <div class="header md-accent-bg" layout="row" layout-align="space-between">
-      <div layout="column" layout-align="center start">
-        <div class="title">Users</div>
+      <div class="logo" layout="row" layout-align="start center">
+        <span class="logo-icon">
+          <md-icon md-font-icon="icon-account-box" class="s24"></md-icon>
+        </span>
+        <span class="logo-text">Users</span>
+      </div>
+      <div layout="row" layout-align="start center">
+        <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">
+          <md-icon md-font-icon="icon-account-plus"></md-icon>
+          <span>Add new user</span>
+        </md-button>
       </div>
     </div>
-    <!-- / HEADER -->
-    <!-- CONTENT -->
     <div class="content">
       <div class="white-bg md-whiteframe-4dp">
         <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
-        	<colgroup>
-        		<col width="35%">
-        		<col width="35%">
-        		<col width="15%">
-        		<col width="15%">
-        	</colgroup>
+          <colgroup>
+            <col width="35%">
+            <col width="35%">
+            <col width="15%">
+            <col width="15%">
+          </colgroup>
           <thead>
             <tr>
               <th class="secondary-text">
@@ -39,27 +45,26 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="(key, user) in vm.users">
+            <tr ng-repeat="(key, user) in vm.users" ng-click="vm.select(key);">
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
               <td>{{ vm.role_label[user.role] }}</td>
               <td>
-              	<button ng-click="vm.edit(key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
-              	<button ng-click="vm.delete(key);"><i class="icon s24 icon-close" style="color:red"></i></button>
+                <button ng-click="vm.edit(key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
+                <button ng-click="vm.delete(key);"><i class="icon s24 icon-close" style="color:red"></i></button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-    <!-- / CONTENT -->
   </div>
 </div>
 <!-- project manager div -->
 <div ng-if="vm.currentUser.role == vm.ROLE.PM">
-  pm div
+	pm div
 </div>
 <!-- client div -->
 <div ng-if="vm.currentUser.role == vm.ROLE.CLIENT">
-  client div
+	client div
 </div>

@@ -1,5 +1,63 @@
-.table-header {
-	span {
-		text-transform: capitalize;
+#dashboard-admin {
+	position: relative;
+
+	> .header {
+		height: 76px;
+		min-height: 76px;
+		max-height: 76px;
+
+		.logo {
+			.logo-icon {
+				margin: 0 16px 0 0;
+			}
+			.logo-text {
+				font-size: 24px;
+			}
+		}
+
+		.search-input-wrapper {
+			position: relative;
+			label {
+				padding-right: 4px;
+				cursor: pointer;
+				md-icon {
+					color: rgba(255, 255, 255, 0.8);
+				}
+			}
+
+			md-input-container {
+				.md-errors-spacer {
+					display: none;
+				}
+				input {
+					border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+					color: rgba(255, 255, 255, 0.8);
+					width: 240px;
+					&::placeholder {
+						color: rgba(255, 255, 255, 0.8);
+					}
+					&:focus {
+						border-bottom: 1px solid white;
+						color: white;
+					}
+				}
+			}
+		}
+	}
+	.table-header {
+		span {
+			text-transform: capitalize;
+		}
+	}
+}
+
+// RESPONSIVE
+@media screen and (min-width: $layout-breakpoint-md) {
+	#dashboard-admin {
+		> .content {
+			.main {
+				left: 268px;
+			}
+		}
 	}
 }

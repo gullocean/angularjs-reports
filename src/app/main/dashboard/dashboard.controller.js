@@ -5,10 +5,10 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http'];
+  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document'];
 
   /** @ngInject */
-  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http) {
+  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
@@ -21,9 +21,9 @@
 
     // Data
     vm.dtOptions = {
-      dom       : '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
+      dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
       pagingType: 'simple',
-      autoWidth : false,
+      autoWidth: false,
       responsive: true
     };
 
@@ -37,8 +37,7 @@
       }).success(function(response) {
         if (response.code == 0) {
           vm.users = response.data;
-        }
-        else $state.go('app.pages_auth_login');
+        } else $state.go('app.pages_auth_login');
       }).error(function(error) {
         console.log('login error : ', error);
       });
@@ -52,8 +51,23 @@
       alert('delete : ' + key);
     }
 
-    // Methods
+    vm.select = function(key) {
+      alert('table row : ' + key);
+    }
 
-    //////////
+    vm.add = function(ev, user) {
+      $mdDialog.show({
+        controller: 'UserDialogController',
+        controllerAs: 'vm',
+        templateUrl: 'app/main/dashboard/dialogs/user/user-dialog.html',
+        parent: angular.element($document.find('#content-container')),
+        targetEvent: ev,
+        clickOutsideToClose: true,
+        locals: {
+          User: user,
+          Users: vm.users
+        }
+      });
+    }
   }
 })();
