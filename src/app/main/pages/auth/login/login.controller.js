@@ -5,10 +5,10 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE'];
+  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE', 'api'];
 
   /** @ngInject */
-  function LoginController($scope, $state, $http, $cookieStore, ROLE) {
+  function LoginController($scope, $state, $http, $cookieStore, ROLE, api) {
     var vm = this;
     
     $cookieStore.remove('currentUser');
@@ -18,22 +18,16 @@
         email: vm.form.email,
         password: vm.form.password,
       };
-      $http({
-        method: 'POST',
-        url: 'http://reports.trafficdev.net/api/index.php/users/auth',
-        data: $.param(data),
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+      api.auth(data,
+        function(response) {
+          if (response.code == 0) {
+            $cookieStore.put('currentUser', response.data);
+            $state.go('app.dashboard');
+          } else {
+            $state.go('app.pages_auth_login');
+          }
         }
-      }).success(function(response) {
-        if (response.code == 0) {
-          $cookieStore.put('currentUser', response.data);
-          $state.go('app.dashboard');
-        }
-        else $state.go('app.pages_auth_login');
-      }).error(function(error) {
-        console.log('login error : ', error);
-      });
+      );
     }
 
     $http.get('assets/particles.json')

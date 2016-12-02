@@ -5,10 +5,10 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document'];
+  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document', 'api'];
 
   /** @ngInject */
-  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document) {
+  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document, api) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
@@ -27,21 +27,13 @@
       responsive: true
     };
 
-    if (vm.currentUser.role == ROLE.ADMIN) {
-      $http({
-        method: 'GET',
-        url: 'http://reports.trafficdev.net/api/index.php/users/get',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).success(function(response) {
-        if (response.code == 0) {
-          vm.users = response.data;
-        } else $state.go('app.pages_auth_login');
-      }).error(function(error) {
-        console.log('login error : ', error);
-      });
-    }
+    api.getUsers(vm.currentUser, function(response) {
+      if (response.code == 0) {
+        vm.users = response.data;
+      } else {
+        $state.go('app.pages_auth_login');
+      }
+    });
 
     vm.edit = function(ev, i) {
       $mdDialog.show({
@@ -52,7 +44,8 @@
         targetEvent: ev,
         clickOutsideToClose: true,
         locals: {
-          User: vm.users[i]
+          User: vm.users[i],
+          Role: vm.currentUser.role
         }
       })
       .then(function(editedUser) {
@@ -75,7 +68,11 @@
         .cancel('CANCEL');
 
       $mdDialog.show(confirm).then(function() {
-        vm.users.splice(i, 1);
+        api.deleteUser({email:user.email}, function(response) {
+          if (response.code == 0) {
+            vm.users.splice(i, 1);
+          }
+        });
       });
     }
 
@@ -92,7 +89,8 @@
         targetEvent: ev,
         clickOutsideToClose: true,
         locals: {
-          User: user
+          User: user,
+          Role: vm.currentUser.role
         }
       })
       .then(function(newUser) {

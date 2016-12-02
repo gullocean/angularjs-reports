@@ -6,11 +6,13 @@
     .controller('UserDialogController', UserDialogController);
 
   /** @ngInject */
-  function UserDialogController($mdDialog, msUtils, ROLE, User) {
+  function UserDialogController($mdDialog, msUtils, ROLE, User, Role, api) {
     var vm = this;
-    
+
     vm.ROLE = ROLE;
+    vm.role = Role;
     vm.role_label = [];
+    vm.oldEmail = '';
 
     angular.forEach(ROLE, function(r, k) {
       vm.role_label[r] = k;
@@ -38,6 +40,7 @@
 
     if (!vm.newUser) {
       vm.user.role    = +vm.user.role;
+      vm.oldEmail     = vm.user.email;
       vm.user.avatar  = 'assets/images/avatars/profile.jpg';
     }
 
@@ -57,9 +60,19 @@
       var newUser = {};
       newUser.username  = vm.user.username;
       newUser.email     = vm.user.email;
-      newUser.role      = vm.user.role;
       newUser.password  = vm.user.newPassword;
-      closeDialog(newUser);
+      if (vm.role == vm.ROLE.ADMIN) {
+        newUser.role    = vm.user.role;
+      } else {
+        newUser.role    = vm.ROLE.CLIENT;
+      }
+      api.addUser(newUser, function(response) {
+        if (response.code == 0) {
+          closeDialog(newUser);
+        } else {
+          closeDialog();
+        }
+      });
     }
 
     /**
@@ -67,11 +80,22 @@
      */
     function saveUser() {
       var editedUser = {};
+      editedUser.oldEmail  = vm.oldEmail;
       editedUser.username  = vm.user.username;
       editedUser.email     = vm.user.email;
-      editedUser.role      = vm.user.role;
       editedUser.password  = vm.user.newPassword;
-      closeDialog(editedUser);
+      if (vm.role == vm.ROLE.ADMIN) {
+        newUser.role = vm.user.role;
+      } else {
+        newUser.role = vm.ROLE.CLIENT;
+      }
+      api.updateUser(editedUser, function(response) {
+        if (response.code == 0) {
+          closeDialog(editedUser);
+        } else {
+          closeDialog();
+        }
+      });
     }
 
     /**
