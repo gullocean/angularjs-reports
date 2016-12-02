@@ -24,34 +24,34 @@
     <!-- DIALOG CONTENT -->
     <md-dialog-content ms-scroll>
       <md-input-container class="md-icon-float md-block">
-        <label>Email (required)</label>
+        <label>Email</label>
         <md-icon md-font-icon="icon-account" class="name"></md-icon>
-        <input ng-model="vm.user.email" type="text" ng-required md-autofocus>
+        <input ng-model="vm.user.email" type="email" required md-autofocus>
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
-        <label>Name (required)</label>
+        <label>Name</label>
         <md-icon></md-icon>
-        <input ng-model="vm.user.name" type="text" ng-required>
+        <input ng-model="vm.user.name" type="text" required>
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
-        <label>Role (required) : {{vm.role_label[vm.user.role]}}</label>
+        <label>Role : {{vm.role_label[vm.user.role]}}</label>
         <md-icon></md-icon>
-        <input ng-model="vm.user.role" type="number" min="0" max="2" ng-required>
+        <input ng-model="vm.user.role" type="number" min="0" max="2" required>
       </md-input-container>
       <md-input-container ng-if="!vm.newUser" class="md-icon-float md-block">
-        <label>Old Password (required)</label>
+        <label>Old Password</label>
         <md-icon></md-icon>
         <input name="oldPassword" ng-model="vm.user.oldPassword" type="password">
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
-        <label>Password (required)</label>
+        <label>Password</label>
         <md-icon></md-icon>
-        <input name="newPassword" ng-model="vm.user.newPassword" type="password" ng-required>
+        <input name="newPassword" ng-model="vm.user.newPassword" type="password" required>
       </md-input-container>
       <md-input-container class="md-icon-float md-block">
-        <label>Confirm Password (required)</label>
+        <label>Confirm Password</label>
         <md-icon></md-icon>
-        <input name="confirmPassword" match-password="newPassword" ng-model="vm.user.confirmPassword" type="password" ng-required>
+        <input name="confirmPassword" match-password="newPassword" ng-model="vm.user.confirmPassword" type="password" required>
       </md-input-container>
     </md-dialog-content>
     <!-- / DIALOG CONTENT -->
