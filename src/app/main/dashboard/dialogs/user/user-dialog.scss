@@ -31,26 +31,6 @@ md-dialog {
     md-dialog-content {
       display: block;
       position: relative;
-      .birthday-input {
-        display: flex;
-        flex-direction: row;
-        width: 100%;
-        margin: 0;
-        padding: 0 0 32px 0;
-        .md-button {
-          margin: 0;
-          padding: 0;
-          width: 24px;
-          height: 24px;
-          md-icon {
-            color: rgba(0, 0, 0, 0.87);
-          }
-        }
-        .md-datepicker-input-container {
-          display: flex;
-          flex: 1;
-        }
-      }
       .textarea-wrapper {
         md-input-container {
           margin-top: 0;

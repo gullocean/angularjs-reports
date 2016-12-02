@@ -8,6 +8,7 @@
   /** @ngInject */
   function UserDialogController($mdDialog, msUtils, ROLE, User) {
     var vm = this;
+    
     vm.ROLE = ROLE;
     vm.role_label = [];
 
@@ -17,9 +18,9 @@
 
     // Data
     vm.title = 'Edit User';
-    vm.user = angular.copy(User);
+    vm.user  = angular.copy(User);
     
-    vm.newUser = false;
+    vm.newUser   = false;
     vm.allFields = false;
 
     if (!vm.user) {
@@ -30,22 +31,21 @@
         'role': ROLE.CLIENT
       };
 
-      vm.title = 'New User';
-      vm.newUser = true;
-      vm.user.tags = [];
+      vm.title      = 'New User';
+      vm.newUser    = true;
+      vm.user.tags  = [];
     }
 
     if (!vm.newUser) {
-      vm.user.role = +vm.user.role;
-      vm.user.avatar = 'assets/images/avatars/profile.jpg';
+      vm.user.role    = +vm.user.role;
+      vm.user.avatar  = 'assets/images/avatars/profile.jpg';
     }
 
     // Methods
-    vm.addNewUser = addNewUser;
-    vm.saveUser = saveUser;
-    vm.deleteUserConfirm = deleteUserConfirm;
-    vm.closeDialog = closeDialog;
-    vm.toggleInArray = msUtils.toggleInArray;
+    vm.addNewUser     = addNewUser;
+    vm.saveUser       = saveUser;
+    vm.closeDialog    = closeDialog;
+    vm.toggleInArray  = msUtils.toggleInArray;
     // vm.exists = msUtils.exists;
 
     //////////
@@ -72,25 +72,6 @@
       editedUser.role      = vm.user.role;
       editedUser.password  = vm.user.newPassword;
       closeDialog(editedUser);
-    }
-
-    /**
-     * Delete User Confirm Dialog
-     */
-    function deleteUserConfirm(ev) {
-      var confirm = $mdDialog.confirm()
-        .title('Are you sure want to delete the user?')
-        .htmlContent('<b>' + vm.user.name + ' ' + vm.user.lastName + '</b>' + ' will be deleted.')
-        .ariaLabel('delete user')
-        .targetEvent(ev)
-        .ok('OK')
-        .cancel('CANCEL');
-
-      $mdDialog.show(confirm).then(function() {
-
-        // vm.users.splice(vm.users.indexOf(User), 1);
-
-      });
     }
 
     /**

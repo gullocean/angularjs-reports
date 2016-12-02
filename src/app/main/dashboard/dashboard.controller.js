@@ -5,10 +5,10 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document', 'DTColumnDefBuilder'];
+  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document'];
 
   /** @ngInject */
-  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document, DTColumnDefBuilder) {
+  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
@@ -96,7 +96,9 @@
         }
       })
       .then(function(newUser) {
-        vm.users.unshift(newUser);
+        if (!angular.isUndefined(newUser)) {
+          vm.users.unshift(newUser);
+        }
       });
     }
   }
