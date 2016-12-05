@@ -27,6 +27,9 @@
             'app.dashboard',
 
             // analytics
-            'app.analytics'
+            'app.analytics',
+
+            // task summaries
+            'app.task-summaries'
         ]);
 })();

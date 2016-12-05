@@ -47,5 +47,7 @@
       translate: 'DASHBOARD.DASHBOARD_NAV',
       weight: 1
     });
+
+    
   }
 })();

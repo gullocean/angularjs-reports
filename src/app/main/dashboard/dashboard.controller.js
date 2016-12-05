@@ -5,10 +5,10 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['DashboardData', '$cookieStore', '$rootScope', 'ROLE', '$http', '$mdDialog', '$document', 'api'];
+  DashboardController.$inject = ['$cookieStore', '$state', 'ROLE', '$mdDialog', '$document', 'api', 'msNavigationService'];
 
   /** @ngInject */
-  function DashboardController(DashboardData, $cookieStore, $rootScope, ROLE, $http, $mdDialog, $document, api) {
+  function DashboardController($cookieStore, $state, ROLE, $mdDialog, $document, api, msNavigationServiceProvider) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
@@ -30,8 +30,62 @@
     api.getUsers(vm.currentUser, function(response) {
       if (response.code == 0) {
         vm.users = response.data;
-      } else {
-        $state.go('app.pages_auth_login');
+
+        msNavigationServiceProvider.saveItem('fuse.summaries', {
+          title: 'Task Summaries',
+          icon: 'icon-table',
+          state: 'app.task_summaries',
+          weight: 1
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.organic', {
+          title: 'Organic',
+          icon: 'icon-poll',
+          state: 'app.analytics_organic',
+          weight: 1
+        });
+        
+        msNavigationServiceProvider.saveItem('fuse.crossChannel', {
+          title: 'Cross-Channel',
+          icon: 'icon-poll',
+          state: 'app.analytics_crossChannel',
+          weight: 1
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.paidMedia', {
+          title: 'Paid Media',
+          icon: 'icon-poll',
+          state: 'app.analytics_paidMedia',
+          weight: 1
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.conversions', {
+          title: 'Conversions',
+          icon: 'icon-phone',
+          weight: 1
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.conversions.phoneCalls', {
+          title: 'Phone Calls',
+          icon: 'icon-poll',
+          state: 'app.analytics_phoneCalls'
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.conversions.goalCompletions', {
+          title: 'Goal Completions',
+          icon: 'icon-poll',
+          state: 'app.analytics_goalCompletions'
+        });
+
+        msNavigationServiceProvider.saveItem('fuse.conversions.value', {
+          title: 'Value',
+          icon: 'icon-poll',
+          state: 'app.analytics_value'
+        });
+
+        // angular.forEach(ANALYTICS.channel, function(value, key) {
+        //   msNavigationServiceProvider.saveItem(value.name, value.content);
+        // });
       }
     });
 
