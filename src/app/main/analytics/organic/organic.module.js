@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app.analytics.organic', [])
+		.module('app.analytics.organic', ['nvd3', 'datatables'])
 		.config(config);
 
 	/** @ngInject */

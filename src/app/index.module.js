@@ -30,6 +30,9 @@
             'app.analytics',
 
             // task summaries
-            'app.task-summaries'
+            'app.task-summaries',
+
+            // reports
+            'app.reports'
         ]);
 })();

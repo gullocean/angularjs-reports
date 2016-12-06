@@ -1,0 +1,34 @@
+#analytics-organic {
+	position: relative;
+
+	> .header {
+		height: 76px;
+		min-height: 76px;
+		max-height: 76px;
+
+		.logo {
+			.logo-icon {
+				margin: 0 16px 0 0;
+			}
+			.logo-text {
+				font-size: 24px;
+			}
+		}
+	}
+	.table-header {
+		span {
+			text-transform: capitalize;
+		}
+	}
+}
+
+// RESPONSIVE
+@media screen and (min-width: $layout-breakpoint-md) {
+	#analytics-organic {
+		> .content {
+			> .content {
+				left: 268px;
+			}
+		}
+	}
+}

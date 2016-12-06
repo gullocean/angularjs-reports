@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app.analytics.paidMedia', [])
+		.module('app.analytics.paidMedia', ['datatables'])
 		.config(config);
 
 	/** @ngInject */

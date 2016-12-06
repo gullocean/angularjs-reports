@@ -2,8 +2,11 @@
   'use strict';
 
   angular
-    .module('app.dashboard', ['datatables', 'ngPassword'])
-    .config(config);
+    .module('app.dashboard', ['datatables', 'ngPassword', 'ngAnalytics'])
+    .config(config)
+    .run(['ngAnalyticsService', function (ngAnalyticsService) {
+      ngAnalyticsService.setClientId('574168449740-uv24b6hfs45vh5vuhf924vt71e1hjnpc.apps.googleusercontent.com');
+    }]);
 
   /** @ngInject */
   function config($stateProvider, $translatePartialLoaderProvider, msApiProvider, msNavigationServiceProvider) {
