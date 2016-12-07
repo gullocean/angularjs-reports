@@ -1,75 +1,58 @@
-<!-- admin div -->
-<div ng-if="vm.currentUser.role != vm.ROLE.CLIENT">
-  <div id="dashboard-admin" class="page-layout simple fullwidth doc-page element-doc-page">
-    <div class="header md-accent-bg" layout="row" layout-align="space-between">
-      <div class="logo" layout="row" layout-align="start center">
-        <span class="logo-icon">
-          <md-icon md-font-icon="icon-account-box" class="s24"></md-icon>
-        </span>
-        <span class="logo-text">Users</span>
-      </div>
-      <div layout="row" layout-align="start center">
-        <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">
-          <md-icon md-font-icon="icon-account-plus"></md-icon>
-          <span>Add new user</span>
-        </md-button>
-      </div>
+<div id="dashboard" class="page-layout simple fullwidth doc-page element-doc-page">
+  <div class="header md-accent-bg" layout="row" layout-align="space-between">
+    <div class="logo" layout="row" layout-align="start center">
+      <span class="logo-icon">
+        <md-icon md-font-icon="icon-account-box" class="s24"></md-icon>
+      </span>
+      <span class="logo-text">Users</span>
     </div>
-    <div class="content">
-      <div class="white-bg md-whiteframe-4dp">
-        <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
-          <thead>
-            <tr>
-              <th class="secondary-text">
-                <div class="table-header">
-                  <span class="column-title">name</span>
-                </div>
-              </th>
-              <th class="secondary-text">
-                <div class="table-header">
-                  <span class="column-title">email</span>
-                </div>
-              </th>
-              <th class="secondary-text" ng-if="vm.currentUser.role==vm.ROLE.ADMIN">
-                <div class="table-header">
-                  <span class="column-title">role</span>
-                </div>
-              </th>
-              <th class="secondary-text"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="(key, user) in vm.users" ng-click="vm.select(key);">
-              <td style="text-transform: capitalize;">{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td ng-if="vm.currentUser.role==vm.ROLE.ADMIN">{{ vm.role_label[user.role] }}</td>
-              <td>
-                <button ng-click="vm.edit($event, key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
-                <button ng-click="vm.delete($event, key);"><i class="icon s24 icon-close" style="color:red"></i></button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    <div ng-if="vm.currentUser.role != vm.ROLE.CLIENT" layout="row" layout-align="start center">
+      <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">
+        <md-icon md-font-icon="icon-account-plus"></md-icon>
+        <span>Add new user</span>
+      </md-button>
     </div>
   </div>
-</div>
-<!-- client div -->
-<div ng-if="vm.currentUser.role == vm.ROLE.CLIENT">
-  <div id="dashboard-admin" class="page-layout simple fullwidth doc-page element-doc-page">
-    <div class="header md-accent-bg" layout="row" layout-align="space-between">
-      <div class="logo" layout="row" layout-align="start center">
-        <span class="logo-icon">
-          <md-icon md-font-icon="icon-account-box" class="s24"></md-icon>
-        </span>
-        <span class="logo-text">Users</span>
-      </div>
-    </div>
-    <div class="content">
+  <div class="content">
+    <div ng-if="vm.currentUser.role != vm.ROLE.PM" class="widget-group" layout="row" flex="100" layout-wrap>
       <ng-analytics-auth label="Hello:&nbsp;" hide-on-auth="true" auth-container="embed-api-auth-container"></ng-analytics-auth>
       <ng-analytics-view view-selector-container="view-selector-container" auth-container="embed-api-auth-container"></ng-analytics-view>
       <ng-analytics-report queries="vm.queries" auth-container="embed-api-auth-container" view-selector-container="view-selector-container"></ng-analytics-report>
     </div>
+    <div ng-if="vm.currentUser.role != vm.ROLE.CLIENT" class="white-bg md-whiteframe-4dp">
+      <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
+        <thead>
+          <tr>
+            <th class="secondary-text">
+              <div class="table-header">
+                <span class="column-title">name</span>
+              </div>
+            </th>
+            <th class="secondary-text">
+              <div class="table-header">
+                <span class="column-title">email</span>
+              </div>
+            </th>
+            <th class="secondary-text" ng-if="vm.currentUser.role==vm.ROLE.ADMIN">
+              <div class="table-header">
+                <span class="column-title">role</span>
+              </div>
+            </th>
+            <th class="secondary-text"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="(key, user) in vm.users" ng-click="vm.select(key);">
+            <td style="text-transform: capitalize;">{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td ng-if="vm.currentUser.role==vm.ROLE.ADMIN">{{ vm.role_label[user.role] }}</td>
+            <td>
+              <button ng-click="vm.edit($event, key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
+              <button ng-click="vm.delete($event, key);"><i class="icon s24 icon-close" style="color:red"></i></button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-	
 </div>

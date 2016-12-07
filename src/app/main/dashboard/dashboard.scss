@@ -1,4 +1,4 @@
-#dashboard-admin {
+#dashboard {
 	position: relative;
 
 	> .header {
@@ -44,16 +44,34 @@
 			}
 		}
 	}
-	.table-header {
-		span {
-			text-transform: capitalize;
+	.content{
+		#view-selector-container {
+			float: left;
+			table {
+				float: left;
+				width: 200px !important;
+				tbody {
+					tr {
+						td:last-child {
+							width: 150px !important;
+						}
+					}
+				}
+			}
+		}
+
+		.table-header {
+			span {
+				text-transform: capitalize;
+			}
 		}
 	}
+	
 }
 
 // RESPONSIVE
 @media screen and (min-width: $layout-breakpoint-md) {
-	#dashboard-admin {
+	#dashboard {
 		> .content {
 			.main {
 				left: 268px;

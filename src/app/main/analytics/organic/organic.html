@@ -6,7 +6,7 @@
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
             <div class="h3">Sessions, Pages / Session</div>
           </div>
-          <div class="pb-32 border-bottom">
+          <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.organic" data="vm.organic"></nvd3>
           </div>
         </ms-widget-front>
@@ -18,7 +18,7 @@
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
             <div class="h3">Pages</div>
           </div>
-          <div class="pb-32 border-bottom">
+          <div class="border-bottom">
             <div class="white-bg md-whiteframe-4dp">
               <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
                 <thead>
@@ -31,7 +31,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr ng-repeat="value in vm.pages.values">
+                  <tr ng-repeat="value in vm.pages.values track by $index">
                     <td ng-repeat="v in value">{{ v }}</td>
                   </tr>
                 </tbody>

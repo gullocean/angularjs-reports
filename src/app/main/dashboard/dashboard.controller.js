@@ -225,7 +225,7 @@
       Global.analytics.channel = report[3].rows;
       Global.analytics.device  = report[4].rows;
       Global.analytics.PPC     = report[5].rows;
-
+      console.log(Global);
     });
     $rootScope.$on('$gaReportError', function(e, error, element) {
       console.log(error);
