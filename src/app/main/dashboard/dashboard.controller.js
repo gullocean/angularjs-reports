@@ -5,10 +5,10 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['$rootScope', '$cookieStore', '$state', 'ROLE', '$mdDialog', '$document', 'api', 'msNavigationService', 'Global'];
+  DashboardController.$inject = ['$scope', '$cookieStore', '$state', 'ROLE', '$mdDialog', '$document', 'api', 'msNavigationService', 'Global'];
 
   /** @ngInject */
-  function DashboardController($rootScope, $cookieStore, $state, ROLE, $mdDialog, $document, api, msNavigationServiceProvider, Global) {
+  function DashboardController($scope, $cookieStore, $state, ROLE, $mdDialog, $document, api, msNavigationServiceProvider, Global) {
     var vm = this;
     vm.ROLE = ROLE;
     vm.users = [];
@@ -27,49 +27,79 @@
       responsive: true
     };
 
-    vm.queries = [{
+    vm.queries = {
+      organic: {
       query: {
         metrics: 'ga:sessions, ga:pageviewsPerSession',
         dimensions: 'ga:month',
         'start-date': '2016-10-01',
         'end-date': '2016-12-06'
       }
-    }, {
-      query: {
-        metrics: 'ga:sessions, ga:pageviewsPerSession',
-        dimensions: 'ga:month',
-        'start-date': '2015-10-01',
-        'end-date': '2015-12-06'
-      }
-    }, {
+    }, pages: {
       query: {
         metrics: 'ga:pageviews, ga:entrances, ga:avgTimeOnPage',
         dimensions: 'ga:pageTitle, ga:landingPagePath',
         'start-date': '2016-10-01',
         'end-date': '2016-12-06'
       }
-    }, {
+    }, channel: {
       query: {
         metrics: 'ga:sessions',
         dimensions: 'ga:channelGrouping',
         'start-date': '2016-10-01',
         'end-date': '2016-12-06'
       }
-    }, {
+    }, device: {
       query: {
         metrics: 'ga:sessions',
         dimensions: 'ga:deviceCategory',
         'start-date': '2016-10-01',
         'end-date': '2016-12-06'
       }
-    }, {
+    }, PPC: {
       query: {
         metrics: 'ga:adClicks, ga:adCost, ga:CTR, ga:CPC, ga:transactionRevenue, ga:goalCompletionsAll, ga:goalConversionRateAll',
         dimensions: 'ga:campaign',
         'start-date': '2016-12-01',
         'end-date': '2016-12-06'
       }
-    }];
+    }, goal_cur: {
+      query: {
+        metrics: 'ga:goalCompletionsAll',
+        'start-date': '2016-11-07',
+        'end-date': '2016-12-06'
+      }
+    }, goal_prev: {
+      query: {
+        metrics: 'ga:goalCompletionsAll',
+        'start-date': '2016-10-07',
+        'end-date': '2016-11-06'
+      }
+    }, value_cur: {
+      query: {
+        metrics: 'ga:goalConversionRateAll',
+        'start-date': '2016-11-07',
+        'end-date': '2016-12-06'
+      }
+    }, value_prev: {
+      query: {
+        metrics: 'ga:goalConversionRateAll',
+        'start-date': '2016-10-07',
+        'end-date': '2016-11-06'
+      }
+    }, phone_prev: {
+      query: {
+        metrics: 'ga:goal1Value',
+        'start-date': '2016-10-07',
+        'end-date': '2016-11-06'
+      }
+    }, phone_cur: {
+      query: {
+        metrics: 'ga:goal1Value',
+        'start-date': '2016-11-07',
+        'end-date': '2016-12-06'
+      }
+    }};
 
     vm.init = function() {
       msNavigationServiceProvider.saveItem('fuse.summaries', {
@@ -203,7 +233,8 @@
     }
 
     // if a report is ready
-    $rootScope.$on('$gaReportSuccess', function(e, report, element) {
+    $scope.$on('$gaReportSuccess', function(e, report, element) {
+      console.log(report);
       Global.analytics = {};
       Global.analytics.organic = [{
         key: 'Sessions',
@@ -213,24 +244,56 @@
         values: []
       }];
 
-      angular.forEach(report[0].rows, function(v, k) {
+      angular.forEach(report[getObjectKeyIndex(vm.queries, 'organic')].rows, function(v, k) {
         Global.analytics.organic[0].values.push({x: +v[0], y: +v[1]});
         Global.analytics.organic[1].values.push({x: +v[0], y: +v[2]});
       });
 
       Global.analytics.pages = {};
       Global.analytics.pages.columnHeaders = ['Page Title', 'Landing Page', 'Pageviews', 'Entrances', 'Avg. Time on Page'];
-      Global.analytics.pages.values = angular.copy(report[2].rows);
+      Global.analytics.pages.values = angular.copy(report[getObjectKeyIndex(vm.queries, 'pages')].rows);
 
-      Global.analytics.channel = report[3].rows;
-      Global.analytics.device  = report[4].rows;
-      Global.analytics.PPC     = report[5].rows;
+      Global.analytics.channel = report[getObjectKeyIndex(vm.queries, 'channel')].rows;
+      Global.analytics.device  = report[getObjectKeyIndex(vm.queries, 'device')].rows;
+      Global.analytics.PPC     = report[getObjectKeyIndex(vm.queries, 'PPC')].rows;
+
+      var goal_cur  = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'goal_cur')].rows)  ? 0 : +report[getObjectKeyIndex(vm.queries, 'goal_cur')].rows[0];
+      var goal_prev = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'goal_prev')].rows) ? 0 : +report[getObjectKeyIndex(vm.queries, 'goal_prev')].rows[0];
+      if (goal_cur  === 0) Global.analytics.goal = 0;
+      else if (goal_prev === 0) Global.analytics.goal = 100;
+      else Global.analytics.goal = (goal_cur - goal_prev) / goal_prev;
+
+      var value_cur  = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'value_cur')].rows)  ? 0 : +report[getObjectKeyIndex(vm.queries, 'value_cur')].rows[0];
+      var value_prev = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'value_prev')].rows) ? 0 : +report[getObjectKeyIndex(vm.queries, 'value_prev')].rows[0];
+      if (value_cur  === 0) Global.analytics.value = 0;
+      else if (value_prev === 0) Global.analytics.value = 100;
+      else Global.analytics.value = (value_cur - value_prev) / value_prev;
+
+      var phone_cur  = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'phone_cur')].rows)  ? 0 : +report[getObjectKeyIndex(vm.queries, 'phone_cur')].rows[0];
+      var phone_prev = angular.isUndefined(report[getObjectKeyIndex(vm.queries, 'phone_prev')].rows) ? 0 : +report[getObjectKeyIndex(vm.queries, 'phone_prev')].rows[0];
+      if (phone_cur  === 0) Global.analytics.phone = 0;
+      else if (phone_prev === 0) Global.analytics.phone = 100;
+      else Global.analytics.phone = (phone_cur - phone_prev) / phone_prev;
+
       console.log(Global);
     });
-    $rootScope.$on('$gaReportError', function(e, error, element) {
+    $scope.$on('$gaReportError', function(e, error, element) {
       console.log(error);
+      alert(error);
     });
 
     vm.init();
+  }
+
+  function getObjectKeyIndex(obj, keyToFind) {
+    var i = 0, key;
+
+    for (key in obj) {
+      if (key == keyToFind) {
+        return i;
+      }
+      i++;
+    }
+    return null;
   }
 })();

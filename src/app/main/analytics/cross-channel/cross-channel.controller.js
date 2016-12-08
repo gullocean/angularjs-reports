@@ -5,13 +5,48 @@
 		.module('app.analytics.crossChannel')
 		.controller('CrossChannelController', CrossChannelController);
 
-	CrossChannelController.$inject = ['Global'];
+	CrossChannelController.$inject = ['Global', 'api'];
 	/** @ngInject */
-	function CrossChannelController(Global) {
+	function CrossChannelController(Global, api) {
 		var vm 			= this;
+
 		vm.options 	= {};
+		vm.flags 		= {};
 		vm.values 	= {};
-		vm.init 		= function () {
+
+		vm.init = function () {
+			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
+				Global.analytics = {};
+			};
+
+			if (angular.isUndefined(Global.analytics.channel) || Global.analytics.channel === null) {
+				api.getAnalyticsData ('channel', function (response) {
+					if (response.code == 0) {
+						Global.analytics.channel = response.data;
+						vm.values.channel 	= Global.analytics.channel;
+						vm.flags.channel = true;
+					} else {
+						vm.flags.channel = false;
+					}
+				});
+			} else {
+				vm.flags.channel = true;
+			}
+
+			if (angular.isUndefined(Global.analytics.device) || Global.analytics.device === null) {
+				api.getAnalyticsData ('device', function (response) {
+					if (response.code == 0) {
+						Global.analytics.device = response.data;
+						vm.values.device 	= Global.analytics.device;
+						vm.flags.device = true;
+					} else {
+						vm.flags.device = false;
+					}
+				});
+			} else {
+				vm.flags.device = true;
+			}
+
 			vm.options = {
 				channel: {
 					chart: {

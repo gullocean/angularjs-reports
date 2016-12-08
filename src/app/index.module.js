@@ -1,38 +1,37 @@
-(function ()
-{
-    'use strict';
+(function() {
+  'use strict';
 
-    /**
-     * Main module of the Fuse
-     */
-    angular
-        .module('fuse', [
+  /**
+   * Main module of the Fuse
+   */
+  angular
+    .module('fuse', [
 
-            // Core
-            'app.core',
+      // Core
+      'app.core',
 
-            // Navigation
-            'app.navigation',
+      // Navigation
+      'app.navigation',
 
-            // Toolbar
-            'app.toolbar',
+      // Toolbar
+      'app.toolbar',
 
-            // Quick Panel
-            'app.quick-panel',
+      // Quick Panel
+      'app.quick-panel',
 
-            // pages
-            'app.pages',
+      // pages
+      'app.pages',
 
-            // dashboard
-            'app.dashboard',
+      // dashboard
+      'app.dashboard',
 
-            // analytics
-            'app.analytics',
+      // analytics
+      'app.analytics',
 
-            // task summaries
-            'app.task-summaries',
+      // task summaries
+      'app.task-summaries',
 
-            // reports
-            'app.reports'
-        ]);
+      // reports
+      'app.reports'
+    ]);
 })();

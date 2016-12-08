@@ -1,1 +1,17 @@
-this is goal-completions page!!!
+<div id="goal-completions">
+	<div class="widget-group" layout="row" flex="100" layout-wrap>
+		<ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25">
+			<ms-widget-front class="white-bg">
+				<div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
+					<div class="h3">Goal Completions</div>
+				</div>
+				<div ng-if="vm.flags.goal" class="pt-8 pb-32" layout="column" layout-align="center center">
+					<div class="light-blue-fg font-size-72 line-height-72">{{vm.values.goal}}%</div>
+				</div>
+				<div ng-if="!vm.flags.goal" class="pt-32 pb-32" layout="column" layout-align="center center">
+					<div class="h3">{{vm.messages.goal}}</div>
+				</div>
+			</ms-widget-front>
+		</ms-widget>
+	</div>
+</div>

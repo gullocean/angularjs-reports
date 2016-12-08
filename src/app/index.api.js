@@ -38,7 +38,7 @@
       }).success(function(response) {
         callback(response);
       }).error(function(error) {
-        console.log('login error : ', error);
+        console.log('get user error : ', error);
       });
     }
 
@@ -53,7 +53,7 @@
       }).success(function(response) {
         callback(response);
       }).error(function(error) {
-        console.log('login error : ', error);
+        console.log('add user error : ', error);
       });
     }
 
@@ -68,7 +68,7 @@
       }).success(function(response) {
         callback(response);
       }).error(function(error) {
-        console.log('login error : ', error);
+        console.log('delete user error : ', error);
       });
     }
 
@@ -83,7 +83,21 @@
       }).success(function(response) {
         callback(response);
       }).error(function(error) {
-        console.log('login error : ', error);
+        console.log('update user error : ', error);
+      });
+    }
+
+    api.getAnalyticsData = function (option, callback) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/analytics/getdata/' + option,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('get analytics data error : ', error);
       });
     }
 

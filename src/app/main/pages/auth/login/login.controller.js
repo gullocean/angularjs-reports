@@ -5,15 +5,16 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE', 'api'];
+  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE', 'api', 'Global'];
 
   /** @ngInject */
-  function LoginController($scope, $state, $http, $cookieStore, ROLE, api) {
+  function LoginController($scope, $state, $http, $cookieStore, ROLE, api, Global) {
     var vm = this;
     
     $cookieStore.remove('currentUser');
 
     $scope.login = function() {
+      Global.analytics = {};
       var data = {
         email: vm.form.email,
         password: vm.form.password,

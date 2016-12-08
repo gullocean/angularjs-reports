@@ -1,0 +1,24 @@
+#goal-completions {
+	position: relative;
+
+	.content {
+		ms-widget {
+			ms-widget-front {
+				.h3 {
+					text-transform: capitalize;
+				}
+			}
+		}
+	}
+}
+
+// RESPONSIVE
+@media screen and (min-width: $layout-breakpoint-md) {
+	#goal-completions {
+		> .content {
+			.main {
+				
+			}
+		}
+	}
+}
