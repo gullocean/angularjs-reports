@@ -1,0 +1,57 @@
+<div class="widget-group" layout="row" flex="100" layout-wrap>
+      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
+        <ms-widget-front class="white-bg">
+          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
+            <div class="h3">PPC Cost</div>
+          </div>
+          <div ng-if="vm.flags.PPC_Cost" class="pt-8 pb-32" layout="column" layout-align="center center">
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Cost}}%</div>
+          </div>
+          <div ng-if="!vm.flags.PPC_Cost" class="pt-32 pb-32" layout="column" layout-align="center center">
+            <div class="h3">{{vm.messages.PPC_Cost}}</div>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+
+      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
+        <ms-widget-front class="white-bg">
+          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
+            <div class="h3">PPC Conversions</div>
+          </div>
+          <div ng-if="vm.flags.PPC_Conversions" class="pt-8 pb-32" layout="column" layout-align="center center">
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversions}}%</div>
+          </div>
+          <div ng-if="!vm.flags.PPC_Conversions" class="pt-32 pb-32" layout="column" layout-align="center center">
+            <div class="h3">{{vm.messages.PPC_Conversions}}</div>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+
+      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
+        <ms-widget-front class="white-bg">
+          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
+            <div class="h3">PPC CPA</div>
+          </div>
+          <div ng-if="vm.flags.PPC_CPA_Box" class="pt-8 pb-32" layout="column" layout-align="center center">
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_CPA_Box}}%</div>
+          </div>
+          <div ng-if="!vm.flags.PPC_CPA_Box" class="pt-32 pb-32" layout="column" layout-align="center center">
+            <div class="h3">{{vm.messages.PPC_CPA_Box}}</div>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+
+      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
+        <ms-widget-front class="white-bg">
+          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
+            <div class="h3">PPC Conversion Rate</div>
+          </div>
+          <div ng-if="vm.flags.PPC_Conversion_Rate" class="pt-8 pb-32" layout="column" layout-align="center center">
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversion_Rate}}%</div>
+          </div>
+          <div ng-if="!vm.flags.PPC_Conversion_Rate" class="pt-32 pb-32" layout="column" layout-align="center center">
+            <div class="h3">{{vm.messages.PPC_Conversion_Rate}}</div>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+    </div>

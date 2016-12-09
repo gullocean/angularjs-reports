@@ -22,7 +22,6 @@
 					type:'lineChart',
 					x: function(d) { return d.month; },
 					y: function(d) { return d.value; },
-					
 					xAxis: {
 						axisLabel: 'Month'
 					},

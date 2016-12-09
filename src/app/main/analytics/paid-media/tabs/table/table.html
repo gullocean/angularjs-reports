@@ -1,0 +1,29 @@
+<div class="widget-group" layout="row" flex="100" layout-wrap>
+  <ms-widget flippable="false" layout="row" flex="100">
+    <ms-widget-front class="white-bg">
+      <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
+        <div class="h3">PPC</div>
+      </div>
+      <div class="border-bottom">
+        <div class="white-bg md-whiteframe-4dp">
+          <table ng-if="vm.flags.PPC" class="dataTable row-border hover" datatable="ng" dt-options="vm.options.PPC">
+            <thead>
+              <tr>
+                <th class="secondary-text" ng-repeat="head in vm.keys.PPC">
+                  <div class="table-header">
+                    <span class="column-title">{{head}}</span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(key, value) in vm.values.PPC">
+                <td ng-repeat="(k, v) in value track by $index">{{v}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </ms-widget-front>
+  </ms-widget>
+</div>
