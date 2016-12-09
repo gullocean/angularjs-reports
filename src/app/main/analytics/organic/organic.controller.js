@@ -17,6 +17,24 @@
 		vm.keys 		= {};
 
 		vm.init = function () {
+			vm.options.organic = {
+				chart : {
+					type:'lineChart',
+					x: function(d) { return d.month; },
+					y: function(d) { return d.value; },
+					
+					xAxis: {
+						axisLabel: 'Month'
+					},
+					yAxis: {
+						tickFormat: function(d) { return d3.format('.02f')(d); }
+					},
+					legend : {
+						updateState: false
+					}
+				}
+			};
+
 			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
 				Global.analytics = {};
 			}
@@ -40,36 +58,23 @@
 					if (response.code == 0) {
 						Global.analytics.organic = response.data;
 						vm.values.organic = Global.analytics.organic;
-						vm.options.organic.chart.yDomain = getExtent(vm.values.organic).map(function(x) { return x * 1.1; })
+						
 						vm.flags.organic = true;
+						vm.values.organic = Global.analytics.organic;
+						vm.values.pages 	= Global.analytics.pages;
+						vm.options.organic.chart.yDomain = getExtent(vm.values.organic).map(function(x) { return x * 1.1; })
 					} else {
 						vm.flags.organic = false;
 					}
 				});
 			} else {
+				vm.values.organic = Global.analytics.organic;
+				vm.values.pages 	= Global.analytics.pages;
+				vm.options.organic.chart.yDomain = getExtent(vm.values.organic).map(function(x) { return x * 1.1; })
 				vm.flags.organic = true;
 			}
 
-			vm.values.organic = Global.analytics.organic;
-			vm.values.pages 	= Global.analytics.pages;
-
-			vm.options.organic = {
-				chart : {
-					type:'lineChart',
-					x: function(d) { return d.month; },
-					y: function(d) { return d.value; },
-					yDomain : getExtent(vm.values.organic).map(function(x) { return x * 1.1; }),
-					xAxis: {
-						axisLabel: 'Month'
-					},
-					yAxis: {
-						tickFormat: function(d) { return d3.format('.02f')(d); }
-					},
-					legend : {
-						updateState: false
-					}
-				}
-			};
+			
 
 			vm.options.pages = {
 	      dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
