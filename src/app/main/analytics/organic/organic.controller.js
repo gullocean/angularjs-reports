@@ -40,6 +40,7 @@
 					if (response.code == 0) {
 						Global.analytics.organic = response.data;
 						vm.values.organic = Global.analytics.organic;
+						vm.options.organic.chart.yDomain = getExtent(vm.values.organic).map(function(x) { return x * 1.1; })
 						vm.flags.organic = true;
 					} else {
 						vm.flags.organic = false;
@@ -56,7 +57,17 @@
 				chart : {
 					type:'lineChart',
 					x: function(d) { return d.month; },
-					y: function(d) { return d.value; }
+					y: function(d) { return d.value; },
+					yDomain : getExtent(vm.values.organic).map(function(x) { return x * 1.1; }),
+					xAxis: {
+						axisLabel: 'Month'
+					},
+					yAxis: {
+						tickFormat: function(d) { return d3.format('.02f')(d); }
+					},
+					legend : {
+						updateState: false
+					}
 				}
 			};
 
@@ -68,6 +79,20 @@
 	    };
 
 	    vm.keys.pages = ['Page Title', 'Landing Page', 'Pageviews', 'Entrances', 'Avg. Time on Page'];
+		}
+
+		function getExtent (data) {
+			var y_min = d3.min(data, function(d) {
+				return d3.min(d.values, function(dv) {
+					return +dv.value;
+				});
+			});
+			var y_max = d3.max(data, function(d) {
+				return d3.max(d.values, function(dv) {
+					return +dv.value;
+				});
+			});
+			return [y_min, y_max];
 		}
 
 		vm.init();
