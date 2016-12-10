@@ -23,7 +23,7 @@
 
 			// PPC table
 			if (angular.isUndefined(Global.analytics.PPC) || Global.analytics.PPC === null) {
-				api.getAnalyticsData ('PPC', function (response) {
+				api.getAnalyticsData ('PPC_Campaign', function (response) {
 					if (response.code == 0) {
 						Global.analytics.PPC = response.data;
 						vm.values.PPC 	= Global.analytics.PPC;

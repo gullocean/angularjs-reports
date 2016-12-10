@@ -39,7 +39,7 @@
 			}
 
 			if (angular.isUndefined(Global.analytics.pages) || Global.analytics.pages === null) {
-				api.getAnalyticsData ('pages', function (response) {
+				api.getAnalyticsData ('Landing_Pages', function (response) {
 					if (response.code == 0) {
 						Global.analytics.pages = response.data;
 						vm.values.pages 	= Global.analytics.pages;
@@ -53,7 +53,7 @@
 			}
 
 			if (angular.isUndefined(Global.analytics.organic) || Global.analytics.organic === null) {
-				api.getAnalyticsData ('organic', function (response) {
+				api.getAnalyticsData ('Sessions', function (response) {
 					if (response.code == 0) {
 						Global.analytics.organic = response.data;
 						vm.values.organic = Global.analytics.organic;

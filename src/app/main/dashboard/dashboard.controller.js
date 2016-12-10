@@ -132,13 +132,13 @@
 
       msNavigationServiceProvider.saveItem('fuse.conversions', {
         title: 'Conversions',
-        icon: 'icon-phone',
+        icon: 'icon-poll',
         weight: 1
       });
 
       msNavigationServiceProvider.saveItem('fuse.conversions.phoneCalls', {
         title: 'Phone Calls',
-        icon: 'icon-poll',
+        icon: 'icon-phone',
         state: 'app.analytics_phoneCalls'
       });
 

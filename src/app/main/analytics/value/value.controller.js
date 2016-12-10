@@ -20,7 +20,7 @@
 				Global.analytics = {};
 			}
 			if (angular.isUndefined(Global.analytics.value) || Global.analytics.value === null) {
-				api.getAnalyticsData ('value', function (response) {
+				api.getAnalyticsData ('Conversion_Value', function (response) {
 					vm.messages.value = response.message;
 					if (response.code == 0) {
 						Global.analytics.value = response.data;

@@ -20,7 +20,7 @@
 				Global.analytics = {};
 			}
 			if (angular.isUndefined(Global.analytics.goal) || Global.analytics.goal === null) {
-				api.getAnalyticsData ('goal', function (response) {
+				api.getAnalyticsData ('Goal_Completions', function (response) {
 					vm.messages.goal = response.message;
 					if (response.code == 0) {
 						Global.analytics.goal = response.data;

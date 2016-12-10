@@ -20,7 +20,7 @@
 			};
 
 			if (angular.isUndefined(Global.analytics.channel) || Global.analytics.channel === null) {
-				api.getAnalyticsData ('channel', function (response) {
+				api.getAnalyticsData ('Sessions_Channel', function (response) {
 					if (response.code == 0) {
 						Global.analytics.channel = response.data;
 						vm.values.channel 	= Global.analytics.channel;
@@ -34,7 +34,7 @@
 			}
 
 			if (angular.isUndefined(Global.analytics.device) || Global.analytics.device === null) {
-				api.getAnalyticsData ('device', function (response) {
+				api.getAnalyticsData ('Sessions_Device', function (response) {
 					if (response.code == 0) {
 						Global.analytics.device = response.data;
 						vm.values.device 	= Global.analytics.device;
