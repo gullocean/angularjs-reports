@@ -14,11 +14,6 @@
     </div>
   </div>
   <div class="content">
-    <!-- <div ng-if="vm.currentUser.role != vm.ROLE.PM" class="widget-group" layout="row" flex="100" layout-wrap>
-      <ng-analytics-auth label="Hello:&nbsp;" hide-on-auth="true" auth-container="embed-api-auth-container"></ng-analytics-auth>
-      <ng-analytics-view view-selector-container="view-selector-container" auth-container="embed-api-auth-container"></ng-analytics-view>
-      <ng-analytics-report queries="vm.queries" auth-container="embed-api-auth-container" view-selector-container="view-selector-container"></ng-analytics-report>
-    </div> -->
     <div ng-if="vm.currentUser.role != vm.ROLE.CLIENT" class="white-bg md-whiteframe-4dp">
       <table class="dataTable row-border hover" datatable="ng" dt-options="vm.dtOptions">
         <thead>
@@ -49,7 +44,7 @@
             <td>
               <button ng-click="vm.edit($event, key);"><i class="icon s24 icon-pencil-box-outline" style="color:green"></i></button>
               <button ng-click="vm.delete($event, key);"><i class="icon s24 icon-close" style="color:red"></i></button>
-              <button ng-click=""><i class="icon s24 icon-apps" style="color:blue"></i></button>
+              <button ng-if="user.role==vm.ROLE.CLIENT" ng-click="vm.editCustomData($event, key);"><i class="icon s24 icon-apps" style="color:blue"></i></button>
             </td>
           </tr>
         </tbody>

@@ -5,7 +5,7 @@
             <div class="h3">PPC Cost</div>
           </div>
           <div ng-if="vm.flags.PPC_Cost" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Cost}}%</div>
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Cost | number : 2}}%</div>
           </div>
           <div ng-if="!vm.flags.PPC_Cost" class="pt-32 pb-32" layout="column" layout-align="center center">
             <div class="h3">{{vm.messages.PPC_Cost}}</div>
@@ -19,7 +19,7 @@
             <div class="h3">PPC Conversions</div>
           </div>
           <div ng-if="vm.flags.PPC_Conversions" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversions}}%</div>
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversions | number : 2}}%</div>
           </div>
           <div ng-if="!vm.flags.PPC_Conversions" class="pt-32 pb-32" layout="column" layout-align="center center">
             <div class="h3">{{vm.messages.PPC_Conversions}}</div>
@@ -33,7 +33,7 @@
             <div class="h3">PPC CPA</div>
           </div>
           <div ng-if="vm.flags.PPC_CPA_Box" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_CPA_Box}}%</div>
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_CPA_Box | number : 2}}%</div>
           </div>
           <div ng-if="!vm.flags.PPC_CPA_Box" class="pt-32 pb-32" layout="column" layout-align="center center">
             <div class="h3">{{vm.messages.PPC_CPA_Box}}</div>
@@ -47,7 +47,7 @@
             <div class="h3">PPC Conversion Rate</div>
           </div>
           <div ng-if="vm.flags.PPC_Conversion_Rate" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversion_Rate}}%</div>
+            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversion_Rate | number : 2}}%</div>
           </div>
           <div ng-if="!vm.flags.PPC_Conversion_Rate" class="pt-32 pb-32" layout="column" layout-align="center center">
             <div class="h3">{{vm.messages.PPC_Conversion_Rate}}</div>

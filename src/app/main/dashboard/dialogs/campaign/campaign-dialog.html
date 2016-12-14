@@ -1,0 +1,69 @@
+<!-- DIALOG -->
+<md-dialog class="campaign-dialog" aria-label="New Task">
+  <form name="form" class="md-inline-form" novalidate>
+    <!-- DIALOG TOOLBAR -->
+    <md-toolbar class="md-accent md-tall" layout="column">
+      <!-- TOOLBAR TOP -->
+      <div class="md-toolbar-tools md-toolbar-tools-top" layout="row" layout-align="end center">
+        <md-button class="md-icon-button" ng-click="vm.closeDialog()" aria-label="Close dialog">
+          <md-icon md-font-icon="icon-close"></md-icon>
+        </md-button>
+      </div>
+      <!-- / TOOLBAR TOP -->
+      <!-- TOOLBAR MIDDLE -->
+      <div class="md-toolbar-tools md-toolbar-tools-middle" flex layout="column" layout-align="center center">
+        <div layout="column" layout-align="center center" class="avatar">
+          <md-icon md-font-icon="icon-palette-advanced"></md-icon>
+        </div>
+        <div layout="row" flex>
+          <div class="user-name" layout="row" flex>{{ vm.title }}</div>
+        </div>
+      </div>
+      <!-- / TOOLBAR MIDDLE -->
+    </md-toolbar>
+    <!-- / DIALOG TOOLBAR -->
+    <!-- DIALOG CONTENT -->
+    <div ng-if="vm.isFirstStep()">
+      <md-dialog-content ms-scroll>
+        <md-input-container class="md-icon-float md-block">
+          <label>company</label>
+          <input ng-model="vm.campaign.company" type="text" required md-autofocus>
+        </md-input-container>
+        <md-input-container class="md-icon-float md-block">
+          <label>url</label>
+          <input ng-model="vm.campaign.url" type="text" required>
+        </md-input-container>
+      </md-dialog-content>
+    </div>
+
+    <div ng-if="vm.currentStep==1">
+      <md-dialog-content ms-scroll>
+        <!-- <md-input-container class="md-icon-float md-block"> -->
+          <ng-analytics-auth label="Hallo:&nbsp;" hide-on-auth="true" auth-container="embed-api-auth-container"></ng-analytics-auth>
+          <ng-analytics-view view-selector-container="view-selector-container" auth-container="embed-api-auth-container"></ng-analytics-view>
+        <!-- </md-input-container> -->
+      </md-dialog-content>
+    </div>
+    
+    <!-- / DIALOG CONTENT -->
+    <!-- DIALOG ACTIONS -->
+    <md-dialog-actions layout="row" layout-align="end center">
+      <div layout="row" layout-align="end center">
+        <md-button type="submit" ng-if="!vm.newCampaign" ng-click="vm.saveCampaign()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="SAVE">
+          SAVE
+        </md-button>
+        <md-button ng-if="vm.newCampaign&&!vm.isFirstStep()" ng-click="vm.backStep()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="Back Step">
+          back
+        </md-button>
+        <md-button type="submit" ng-if="vm.newCampaign&&vm.isLastStep()" ng-click="vm.addNewCampaign()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="Add Campaign">
+          ADD campaign
+        </md-button>
+        <md-button ng-if="vm.newCampaign&&!vm.isLastStep()" ng-click="vm.nextStep()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="Next Step">
+          next
+        </md-button>
+      </div>
+    </md-dialog-actions>
+    <!-- / DIALOG ACTIONS -->
+  </form>
+</md-dialog>
+<!-- / DIALOG -->

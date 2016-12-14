@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.dashboard', ['datatables', 'ngPassword', 'ngAnalytics'])
+    .module('app.dashboard', ['datatables', 'ngPassword', 'ngAnalytics', 'app.dashboard.customData', 'app.dashboard.manage.campaigns'])
     .config(config)
     .run(['ngAnalyticsService', function (ngAnalyticsService) {
       ngAnalyticsService.setClientId('574168449740-uv24b6hfs45vh5vuhf924vt71e1hjnpc.apps.googleusercontent.com');
@@ -13,7 +13,7 @@
     // State
     $stateProvider
       .state('app.dashboard', {
-        url: '/dashboard',
+        url: '/manage-users',
         views: {
           'content@app': {
             templateUrl: 'app/main/dashboard/dashboard.html',
@@ -43,14 +43,78 @@
     msNavigationServiceProvider.saveItem('fuse.dashboard', {
       title: 'Dashboard',
       icon: 'icon-tile-four',
-      state: 'app.dashboard',
-      /*stateParams: {
-          'param1': 'page'
-       },*/
       translate: 'DASHBOARD.DASHBOARD_NAV',
       weight: 1
     });
 
-    
+    msNavigationServiceProvider.saveItem('fuse.dashboard.manageUsers', {
+      title: 'Users',
+      icon: 'icon-account-multiple',
+      state: 'app.dashboard'
+    });
+
+    msNavigationServiceProvider.saveItem('fuse.dashboard.manageCampaigns', {
+      title: 'Campaigns',
+      icon: 'icon-book-multiple',
+      state: 'app.dashboard_manage_campaigns'
+    });
+
+    msNavigationServiceProvider.saveItem('fuse.summaries', {
+        title: 'Task Summaries',
+        icon: 'icon-table',
+        state: 'app.task_summaries',
+        weight: 1
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.organic', {
+        title: 'Organic',
+        icon: 'icon-poll',
+        state: 'app.analytics_organic',
+        weight: 1
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.crossChannel', {
+        title: 'Cross-Channel',
+        icon: 'icon-poll',
+        state: 'app.analytics_crossChannel',
+        weight: 1
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.paidMedia', {
+        title: 'Paid Media',
+        icon: 'icon-poll',
+        state: 'app.analytics_paidMedia',
+        weight: 1
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.conversions', {
+        title: 'Conversions',
+        icon: 'icon-poll',
+        weight: 1
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.conversions.phoneCalls', {
+        title: 'Phone Calls',
+        icon: 'icon-phone',
+        state: 'app.analytics_phoneCalls'
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.conversions.goalCompletions', {
+        title: 'Goal Completions',
+        icon: 'icon-poll',
+        state: 'app.analytics_goalCompletions'
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.conversions.value', {
+        title: 'Value',
+        icon: 'icon-poll',
+        state: 'app.analytics_value'
+      });
+
+      msNavigationServiceProvider.saveItem('fuse.reports', {
+        title: 'Reports',
+        icon: 'icon-file-pdf',
+        state: 'app.reports'
+      });
   }
 })();

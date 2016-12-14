@@ -12,7 +12,16 @@
     // Base Url
     api.baseUrl = 'http://reports.trafficdev.net/api/index.php';
 
-    api.auth = function(data, callback) {
+    // functions
+    api.auth              = auth;
+    api.getUsers          = getUsers;
+    api.addUser           = addUser;
+    api.deleteUser        = deleteUser;
+    api.updateUser        = updateUser;
+    api.getAnalyticsData  = getAnalyticsData;
+    api.getParticleData   = getParticleData;
+
+    function auth (data, callback) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/auth',
@@ -27,7 +36,7 @@
       });
     }
 
-    api.getUsers = function(data, callback) {
+    function getUsers (data, callback) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/get',
@@ -42,7 +51,7 @@
       });
     }
 
-    api.addUser = function(data, callback) {
+    function addUser (data, callback) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/add',
@@ -57,7 +66,7 @@
       });
     }
 
-    api.deleteUser = function(data, callback) {
+    function deleteUser (data, callback) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/delete',
@@ -72,7 +81,7 @@
       });
     }
 
-    api.updateUser = function(data, callback) {
+    function updateUser (data, callback) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/update',
@@ -87,7 +96,7 @@
       });
     }
 
-    api.getAnalyticsData = function (option, callback) {
+    function getAnalyticsData (option, callback) {
       $http({
         method: 'GET',
         url: api.baseUrl + '/analytics/getdata/' + option,
@@ -98,6 +107,17 @@
         callback(response);
       }).error(function(error) {
         console.log('get analytics data error : ', error);
+      });
+    }
+
+    function getParticleData (callback) {
+      $http({
+        method: 'GET',
+        url: 'assets/particles.json',
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('particles data load error : ', error);
       });
     }
 

@@ -5,9 +5,9 @@
 		.module('app.analytics.organic')
 		.controller('OrganicController', OrganicController);
 
-	OrganicController.$inject = ['Global', 'api'];
+	OrganicController.$inject = ['Global', 'api', '$rootScope'];
 	/** @ngInject */
-	function OrganicController(Global, api) {
+	function OrganicController(Global, api, $rootScope) {
 		var vm = this;
 
 		vm.options 	= {};
@@ -17,6 +17,11 @@
 		vm.keys 		= {};
 
 		vm.init = function () {
+			
+			vm.flags.endRequestPages 		= false;
+			vm.flags.endRequestOrganic 	= false;
+			$rootScope.loadingProgress 	= true;
+
 			vm.options.organic = {
 				chart : {
 					type:'lineChart',
@@ -47,6 +52,8 @@
 					} else {
 						vm.flags.pages = false;
 					}
+					vm.flags.endRequestPages = true;
+					$rootScope.loadingProgress = true && !(vm.flags.endRequestPages && vm.flags.endRequestOrganic);
 				});
 			} else {
 				vm.flags.pages = true;
@@ -65,6 +72,8 @@
 					} else {
 						vm.flags.organic = false;
 					}
+					vm.flags.endRequestOrganic = true;
+					$rootScope.loadingProgress = true && !(vm.flags.endRequestPages && vm.flags.endRequestOrganic);
 				});
 			} else {
 				vm.values.organic = Global.analytics.organic;

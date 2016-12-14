@@ -5,38 +5,44 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$scope', '$state', '$http', '$cookieStore', 'ROLE', 'api', 'Global'];
+  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api'];
 
   /** @ngInject */
-  function LoginController($scope, $state, $http, $cookieStore, ROLE, api, Global) {
-    var vm = this;
-    
-    $cookieStore.remove('currentUser');
+  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api) {
 
-    $scope.login = function() {
-      Global.analytics = {};
-      var data = {
-        email: vm.form.email,
-        password: vm.form.password,
-      };
-      api.auth(data,
-        function(response) {
-          if (response.code == 0) {
-            $cookieStore.put('currentUser', response.data);
-            $state.go('app.dashboard');
-          } else {
-            $state.go('app.pages_auth_login');
-          }
-        }
-      );
+    var vm = this;
+
+    vm.init = init;
+
+    function init () {
+      $cookieStore.remove('currentUser');
+
+      api.getParticleData(function(particleData) {
+        particlesJS('particles-js', particleData);
+      });
     }
 
-    $http.get('assets/particles.json')
-      .success(function(particles_data) {
-        particlesJS('particles-js', particles_data);
-      })
-      .error(function(error) {
-        console.log('particles data load error : ', error);
+    $scope.login = function() {
+
+      $rootScope.loadingProgress  = true;
+
+      var data = {
+        email   : vm.form.email,
+        password: vm.form.password
+      };
+
+      api.auth(data, function(response) {
+        if (response.code == 0) {
+          $cookieStore.put('currentUser', response.data);
+          $state.go('app.dashboard');
+        } else {
+          $state.go('app.pages_auth_login');
+          alert('email or password is incorrect!');
+        }
+        $rootScope.loadingProgress  = false;
       });
+    }
+
+    vm.init ();
   }
 })();

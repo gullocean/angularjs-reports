@@ -1,0 +1,25 @@
+<!-- SIDENAV HEADER -->
+<div class="header md-padding" layout="row" layout-align="start center">
+  <!-- USER -->
+  <img ng-src="{{vm.user.avatar}}" class="md-avatar avatar mr-16" alt="{{vm.user.name}}" />
+  <span class="font-weight-500 font-size-14">{{vm.user.username}}</span>
+  <!-- / USER -->
+</div>
+<!-- / SIDENAV HEADER -->
+<md-divider></md-divider>
+<!-- SIDENAV CONTENT -->
+<div ms-scroll class="content scrollable">
+  <md-list>
+    <md-list-item>
+      <p>
+        {{vm.user.email}}
+      </p>
+    </md-list-item>
+    <md-list-item ng-click="vm.changeProject()">
+      <p>
+        test
+      </p>
+    </md-list-item>
+  </md-list>
+</div>
+<!-- / SIDENAV CONTENT -->

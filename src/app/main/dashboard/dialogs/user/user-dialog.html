@@ -34,9 +34,13 @@
         <input ng-model="vm.user.username" type="text" required>
       </md-input-container>
       <md-input-container class="md-icon-float md-block" ng-if="vm.role==vm.ROLE.ADMIN">
-        <label>Role : {{vm.role_label[vm.user.role]}}</label>
+        <label>Role</label>
         <md-icon></md-icon>
-        <input ng-model="vm.user.role" type="number" min="0" max="2" required>
+        <md-select ng-model="vm.user.role">
+          <md-option ng-repeat="(key, label) in vm.role_label" value="{{key}}">
+            {{ label }}
+          </md-option>
+        </md-select>
       </md-input-container>
       <md-input-container ng-if="!vm.newUser" class="md-icon-float md-block">
         <label>Old Password</label>

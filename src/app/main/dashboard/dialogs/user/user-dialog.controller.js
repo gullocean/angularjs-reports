@@ -85,9 +85,9 @@
       editedUser.email     = vm.user.email;
       editedUser.password  = vm.user.newPassword;
       if (vm.role == vm.ROLE.ADMIN) {
-        newUser.role = vm.user.role;
+        editedUser.role = vm.user.role;
       } else {
-        newUser.role = vm.ROLE.CLIENT;
+        editedUser.role = vm.ROLE.CLIENT;
       }
       api.updateUser(editedUser, function(response) {
         if (response.code == 0) {
