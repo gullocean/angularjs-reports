@@ -24,7 +24,7 @@
       vm.campaigns.push({
         company: 'test campaign',
         url : 'test url',
-        thumbnail: 'assets/images/thumbnails/campaigns/test.png'
+        thumbnail: 'assets/images/thumbnails/campaigns/traffic.png'
       });
     }
     
