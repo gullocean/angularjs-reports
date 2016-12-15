@@ -2,7 +2,7 @@
   'use strict';
 
   angular
-    .module('app.dashboard', ['datatables', 'ngPassword', 'ngAnalytics', 'app.dashboard.customData', 'app.dashboard.manage.campaigns'])
+    .module('app.dashboard', ['datatables', 'ngPassword', 'ngAnalytics', 'app.dashboard.customData'])
     .config(config)
     .run(['ngAnalyticsService', function (ngAnalyticsService) {
       ngAnalyticsService.setClientId('574168449740-uv24b6hfs45vh5vuhf924vt71e1hjnpc.apps.googleusercontent.com');
@@ -44,20 +44,15 @@
       title: 'Dashboard',
       icon: 'icon-tile-four',
       translate: 'DASHBOARD.DASHBOARD_NAV',
+      state: 'app.dashboard',
       weight: 1
     });
 
-    msNavigationServiceProvider.saveItem('fuse.dashboard.manageUsers', {
-      title: 'Users',
-      icon: 'icon-account-multiple',
-      state: 'app.dashboard'
-    });
-
-    msNavigationServiceProvider.saveItem('fuse.dashboard.manageCampaigns', {
-      title: 'Campaigns',
-      icon: 'icon-book-multiple',
-      state: 'app.dashboard_manage_campaigns'
-    });
+    // msNavigationServiceProvider.saveItem('fuse.dashboard.manageUsers', {
+    //   title: 'Users',
+    //   icon: 'icon-account-multiple',
+    //   state: 'app.dashboard'
+    // });
 
     msNavigationServiceProvider.saveItem('fuse.summaries', {
         title: 'Task Summaries',

@@ -5,12 +5,13 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api'];
+  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api', 'ROLE'];
 
   /** @ngInject */
-  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api) {
+  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api, ROLE) {
 
     var vm = this;
+    vm.currentUser = {};
 
     vm.init = init;
 
@@ -33,8 +34,15 @@
 
       api.auth(data, function(response) {
         if (response.code == 0) {
-          $cookieStore.put('currentUser', response.data);
-          $state.go('app.dashboard');
+          vm.currentUser = response.data;
+          vm.currentUser.role = +vm.currentUser.role;
+          $cookieStore.put('currentUser', vm.currentUser);
+
+          if (vm.currentUser.role === ROLE.ADMIN) {
+            $state.go('app.campaigns');
+          } else {
+            $state.go('app.dashboard');
+          }
         } else {
           $state.go('app.pages_auth_login');
           alert('email or password is incorrect!');

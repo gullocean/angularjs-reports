@@ -4,6 +4,11 @@
     max-height: $toolbarHeight;
     z-index: 55 !important;
 
+    .logo-small {
+        margin-left: 30px;
+        width: 120px;
+    }
+
     #navigation-toggle {
         width: $toolbarHeight;
         min-width: $toolbarHeight;

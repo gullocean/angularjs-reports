@@ -1,0 +1,49 @@
+<div id="campaigns" class="page-layout simple fullwidth doc-page element-doc-page">
+  <div class="header md-accent-bg" layout="row" layout-align="space-between">
+    <div class="logo" layout="row" layout-align="start center">
+      <span class="logo-icon">
+        <md-icon md-font-icon="icon-book-multiple" class="s24"></md-icon>
+      </span>
+      <span class="logo-text">Campaigns</span>
+      <md-button class="md-raised reference-button campaigns" ng-click="">
+        <span>Campaign</span>
+      </md-button>
+      <md-button class="md-raised reference-button users" ng-click="vm.goToUsers();">
+        <span>Users</span>
+      </md-button>
+    </div>
+    <div layout="row" layout-align="start center">
+      <md-button class="md-raised reference-button" ng-click="vm.addCampaign($event);">
+        <span>Create Campaign</span>
+      </md-button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="widget-group" layout="row" flex="100" layout-wrap ng-repeat="(key, campaign) in vm.campaigns">
+			<ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20">
+				<ms-widget-front class="white-bg" ng-click="vm.selectCampaign(campaign)">
+					<div class="p-8 pt-16" layout="row" layout-align="space-between center">
+						<div class="h3">{{ campaign.company }}</div>
+
+						<md-menu>
+							<md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+								<md-icon md-font-icon="icon-dots-vertical"></md-icon>
+							</md-button>
+							<md-menu-content width="2">
+								<md-menu-item>
+									<md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button>
+								</md-menu-item>
+								<md-menu-item>
+									<md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button>
+								</md-menu-item>
+							</md-menu-content>
+						</md-menu>
+					</div>
+					<div class="p-8" layout="column" layout-align="center center">
+						<img ng-src="{{ campaign.thumbnail }}">
+					</div>
+				</ms-widget-front>
+			</ms-widget>
+		</div>
+  </div>
+</div>

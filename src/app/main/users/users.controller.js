@@ -2,28 +2,44 @@
   'use strict';
 
   angular
-    .module('app.dashboard.customData')
-    .controller('ManageCampaignsController', ManageCampaignsController);
+    .module('app.users')
+    .controller('UsersController', UsersController);
 
-  ManageCampaignsController.$inject = ['Global', 'api', '$mdDialog', '$document'];
+  UsersController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE'];
   /** @ngInject */
-  function ManageCampaignsController(Global, api, $mdDialog, $document) {
+  function UsersController($state, Global, api, $mdDialog, $document, $cookieStore, ROLE) {
     var vm = this;
 
     // variables
-    vm.campaigns = [];
+    vm.users = [];
+    vm.ROLE = ROLE;
+    vm.role_label = [];
+    vm.currentUser = {};
 
     // functions
     vm.addCampaign    = addCampaign;
     vm.deleteCampaign = deleteCampaign;
     vm.editCampaign   = editCampaign;
+    vm.selectCampaign = selectCampaign;
+    vm.goToCampaigns  = goToCampaigns;
 
     vm.init = function () {
-      vm.campaigns.push({
-        company: 'test campaign',
-        url : 'test url',
-        thumbnail: 'assets/images/thumbnails/campaigns/test.png'
+      angular.forEach(ROLE, function(r, k) {
+        vm.role_label[r] = k;
       });
+
+      vm.currentUser = $cookieStore.get('currentUser');
+
+      if (angular.isUndefined(Global.users) || Global.users === null) {
+        api.getUsers(vm.currentUser, function(response) {
+          if (response.code == 0) {
+            Global.users = response.data;
+            vm.users = Global.users;
+          }
+        });
+      } else {
+        vm.users = Global.users;
+      }
     }
     
     function addCampaign (ev) {
@@ -82,6 +98,15 @@
         //   }
         // });
       });
+    }
+
+    function selectCampaign (campaign) {
+      Global.currentCampaign = angular.copy(campaign);
+      $state.go('app.dashboard');
+    }
+
+    function goToCampaigns () {
+      $state.go('app.campaigns');
     }
 
     vm.init();

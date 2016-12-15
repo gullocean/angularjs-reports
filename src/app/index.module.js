@@ -32,6 +32,12 @@
       'app.task-summaries',
 
       // reports
-      'app.reports'
+      'app.reports',
+
+      // campaigns
+      'app.campaigns',
+
+      // users
+      'app.users'
     ]);
 })();
