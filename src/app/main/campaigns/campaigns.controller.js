@@ -20,12 +20,19 @@
     vm.selectCampaign = selectCampaign;
     vm.goToUsers      = goToUsers;
 
-    vm.init = function () {
-      vm.campaigns.push({
-        company: 'test campaign',
-        url : 'test url',
-        thumbnail: 'assets/images/thumbnails/campaigns/traffic.png'
-      });
+    function init () {
+      if (angular.isUndefined(Global.campaigns) || Global.campaigns === null) {
+        api.getCampaigns (function(response) {
+          if (response.code === 0) {
+            Global.campaigns = response.data;
+            vm.campaigns = Global.campaigns;
+          } else {
+            console.log( 'campaigns getting error!' );
+          }
+        });
+      } else {
+        vm.campaigns = Global.campaigns;
+      }
     }
     
     function addCampaign (ev) {
@@ -95,6 +102,6 @@
       $state.go('app.users');
     }
 
-    vm.init();
+    init ();
   }
 })();

@@ -53,11 +53,14 @@
 		}
 	}
 	.content{
+		.avatar {
+			margin: 0;
+		}
+		
 		ms-widget-front:hover {
 			border: 1px solid DarkGoldenRod;
 		}
 	}
-	
 }
 
 // RESPONSIVE

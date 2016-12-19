@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app.analytics.organic', ['nvd3', 'datatables'])
+		.module('app.analytics.organic', ['nvd3', 'datatables', 'ngMaterialDateRangePicker', 'angularMoment'])
 		.config(config);
 
 	/** @ngInject */

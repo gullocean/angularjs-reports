@@ -19,7 +19,9 @@
     api.deleteUser        = deleteUser;
     api.updateUser        = updateUser;
     api.getAnalyticsData  = getAnalyticsData;
+    api.getAnalytics      = getAnalytics;
     api.getParticleData   = getParticleData;
+    api.getCampaigns      = getCampaigns;
 
     function auth (data, callback) {
       $http({
@@ -110,6 +112,21 @@
       });
     }
 
+    function getAnalytics (query, callback) {
+      $http({
+        method: 'POST',
+        url: api.baseUrl + '/analytics/get',
+        data : $.param(query),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('get analytics data error : ', error);
+      });
+    }
+
     function getParticleData (callback) {
       $http({
         method: 'GET',
@@ -118,6 +135,20 @@
         callback(response);
       }).error(function(error) {
         console.log('particles data load error : ', error);
+      });
+    }
+
+    function getCampaigns (callback) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/campaigns/get',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('get campaigns error : ', error);
       });
     }
 

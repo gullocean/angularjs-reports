@@ -19,11 +19,11 @@
     </div>
   </div>
   <div class="content">
-    <div class="widget-group" layout="row" flex="100" layout-wrap ng-repeat="(key, campaign) in vm.campaigns">
-			<ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20">
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
+			<ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="33" flex-gt-md="20" ng-repeat="(key, campaign) in vm.campaigns">
 				<ms-widget-front class="white-bg" ng-click="vm.selectCampaign(campaign)">
 					<div class="p-8 pt-16" layout="row" layout-align="space-between center">
-						<div class="h3">{{ campaign.company }}</div>
+						<div class="h3">{{ campaign.title }}</div>
 
 						<md-menu>
 							<md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">

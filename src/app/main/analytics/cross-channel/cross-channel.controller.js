@@ -15,6 +15,22 @@
 		vm.values 	= {};
 
 		vm.init = function () {
+			// console.log(Global.currentCampaign);
+			// var query = {
+			// 	table_id: 'ga:' + Global.currentCampaign.view_ID,
+			// 	metrics: 'ga:sessions, ga:pageviewsPerSession',
+			// 	start_date: '2016-10-01',
+			// 	end_date: '2016-12-16',
+			// 	dimensions: 'ga:month'
+			// };
+			// api.getAnalytics (query, function (response) {
+			// 		if (response.code == 0) {
+			// 			console.log(response);
+			// 		} else {
+			// 			vm.flags.channel = false;
+			// 		}
+			// 	});
+
 			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
 				Global.analytics = {};
 			};

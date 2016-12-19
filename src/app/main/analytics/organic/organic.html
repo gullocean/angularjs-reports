@@ -5,6 +5,15 @@
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
             <div class="h3">Sessions, Pages / Session</div>
+            <div>
+              <md-label class="pr-8">Compare : </md-label>
+              <md-checkbox class="md-caption" ng-model="isCompare" aria-label="compare"></md-checkbox>
+              <md-label class="pr-8">Date range : </md-label>
+              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">30</md-button>
+              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">90</md-button>
+              <md-label class="pl-15 pr-8">Period : </md-label>
+              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{vm.dateRanges.organic.dateStart | date}}:{{vm.dateRanges.organic.dateEnd | date}}</md-button>
+            </div>
           </div>
           <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.organic" data="vm.values.organic"></nvd3>
