@@ -115,32 +115,6 @@
 			}
 		}
 
-		function updateOrganicDateRange ($event, showTemplate) {
-			$mdDateRangePicker
-				.show({targetEvent:$event, model:Global.dateRange} )
-				.then(function(result){
-					if(result) {
-						Global.dateRange = result;
-						Global.dateRange = Global.dateRange;
-						getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
-					}
-				});
-		}
-
-		function getReport (query) {
-			var promise = $q.defer();
-
-			api.getAnalytics (query, function (response) {
-				if (response.code == 0) {
-					promise.resolve (response);
-				} else {
-					promise.reject (response);
-				} 
-			});
-
-			return promise.promise;
-		}
-
 		function getAllReports (dateRange, viewID, isCompare) {
 
 			$rootScope.loadingProgress = true;
@@ -157,7 +131,7 @@
 				dimensions	: 'ga:date'
 			};
 			
-			tasks.push(getReport(query));
+			tasks.push(Global.getReport(query));
 
 			// pages / session
 			query = {
@@ -168,7 +142,7 @@
 				dimensions	: 'ga:date'
 			};
 
-			tasks.push(getReport(query));
+			tasks.push(Global.getReport(query));
 
 			// Landing Pages
 			query = {
@@ -179,7 +153,7 @@
 				dimensions	: 'ga:pageTitle, ga:landingPagePath'
 			};
 
-			tasks.push(getReport(query));
+			tasks.push(Global.getReport(query));
 
 			angular.forEach (vm.keys.compare, function (item) {
 
@@ -191,7 +165,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(getReport(query));
+				tasks.push(Global.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -201,7 +175,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(getReport(query));
+				tasks.push(Global.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -211,7 +185,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(getReport(query));
+				tasks.push(Global.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -221,7 +195,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(getReport(query));
+				tasks.push(Global.getReport(query));
 			});
 
 			$q.all(tasks).then (function (response) {
@@ -274,11 +248,24 @@
 			});
 		}
 
+		function updateOrganicDateRange ($event, showTemplate) {
+			$mdDateRangePicker
+				.show({targetEvent:$event, model:Global.dateRange} )
+				.then(function(result){
+					if(result) {
+						Global.dateRange = result;
+						vm.dateRange = Global.dateRange;
+						getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+					}
+				});
+		}
+
 		function onThirtyDays () {
 			Global.dateRange = {
 				dateStart: 	new Date(moment(new Date()).subtract(30, 'days')),
 				dateEnd: 		new Date(moment(new Date()))
 			};
+			vm.dateRange = Global.dateRange;
 			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
 		}
 
@@ -287,6 +274,7 @@
 				dateStart: 	new Date(moment(new Date()).subtract(90, 'days')),
 				dateEnd: 		new Date(moment(new Date()))
 			};
+			vm.dateRange = Global.dateRange;
 			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
 		}
 

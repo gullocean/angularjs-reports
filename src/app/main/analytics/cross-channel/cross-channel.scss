@@ -1,9 +1,14 @@
 #cross-channel {
 	position: relative;
 	
-	.table-header {
-		span {
-			text-transform: capitalize;
+	#widgets {
+		
+		md-label {
+			vertical-align: middle;
+		}
+
+		i {
+			vertical-align: middle;
 		}
 	}
 }

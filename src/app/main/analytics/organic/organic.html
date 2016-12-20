@@ -6,7 +6,7 @@
           <div class="p-24 border-bottom" layout="row" layout-align="end center">
             <div>
               <md-label class="pr-8">Compare : </md-label>
-              <md-checkbox class="md-caption" ng-model="vm.isCompare" aria-label="compare" ng-click="vm.onCompare();"></md-checkbox>
+              <md-checkbox class="md-caption" ng-model="vm.isCompare" aria-label="compare"></md-checkbox>
               <md-label class="pr-8">Date range : </md-label>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
@@ -59,7 +59,7 @@
 
             <div layout="row" layout-align="start center">
               <span>Last week: {{ vm.values.compare[4 * key + 2].value | number }}</span>
-              <span class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
+              <span ng-if="vm.isCompare" class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
             </div>
           </div>
         </ms-widget-front>
