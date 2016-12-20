@@ -1,27 +1,71 @@
 <div id="analytics-organic">
   <div id="widgets">
-    <div ng-if="vm.flags.organic" class="widget-group" layout="row" flex="100" layout-wrap>
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
       <ms-widget flippable="false" layout="row" flex="100">
         <ms-widget-front class="white-bg">
-          <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-            <div class="h3">Sessions, Pages / Session</div>
+          <div class="p-24 border-bottom" layout="row" layout-align="end center">
             <div>
               <md-label class="pr-8">Compare : </md-label>
-              <md-checkbox class="md-caption" ng-model="isCompare" aria-label="compare"></md-checkbox>
+              <md-checkbox class="md-caption" ng-model="vm.isCompare" aria-label="compare" ng-click="vm.onCompare();"></md-checkbox>
               <md-label class="pr-8">Date range : </md-label>
-              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">30</md-button>
-              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.add($event);">90</md-button>
+              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
+              <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
               <md-label class="pl-15 pr-8">Period : </md-label>
-              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{vm.dateRanges.organic.dateStart | date}}:{{vm.dateRanges.organic.dateEnd | date}}</md-button>
+              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{ vm.dateRange.dateStart | date }}:{{ vm.dateRange.dateEnd | date }}</md-button>
             </div>
-          </div>
-          <div class="border-bottom">
-            <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.organic" data="vm.values.organic"></nvd3>
           </div>
         </ms-widget-front>
       </ms-widget>
     </div>
-    <div ng-if="vm.flags.pages" class="widget-group" layout="row" flex="100" layout-wrap>
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
+      <ms-widget flippable="false" layout="row" flex="100">
+        <ms-widget-front class="white-bg">
+          <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
+            <div class="h3">Sessions, Pages / Session</div>
+          </div>
+          <div class="border-bottom">
+            <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.organic" data="vm.chart.values"></nvd3>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+    </div>
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
+      <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25" ng-repeat="(key, metric) in vm.keys.compare">
+        <ms-widget-front class="h-170 p-16 light-blue-bg">
+          <div class="pb-8" layout="row" layout-align="space-between center">
+            <div class="h4 font-weight-500 secondary-text">{{ metric.label }}</div>
+            <md-menu>
+              <md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                <md-icon md-font-icon="icon-dots-vertical"></md-icon>
+              </md-button>
+              <md-menu-content width="2">
+                <md-menu-item>
+                  <!-- <md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button> -->
+                </md-menu-item>
+                <md-menu-item>
+                  <!-- <md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button> -->
+                </md-menu-item>
+              </md-menu-content>
+            </md-menu>
+          </div>
+          <div class="white-fg" layout="column" layout-align="space-between" flex>
+            <div class="md-display-1" layout="row" layout-align="start center">
+              <span>{{ vm.values.compare[4 * key].value | number }}</span>
+              <div ng-if="vm.isCompare">
+                <md-icon ng-if="vm.values.compare[4 * key].value > vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-up" class="s36 ml-16"></md-icon>
+                <md-icon ng-if="vm.values.compare[4 * key].value < vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-down" class="s36 ml-16"></md-icon>
+              </div>
+            </div>
+
+            <div layout="row" layout-align="start center">
+              <span>Last week: {{ vm.values.compare[4 * key + 2].value | number }}</span>
+              <span class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
+            </div>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+    </div>
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
       <ms-widget flippable="false" layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">

@@ -15,9 +15,9 @@
 
     // De-activate loading indicator
     var stateChangeSuccessEvent = $rootScope.$on('$stateChangeSuccess', function() {
-      $timeout(function() {
+      // $timeout(function() {
         $rootScope.loadingProgress = false;
-      });
+      // });
     });
 
     // Store state in the root scope for easy access

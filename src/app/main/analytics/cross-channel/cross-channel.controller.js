@@ -5,35 +5,36 @@
 		.module('app.analytics.crossChannel')
 		.controller('CrossChannelController', CrossChannelController);
 
-	CrossChannelController.$inject = ['Global', 'api'];
+	CrossChannelController.$inject = ['Global', 'api', '$state'];
 	/** @ngInject */
-	function CrossChannelController(Global, api) {
-		var vm 			= this;
+	function CrossChannelController(Global, api, $state) {
+		var vm = this;
 
-		vm.options 	= {};
-		vm.flags 		= {};
-		vm.values 	= {};
+		// variables
+		vm.options 		= {};
+		vm.flags 			= {};
+		vm.values 		= {};
+		vm.dateRange 	= {};
 
 		vm.init = function () {
-			// console.log(Global.currentCampaign);
-			// var query = {
-			// 	table_id: 'ga:' + Global.currentCampaign.view_ID,
-			// 	metrics: 'ga:sessions, ga:pageviewsPerSession',
-			// 	start_date: '2016-10-01',
-			// 	end_date: '2016-12-16',
-			// 	dimensions: 'ga:month'
-			// };
-			// api.getAnalytics (query, function (response) {
-			// 		if (response.code == 0) {
-			// 			console.log(response);
-			// 		} else {
-			// 			vm.flags.channel = false;
-			// 		}
-			// 	});
+
+			if ( angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null ) {
+				$state.go('app.campaigns');
+				return;
+			}
 
 			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
 				Global.analytics = {};
 			};
+
+			if ( angular.isUndefined (Global.dateRange) || Global.dateRange === null ) {
+				Global.dateRange = {
+					dateStart: 	new Date(moment(new Date()).subtract(1, 'months')),
+					dateEnd: 		new Date(moment(new Date()))
+				};
+			}
+
+			vm.dateRange = Global.dateRange;
 
 			if (angular.isUndefined(Global.analytics.channel) || Global.analytics.channel === null) {
 				api.getAnalyticsData ('Sessions_Channel', function (response) {
