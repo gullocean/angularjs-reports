@@ -40,13 +40,13 @@
       weight: 1
     });
 
-    msNavigationServiceProvider.saveItem('fuse.dashboard', {
-      title: 'Dashboard',
-      icon: 'icon-tile-four',
-      translate: 'DASHBOARD.DASHBOARD_NAV',
-      state: 'app.dashboard',
-      weight: 1
-    });
+    // msNavigationServiceProvider.saveItem('fuse.dashboard', {
+    //   title: 'Dashboard',
+    //   icon: 'icon-tile-four',
+    //   translate: 'DASHBOARD.DASHBOARD_NAV',
+    //   state: 'app.dashboard',
+    //   weight: 1
+    // });
 
     // msNavigationServiceProvider.saveItem('fuse.dashboard.manageUsers', {
     //   title: 'Users',

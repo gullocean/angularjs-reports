@@ -43,34 +43,6 @@
 
 			vm.dateRange = Global.dateRange;
 
-			// if (angular.isUndefined(Global.analytics.channel) || Global.analytics.channel === null) {
-			// 	api.getAnalyticsData ('Sessions_Channel', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.channel = response.data;
-			// 			vm.values.channel 	= Global.analytics.channel;
-			// 			vm.flags.channel = true;
-			// 		} else {
-			// 			vm.flags.channel = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.flags.channel = true;
-			// }
-
-			// if (angular.isUndefined(Global.analytics.device) || Global.analytics.device === null) {
-			// 	api.getAnalyticsData ('Sessions_Device', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.device = response.data;
-			// 			vm.values.device 	= Global.analytics.device;
-			// 			vm.flags.device = true;
-			// 		} else {
-			// 			vm.flags.device = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.flags.device = true;
-			// }
-
 			vm.options = {
 				pieChart: {
 					chart: {
@@ -171,6 +143,7 @@
 				$rootScope.loadingProgress = false;
 			}, function (error) {
 				console.log(error);
+				$rootScope.loadingProgress = false;
 			});
 
 			

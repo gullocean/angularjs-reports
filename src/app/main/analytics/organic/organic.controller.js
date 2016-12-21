@@ -5,10 +5,10 @@
 		.module('app.analytics.organic')
 		.controller('OrganicController', OrganicController);
 
-	OrganicController.$inject = ['Global', 'api', '$rootScope', '$mdDateRangePicker', 'moment', '$q', '$state'];
+	OrganicController.$inject = ['Global', '$rootScope', '$mdDateRangePicker', 'moment', '$q', '$state'];
 	
 	/** @ngInject */
-	function OrganicController(Global, api, $rootScope, $mdDateRangePicker, moment, $q, $state) {
+	function OrganicController(Global, $rootScope, $mdDateRangePicker, moment, $q, $state) {
 		
 		var vm = this;
 
@@ -245,6 +245,7 @@
 
 			}, function (error) {
 				console.log(error);
+				$rootScope.loadingProgress = false;
 			});
 		}
 

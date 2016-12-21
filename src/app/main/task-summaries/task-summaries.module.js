@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('app.task-summaries', [])
+		.module('app.task-summaries', ['ng-sortable', 'textAngular'])
 		.config(config);
 
 	/** @ngInject */

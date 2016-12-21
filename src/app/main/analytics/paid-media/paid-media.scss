@@ -1,9 +1,13 @@
 #paid-media {
 	position: relative;
 	
-	.table-header {
-		span {
-			text-transform: capitalize;
+	.content {
+		md-label {
+			vertical-align: middle;
+		}
+
+		i {
+			vertical-align: middle;
 		}
 	}
 }
