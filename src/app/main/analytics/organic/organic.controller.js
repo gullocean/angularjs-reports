@@ -42,7 +42,26 @@
 
 			vm.dateRange = Global.dateRange;
 
-			vm.keys.pages = ['Page Title', 'Landing Page', 'Pageviews', 'Entrances', 'Avg. Time on Page'];
+			// vm.keys.pages = ['Page Title', 'Landing Page', 'Pageviews', 'Entrances', 'Avg. Time on Page'];
+			vm.keys.pages = [
+				{
+					label 		: 'Landing Page',
+					dimension : 'ga:landingPagePath'
+				}, {
+					label 		: 'Sessions',
+					metrics 	: 'ga:sessions'
+				}, {
+					label 		: 'Bounce Rate',
+					metrics 	: 'ga:bounceRate'
+				}, {
+					label 		: 'Pages Per Session',
+					metrics 	: 'ga:pageviewsPerSession'
+				}, {
+					label 		: 'Average Session Duration',
+					metrics 	: 'ga:avgSessionDuration'
+				}
+			];
+
 			vm.keys.compare = [
 				{
 					label 	: 'Page Views',
@@ -144,14 +163,23 @@
 
 			tasks.push(Global.getReport(query));
 
-			// Landing Pages
-			query = {
-				table_id		: 'ga:' + viewID,
-				metrics			: 'ga:pageviews, ga:entrances, ga:avgTimeOnPage',
-				start_date	: moment(new Date()).subtract(3, 'months').format('YYYY-MM-DD'),
-				end_date		: moment(new Date()).format('YYYY-MM-DD'),
-				dimensions	: 'ga:pageTitle, ga:landingPagePath'
-			};
+			// for pages table
+			query.metrics 		= '';
+			query.dimensions 	= '';
+
+			angular.forEach (vm.keys.pages, function (key) {
+				if (angular.isDefined (key.metrics)) {
+					query.metrics += key.metrics;
+					query.metrics += ',';
+				}
+				if (angular.isDefined (key.dimension)) {
+					query.dimensions += key.dimension;
+					query.dimensions += ',';
+				}
+			});
+
+			query.metrics 		= query.metrics.slice(0, -1);
+			query.dimensions 	= query.dimensions.slice(0, -1);
 
 			tasks.push(Global.getReport(query));
 
@@ -206,7 +234,7 @@
 				// page / session
 				vm.chart.values[1].values = response[1].data;
 
-				// landing page
+				// for pages table
 				vm.values.pages = response[2].data;
 
 				angular.forEach (vm.chart.values, function(r) {
