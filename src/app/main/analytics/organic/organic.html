@@ -21,7 +21,7 @@
       <ms-widget flippable="false" layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-            <div class="h3">Sessions, Pages / Session</div>
+            <div class="h3">Sessions</div>
           </div>
           <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.organic" data="vm.chart.values"></nvd3>
@@ -50,7 +50,8 @@
           </div>
           <div class="white-fg" layout="column" layout-align="space-between" flex>
             <div class="md-display-1" layout="row" layout-align="start center">
-              <span>{{ vm.values.compare[4 * key].value | number }}</span>
+              <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span>
+              <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
               <div ng-if="vm.isCompare">
                 <md-icon ng-if="vm.values.compare[4 * key].value > vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-up" class="s36 ml-16"></md-icon>
                 <md-icon ng-if="vm.values.compare[4 * key].value < vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-down" class="s36 ml-16"></md-icon>

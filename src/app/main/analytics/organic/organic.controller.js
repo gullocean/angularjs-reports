@@ -42,7 +42,6 @@
 
 			vm.dateRange = Global.dateRange;
 
-			// vm.keys.pages = ['Page Title', 'Landing Page', 'Pageviews', 'Entrances', 'Avg. Time on Page'];
 			vm.keys.pages = [
 				{
 					label 		: 'Landing Page',
@@ -64,17 +63,17 @@
 
 			vm.keys.compare = [
 				{
-					label 	: 'Page Views',
-					metrics : 'pageviews'
+					label 	: 'Sessions',
+					metrics : 'ga:sessions'
 				}, {
 					label 	: 'Bounce Rate',
-					metrics : 'bounceRate'
+					metrics : 'ga:bounceRate'
 				}, {
 					label 	: 'Avg. Session Duration',
-					metrics : 'avgSessionDuration'
+					metrics : 'ga:avgSessionDuration'
 				}, {
 					label 	: 'Pages / Session',
-					metrics : 'pageviewsPerSession'
+					metrics : 'ga:pageviewsPerSession'
 				}
 			];
 
@@ -87,25 +86,22 @@
 
 			vm.options.organic = {
 				chart : {
-					type:'multiChart',
+					type:'lineChart',
 					margin : {
 						top: 30,
 						right: 60,
 						bottom: 50,
 						left : 70
 					},
-					x: function(d) { return d[0]; },
+					x: function(d) { return d[0].setFullYear(2016); },
 					y: function(d) { return d[1]; },
 					xScale : d3.time.scale(),
 					xAxis: {
 						axisLabel: 'Year',
 						rotateLabels: 0,
-						tickFormat: function(d) { return moment(d).format('YYYY-MM-DD'); }
+						tickFormat: function(d) { return moment(d).format('MMM DD'); }
 					},
 					yAxis: {
-						tickFormat: function(d) { return d3.format('.2f')(d); }
-					},
-					y2Axis: {
 						tickFormat: function(d) { return d3.format('.2f')(d); }
 					}
 				}
@@ -113,15 +109,11 @@
 
 			vm.chart.values = [
 				{
-					key 		: 'Sessions',
-					type 		: 'line',
-					values 	: [],
-					yAxis 	: 1
+					key 		: 'Current',
+					values 	: []
 				}, {
-					key 		: 'Pages / Session',
-					type 		: 'line',
-					values 	: [],
-					yAxis 	: 2
+					key 		: 'Previous',
+					values 	: []
 				}
 			];
 
@@ -139,27 +131,25 @@
 			$rootScope.loadingProgress = true;
 
 			var tasks = [];
-			var query = {};
-
-			// sessions
-			query = {
+			var query = {
 				table_id		: 'ga:' + viewID,
-				metrics			: 'ga:sessions',
-				start_date	: moment(dateRange.dateStart).format('YYYY-MM-DD'),
-				end_date		: moment(dateRange.dateEnd).format('YYYY-MM-DD'),
-				dimensions	: 'ga:date'
+				metrics			: '',
+				start_date	: '',
+				end_date		: '',
+				dimensions	: ''
 			};
+
+			// sessions for current period
+			query.metrics 		= 'ga:sessions';
+			query.start_date 	= moment(dateRange.dateStart).format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRange.dateEnd).format('YYYY-MM-DD');
+			query.dimensions 	= 'ga:date';
 			
 			tasks.push(Global.getReport(query));
 
-			// pages / session
-			query = {
-				table_id		: 'ga:' + viewID,
-				metrics			: 'ga:pageviewsPerSession',
-				start_date	: moment(dateRange.dateStart).format('YYYY-MM-DD'),
-				end_date		: moment(dateRange.dateEnd).format('YYYY-MM-DD'),
-				dimensions	: 'ga:date'
-			};
+			// sessions for same period of previous year
+			query.start_date 	= moment(dateRange.dateStart).subtract(1, 'years').format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRange.dateEnd).subtract(1, 'years').format('YYYY-MM-DD');
 
 			tasks.push(Global.getReport(query));
 
@@ -187,7 +177,7 @@
 
 				query = {
 					table_id		: 'ga:' + viewID,
-					metrics			: 'ga:' + item.metrics,
+					metrics			: item.metrics,
 					start_date	: moment(dateRange.dateStart).format('YYYY-MM-DD'),
 					end_date		: moment(dateRange.dateEnd).format('YYYY-MM-DD'),
 					dimensions	: null
@@ -197,7 +187,7 @@
 
 				query = {
 					table_id		: 'ga:' + viewID,
-					metrics			: 'ga:' + item.metrics,
+					metrics			: item.metrics,
 					start_date	: moment(dateRange.dateStart).subtract(1, 'years').format('YYYY-MM-DD'),
 					end_date		: moment(dateRange.dateEnd).subtract(1, 'years').format('YYYY-MM-DD'),
 					dimensions	: null
@@ -207,7 +197,7 @@
 
 				query = {
 					table_id		: 'ga:' + viewID,
-					metrics			: 'ga:' + item.metrics,
+					metrics			: item.metrics,
 					start_date	: moment().subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
 					end_date		: moment().subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
@@ -217,7 +207,7 @@
 
 				query = {
 					table_id		: 'ga:' + viewID,
-					metrics			: 'ga:' + item.metrics,
+					metrics			: item.metrics,
 					start_date	: moment().subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
 					end_date		: moment().subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
