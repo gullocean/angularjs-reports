@@ -102,7 +102,7 @@
 						tickFormat: function(d) { return moment(d).format('MMM DD'); }
 					},
 					yAxis: {
-						tickFormat: function(d) { return d3.format('.2f')(d); }
+						tickFormat: function(d) { return d3.format('.0f')(d); }
 					}
 				}
 			};
@@ -110,10 +110,12 @@
 			vm.chart.values = [
 				{
 					key 		: 'Current',
-					values 	: []
+					values 	: [],
+					color 	: 'red'
 				}, {
 					key 		: 'Previous',
-					values 	: []
+					values 	: [],
+					color 	: 'blue'
 				}
 			];
 
