@@ -200,8 +200,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment().subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
-					end_date		: moment().subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.dateStart).subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.dateEnd).subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
@@ -210,8 +210,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment().subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
-					end_date		: moment().subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.dateStart).subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.dateEnd).subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
