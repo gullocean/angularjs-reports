@@ -59,7 +59,11 @@
             </div>
 
             <div layout="row" layout-align="start center">
-              <span>Last week: {{ vm.values.compare[4 * key + 2].value | number }}</span>
+              <span>
+                Last week: 
+                <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span>
+                <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value * 1000 | date : "mm:ss" }}</span>
+              </span>
               <span ng-if="vm.isCompare" class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
             </div>
           </div>

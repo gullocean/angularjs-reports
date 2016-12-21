@@ -47,34 +47,25 @@
 				pieChart: {
 					chart: {
 						type							: 'pieChart',
-						x: function (d) { return d[0]; },
-						y: function (d) { return d[1]; },
+						x									: function (d) { return d[0]; },
+						y 								: function (d) { return d[1]; },
 						showLabels 				: true,
 						transitionDuration: 500,
-						labelThreshold    : 0.01,
 						labelType					: 'percent',
-						labelsOutside			: true
+						labelsOutside			: true,
+						valueFormat				: function (d) { return +d; }
 					}
 				}
 			};
 
-			if (angular.isUndefined (Global.analytics.cross_channel) || Global.analytics.cross_channel === null) {
-				Global.analytics.cross_channel = {};
-
-				getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
-			} else {
-				vm.values = { 
-					channel 		: Global.analytics.cross_channel.channel,
-					device 			: Global.analytics.cross_channel.device,
-					source 			: Global.analytics.cross_channel.source,
-					landingPage : Global.analytics.cross_channel.landingPage
-				};
-			}
+			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
 		}
 
 		function getAllReports (dateRange, viewID, isCompare) {
 
 			$rootScope.loadingProgress = true;
+
+			Global.analytics.cross_channel = {};
 
 			var tasks = [];
 			var query = {};
@@ -124,6 +115,7 @@
 			tasks.push(Global.getReport(query));
 
 			$q.all(tasks).then (function (response) {
+
 				// sessions by channel
 				Global.analytics.cross_channel.channel 			= response[0].data;
 				// sessions by device
