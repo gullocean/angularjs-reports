@@ -11,7 +11,7 @@
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
               <md-label class="pl-15 pr-8">Period : </md-label>
-              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{ vm.dateRange.dateStart | date }}:{{ vm.dateRange.dateEnd | date }}</md-button>
+              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{ vm.dateRange.this.dateStart | date }}:{{ vm.dateRange.this.dateEnd | date }}</md-button>
             </div>
           </div>
         </ms-widget-front>

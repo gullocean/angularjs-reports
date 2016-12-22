@@ -9,7 +9,7 @@
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
               <md-label class="pl-15 pr-8">Period : </md-label>
-              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{ vm.dateRange.dateStart | date }}:{{ vm.dateRange.dateEnd | date }}</md-button>
+              <md-button class="md-raised md-primary" ng-click="vm.updateOrganicDateRange($event, true)"><i class="pr-8 icon-calendar"></i>{{ vm.dateRange.this.dateStart | date }}:{{ vm.dateRange.this.dateEnd | date }}</md-button>
             </div>
           </div>
         </ms-widget-front>
@@ -34,6 +34,66 @@
           <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.pieChart" data="vm.values.device"></nvd3>
           </div>
+        </ms-widget-front>
+      </ms-widget>
+    </div>
+
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
+      <ms-widget flippable="true" layout="column" flex>
+        <ms-widget-front class="white-bg">
+          <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
+            <div class="h3">Sessions by Device</div>
+          </div>
+
+          <table class="simple" ms-responsive-table>
+            <tbody>
+              <tr>
+                <td class="text-center border">{{ vm.keys.sessionsDevice[0].label }}</td>
+                <td ng-repeat="(iDevice, key) in vm.keys.sessionsDevice" ng-if="iDevice!=0" class="text-center border" ng-style="vm.style.tableDevice">{{ key.label }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div ng-repeat="(iDevice, value) in vm.values.tableSessionDeviceThis" layout="column" class="border">
+            <div class="pl-24 pv-16 border-bottom" layout="row" layout-align="space-between center">
+              <div class="h3 device-name">{{ value[0] }}</div>
+            </div>
+            
+            <table class="simple" ms-responsive-table>
+              
+              <tbody>
+                <tr>
+                  <td class="text-center border" ng-style="{color : '#3B49FF'}">{{ vm.dateRange.this.dateStart | date : 'MM/dd/yyyy' }} - {{ vm.dateRange.this.dateEnd | date : 'MM/dd/yyyy' }}</td>
+                  <td ng-repeat="(k, v) in vm.values.tableSessionDeviceThis[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='text'">{{ v }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number }}%</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='time'">{{ v * 1000 | date : "mm:ss" }}</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="text-center border" ng-style="{color : '#FFB169'}">{{ vm.dateRange.last.dateStart | date : 'MM/dd/yyyy' }} - {{ vm.dateRange.last.dateEnd | date : 'MM/dd/yyyy' }}</td>
+                  <td ng-repeat="(k, v) in vm.values.tableSessionDeviceLast[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='text'">{{ v }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number }}%</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='time'">{{ v * 1000 | date : "mm:ss" }}</span>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td class="text-center border">% change</td>
+                  <td ng-repeat="(k, v) in vm.values.tableSessionDeviceLast[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v > 0" ng-style="{color : '#6AB4A9'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) / v | number }}%</span>
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v < 0" ng-style="{color : '#CB6A79'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) / v | number }}%</span>
+                    <span ng-if="v == 0" ng-style="{color : 'black'}">0.0%</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
         </ms-widget-front>
       </ms-widget>
     </div>

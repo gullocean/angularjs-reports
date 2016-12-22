@@ -35,8 +35,14 @@
 			
 			if ( angular.isUndefined (Global.dateRange) || Global.dateRange === null ) {
 				Global.dateRange = {
-					dateStart: 	new Date(moment(new Date()).subtract(1, 'months')),
-					dateEnd: 		new Date(moment(new Date()))
+					this : {
+						dateStart: 	moment().subtract(1, 'months').toDate(),
+						dateEnd: 		moment().toDate()
+					},
+					last : {
+						dateStart: 	moment().subtract(1, 'years').subtract(1, 'months').toDate(),
+						dateEnd: 		moment().subtract(1, 'years').toDate()
+					}
 				};
 			}
 
@@ -143,15 +149,15 @@
 
 			// sessions for current period
 			query.metrics 		= 'ga:sessions';
-			query.start_date 	= moment(dateRange.dateStart).format('YYYY-MM-DD');
-			query.end_date 		= moment(dateRange.dateEnd).format('YYYY-MM-DD');
+			query.start_date 	= moment(dateRange.this.dateStart).format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRange.this.dateEnd).format('YYYY-MM-DD');
 			query.dimensions 	= 'ga:date';
 			
 			tasks.push(Global.getReport(query));
 
 			// sessions for same period of previous year
-			query.start_date 	= moment(dateRange.dateStart).subtract(1, 'years').format('YYYY-MM-DD');
-			query.end_date 		= moment(dateRange.dateEnd).subtract(1, 'years').format('YYYY-MM-DD');
+			query.start_date 	= moment(dateRange.last.dateStart).format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRange.last.dateEnd).format('YYYY-MM-DD');
 
 			tasks.push(Global.getReport(query));
 
@@ -180,8 +186,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment(dateRange.dateStart).format('YYYY-MM-DD'),
-					end_date		: moment(dateRange.dateEnd).format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.this.dateStart).format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.this.dateEnd).format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
@@ -190,8 +196,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment(dateRange.dateStart).subtract(1, 'years').format('YYYY-MM-DD'),
-					end_date		: moment(dateRange.dateEnd).subtract(1, 'years').format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.last.dateStart).format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.last.dateEnd).format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
@@ -200,8 +206,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment(dateRange.dateStart).subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
-					end_date		: moment(dateRange.dateEnd).subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.this.dateStart).subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.this.dateEnd).subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
@@ -210,8 +216,8 @@
 				query = {
 					table_id		: 'ga:' + viewID,
 					metrics			: item.metrics,
-					start_date	: moment(dateRange.dateStart).subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
-					end_date		: moment(dateRange.dateEnd).subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
+					start_date	: moment(dateRange.this.dateStart).subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
+					end_date		: moment(dateRange.this.dateEnd).subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
 					dimensions	: null
 				};
 
@@ -271,32 +277,50 @@
 
 		function updateOrganicDateRange ($event, showTemplate) {
 			$mdDateRangePicker
-				.show({targetEvent:$event, model:Global.dateRange} )
+				.show({targetEvent:$event, model:Global.dateRange.this} )
 				.then(function(result){
 					if(result) {
-						Global.dateRange = result;
+						Global.dateRange.this = result;
+						Global.dateRange.last = {
+							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years'),
+							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years')
+						};
+
 						vm.dateRange = Global.dateRange;
-						getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+
+						getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
 					}
 				});
 		}
 
 		function onThirtyDays () {
 			Global.dateRange = {
-				dateStart: 	new Date(moment(new Date()).subtract(30, 'days')),
-				dateEnd: 		new Date(moment(new Date()))
+				this : {
+					dateStart: 	moment().subtract(30, 'days').toDate(),
+					dateEnd: 		moment().toDate()
+				},
+				last : {
+					dateStart: 	moment().subtract(1, 'years').subtract(30, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'years').toDate()
+				}
 			};
 			vm.dateRange = Global.dateRange;
-			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
 		}
 
 		function onNinetyDays () {
 			Global.dateRange = {
-				dateStart: 	new Date(moment(new Date()).subtract(90, 'days')),
-				dateEnd: 		new Date(moment(new Date()))
+				this : {
+					dateStart: 	moment().subtract(90, 'days').toDate(),
+					dateEnd: 		moment().toDate()
+				},
+				last : {
+					dateStart: 	moment().subtract(1, 'years').subtract(90, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'years').toDate()
+				}
 			};
 			vm.dateRange = Global.dateRange;
-			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
 		}
 
 		vm.init();

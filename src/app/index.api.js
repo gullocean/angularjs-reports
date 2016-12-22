@@ -123,6 +123,7 @@
       }).success(function(response) {
         callback(response);
       }).error(function(error) {
+        $rootScope.loadingProgress = false;
         console.log('get analytics data error : ', error);
       });
     }
