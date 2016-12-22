@@ -6,34 +6,31 @@
       </div>
       <div class="border-bottom">
         <div class="white-bg md-whiteframe-4dp">
-          <table ng-if="vm.flags.PPC" class="dataTable row-border hover" datatable="ng" dt-options="vm.options.PPC">
+          <table class="dataTable row-border hover" datatable="ng" dt-options="vm.options.table">
             <thead>
               <tr>
-                <th class="secondary-text" ng-repeat="head in vm.keys.PPC">
+                <th class="secondary-text border" ng-repeat="key in vm.keys.table">
                   <div class="table-header">
-                    <span class="column-title">{{head}}</span>
+                    <span class="column-title">{{ key.label }}</span>
                   </div>
                 </th>
               </tr>
             </thead>
             <tbody>
-              <tr ng-repeat="(key, value) in vm.values.PPC">
-                <!-- <td ng-repeat="(k, v) in value track by $index">{{v}}</td> -->
-                <td>{{ value[0] }}</td>
-                <!-- clicks(#) -->
-                <td>{{ value[1] | number }}</td> 
-                <!-- cost($) -->
-                <td>{{ value[2] | currency }}</td>
-                <!-- clickthrough rate (%) -->
-                <td>{{ value[3] | number }}%</td>
-                <!-- cost per click ($) -->
-                <td>{{ value[4] | currency }}</td>
-                <!-- revenue ($) -->
-                <td>{{ value[5] | currency }}</td>
-                <!-- goal completions (#) -->
-                <td>{{ value[6] | number }}</td>
-                <!-- conversion rate (%) -->
-                <td>{{ value[7] | number }}%</td>
+              <tr ng-repeat="(iValue, value) in vm.values.tableThis">
+                <td ng-repeat="(iItem, key) in vm.keys.table track by $index" class="border">
+                  <span layout="row" layout-align="space-between center">
+                    <span ng-if="key.dimension != null">{{ value[key.index] }}</span>
+                    <span ng-if="key.dimension == null && key.filter=='text'">{{ value[key.index] }}</span>
+                    <span ng-if="key.dimension == null && key.filter=='currency'">{{ value[key.index] | currency }}</span>
+                    <span ng-if="key.dimension == null && key.filter=='percent'">{{ value[key.index] | number }}%</span>
+
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] > 0" class="compare" ng-style="{color :  'green'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] | number }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] < 0" class="compare" ng-style="{color :  'red'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] | number }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] == 0" class="compare" ng-style="{color :  'black'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] | number }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] == 0" class="compare" ng-style="{color : 'black'}">(0%)</span>
+                  </span>
+                </td>
               </tr>
             </tbody>
           </table>

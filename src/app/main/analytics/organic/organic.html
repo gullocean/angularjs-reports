@@ -33,20 +33,20 @@
       <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25" ng-repeat="(key, metric) in vm.keys.compare">
         <ms-widget-front class="h-170 p-16 light-blue-bg">
           <div class="pb-8" layout="row" layout-align="space-between center">
-            <div class="h4 font-weight-500 secondary-text">{{ metric.label }}</div>
-            <md-menu>
+            <div class="h4 font-weight-500 secondary-text pv-16">{{ metric.label }}</div>
+            <!-- <md-menu>
               <md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">
                 <md-icon md-font-icon="icon-dots-vertical"></md-icon>
               </md-button>
               <md-menu-content width="2">
                 <md-menu-item>
-                  <!-- <md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button> -->
+                  <md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <!-- <md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button> -->
+                  <md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button>
                 </md-menu-item>
               </md-menu-content>
-            </md-menu>
+            </md-menu> -->
           </div>
           <div class="white-fg" layout="column" layout-align="space-between" flex>
             <div class="md-display-1" layout="row" layout-align="start center">

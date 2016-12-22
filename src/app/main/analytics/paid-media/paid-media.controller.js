@@ -16,6 +16,7 @@
 		vm.flags 	 		= {};
 		vm.values  		= {};
 		vm.keys		 		= {};
+		vm.indices 		= {};
 		vm.messages 	= {};
 		vm.dateRanges	= {};
 
@@ -26,10 +27,6 @@
 			if ( angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null ) {
 				$state.go('app.campaigns');
 				return;
-			}
-
-			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
-				Global.analytics = {};
 			}
 
 			vm.dateRanges.table = {
@@ -43,82 +40,99 @@
 				}
 			};
 
+			vm.indices = {
+				tableThis : null,
+				tableLast : null
+			}
+
 			vm.options = { 
-				PPC: {
+				table 		: {
 					dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
 		      pagingType: 'simple',
 		      autoWidth: false,
 		      responsive: true
 		    },
-		    PPC_CTR: {
-		    	chart: {
-		    		type: 'lineChart',
-		    		color: ['#03A9F4'],
-		    		height: 40,
-		    		margin: { top: 4, right: 4, bottom: 4, left: 4 },
-		    		isArea: true,
-		    		interpolate: 'cardinal',
-		    		clipEdge: true,
-		    		duration: 500,
-		    		showXAxis: false,
-		    		showYAxis: false,
-		    		showLegend: false,
-		    		x: function(d) { return d[0]; },
-		    		y: function(d) { return d[1]; }
-		    	}
-		    },
-		    PPC_CPC: {
-		    	chart: {
-		    		type: 'lineChart',
-		    		x: function(d) { return d[0]; },
-		    		y: function(d) { return d[1]; },
-		    		color: ['#03A9F4'],
-		    		height: 40,
-		    		margin: { top: 4, right: 4, bottom: 4, left: 4 },
-		    		isArea: true,
-		    		interpolate: 'cardinal',
-		    		clipEdge: true,
-		    		duration: 500,
-		    		showXAxis: false,
-		    		showYAxis: false,
-		    		showLegend: false
+		    lineChart : {
+		    	chart : {
+		    		type 				: 'lineChart',
+		    		color 			: ['#03A9F4'],
+		    		height			: 40,
+		    		margin			: { top: 4, right: 4, bottom: 4, left: 4 },
+		    		isArea			: true,
+		    		interpolate	: 'cardinal',
+		    		clipEdge		: true,
+		    		duration		: 500,
+		    		showXAxis		: false,
+		    		showYAxis		: false,
+		    		showLegend	: false,
+		    		x 					: function(d) { return d[0]; },
+		    		y 					: function(d) { return d[1]; }
 		    	}
 		    }
 			};
 
-			vm.keys = {
-				PPC: ['Campaign', 'Clicks', 'Cost', 'Clickthrough rate', 'Cost per click', 'Revenue', 'Goal Completions', 'Conversion Rate', 'Cost/Goalcompletion', 'ROI']
-			};
-
 			vm.keys.table = [
 				{
-					label 	: 'Clicks',
-					metrics	: 'ga:adClicks'
+					label 		: 'Campaign',
+					metrics 	: null,
+					dimension	: 'ga:campaign',
+					filter		: 'text',
+					index 		: null
 				}, {
-					label		: 'Cost',
-					metrics : 'ga:adCost'
+					label 		: 'Clicks',
+					metrics		: 'ga:adClicks',
+					filter		: 'text',
+					index 		: null,
+					dimension : null
 				}, {
-					label 	: 'Clickthrough rate',
-					metrics : 'ga:CTR'
+					label			: 'Cost',
+					metrics 	: 'ga:adCost',
+					filter		: 'currency',
+					index 		: null,
+					dimension : null
 				}, {
-					label		: 'Cost per click',
-					metrics : 'ga:CPC'
+					label 		: 'Clickthrough rate',
+					metrics 	: 'ga:CTR',
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
 				}, {
-					label		: 'Revenue',
-					metrics : 'ga:transactionRevenue'
+					label			: 'Cost per click',
+					metrics 	: 'ga:CPC',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
 				}, {
-					label		: 'Goal Completions',
-					metrics : 'ga:goalCompletionsAll'
+					label			: 'Revenue',
+					metrics 	: 'ga:transactionRevenue',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
 				}, {
-					label 	: 'Conversion Rate',
-					metrics : 'ga:goalConversionRateAll'
+					label			: 'Goal Completions',
+					metrics 	: 'ga:goalCompletionsAll',
+					filter 		: 'text',
+					index 		: null,
+					dimension : null
 				}, {
-					label 	: 'Cost per Goal Conversion',
-					metrics : 'ga:costPerGoalConversion'
-				}/*, {
-					label		: 'ROI',
-					metrics : null
-				}*/
+					label 		: 'Conversion Rate',
+					metrics 	: 'ga:goalConversionRateAll',
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
+				}, {
+					label 		: 'Cost per Goal Conversion',
+					metrics 	: 'ga:costPerGoalConversion',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
+				}, {
+					label			: 'ROI',
+					metrics 	: null,
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
+				}
 			];
 
 			getAllReports (vm.dateRanges.table, Global.currentCampaign.view_ID);
@@ -248,6 +262,7 @@
 		}
 
 		function getAllReports (dateRanges, viewID) {
+
 			$rootScope.loadingProgress = true;
 
 			var tasks = [];
@@ -256,33 +271,65 @@
 			// for this month
 			query = {
 				table_id		: 'ga:' + viewID,
-				metrics			: 'ga:adClicks, ga:adCost, ga:CTR, ga:CPC, ga:transactionRevenue, ga:goalCompletionsAll, ga:goalConversionRateAll, ga:costPerGoalConversion',
+				metrics			: '',
 				start_date	: moment(dateRanges.thisMonth.dateStart).format('YYYY-MM-DD'),
 				end_date		: moment(dateRanges.thisMonth.dateEnd).format('YYYY-MM-DD'),
-				dimensions	: 'ga:campaign'
+				dimensions	: ''
 			};
 
-			tasks.push (Global.getReport (query));
+			var indexMetrics = 0;
 
-			// angular.forEach (vm.keys.table, function (d) {
-			// 	query.metrics = d.metrics;
-			// 	tasks.push (Global.getReport (query));
-			// });
+			angular.forEach (vm.keys.table, function (key, index) {
+				if (key.metrics != null) {
+					query.metrics += key.metrics;
+					query.metrics += ',';
+					vm.keys.table[index].index = indexMetrics ++;
+				}
+				if (key.dimension != null) {
+					query.dimensions += key.dimension;
+					query.dimensions += ',';
+					vm.keys.table[index].index = indexMetrics ++;
+				}
+			});
+
+			query.metrics 		= query.metrics.slice(0, -1);
+			query.dimensions 	= query.dimensions.slice(0, -1);
+
+			vm.indices.tableThis = tasks.push (Global.getReport (query)) - 1;
 
 			// for last month
-			query.start_date = moment(dateRanges.lastMonth.dateStart).format('YYYY-MM-DD');
-			query.end_date = moment(dateRanges.lastMonth.dateEnd).format('YYYY-MM-DD');
+			query.start_date 	= moment(dateRanges.lastMonth.dateStart).format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRanges.lastMonth.dateEnd).format('YYYY-MM-DD');
 
-			tasks.push (Global.getReport (query));
-
-			// angular.forEach (vm.keys.table, function (d) {
-			// 	query.metrics = d.metrics;
-			// 	tasks.push (Global.getReport (query));
-			// });
+			vm.indices.tableLast = tasks.push (Global.getReport (query)) - 1;
 			
 			$q.all(tasks).then (function (response) {
+				
+				vm.values.tableThis = response[vm.indices.tableThis].data;
+				vm.values.tableLast = response[vm.indices.tableLast].data;
+
+				angular.forEach (vm.values.tableThis, function(value, index) {
+					var revenue = {}, cost = {}, roi = {};
+					for (var i = 0; i < vm.keys.table.length; i ++) {
+						if (vm.keys.table[i].label == 'Revenue') {
+							revenue.this = +vm.values.tableThis[index][vm.keys.table[i].index];
+							revenue.last = +vm.values.tableLast[index][vm.keys.table[i].index];
+						}
+						if (vm.keys.table[i].label == 'Cost') {
+							cost.this = +vm.values.tableThis[index][vm.keys.table[i].index];
+							cost.last = +vm.values.tableLast[index][vm.keys.table[i].index];
+						}
+					}
+					roi.this = cost.this == 0 ? 0 : (revenue.this - cost.this) / cost.this;
+					roi.last = cost.last == 0 ? 0 : (revenue.last - cost.last) / cost.last;
+
+					vm.keys.table[vm.keys.table.length - 1].index = vm.values.tableThis[index].push(roi.this) - 1;
+					vm.keys.table[vm.keys.table.length - 1].index = vm.values.tableLast[index].push(roi.last) - 1;
+				});
+
+				console.log(vm.values);
+
 				$rootScope.loadingProgress = false;
-				console.log('paid media response', response);
 			}, function (error) {
 				$rootScope.loadingProgress = false;
 				console.log('paid media error', error);
