@@ -2,34 +2,23 @@
   <ms-widget flippable="false" layout="row" flex="100">
     <ms-widget-front class="white-bg">
       <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-        <div class="h3">PPC CTR</div>
-      </div>
-      <div layout="row" layout-align="start center" layout-wrap>
-        <div ng-repeat="ctr in vm.values.PPC_CTR" class="p-24 grey-50-bg" layout="row" layout-align="start center" flex="100" flex-gt-xs="33">
-          <div layout="column" flex>
-            <div class="h3 secondary-text pb-8">{{ctr[0].key}}</div>
-            <div class="font-size-32 line-height-32 pb-16">{{vm.GetSum(ctr[0].values) | number : 2}}</div>
-            <div>
-              <nvd3 ng-if="vm.flags.PPC_CTR" class="h-40" options="vm.options.PPC_CTR" data="ctr"></nvd3>
-            </div>
-          </div>
+        <dir>
+          <div class="h3">{{vm.dateRanges.chart.dateStart | date : 'MMM dd yyyy'}} - {{vm.dateRanges.chart.dateEnd | date : 'MMM dd yyyy'}}</div>
+        </dir>
+        <div>
+          <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
+          <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onSixtyDays($event);">60</md-button>
+          <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
         </div>
       </div>
-    </ms-widget-front>
-  </ms-widget>
 
-  <ms-widget flippable="false" layout="row" flex="100">
-    <ms-widget-front class="white-bg">
-      <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-        <div class="h3">PPC CPC</div>
-      </div>
       <div layout="row" layout-align="start center" layout-wrap>
-        <div ng-repeat="cpc in vm.values.PPC_CPC" class="p-24 grey-50-bg" layout="row" layout-align="start center" flex="100" flex-gt-xs="33">
+        <div ng-repeat="(index, key) in vm.keys.chart" class="p-24 grey-50-bg" layout="row" layout-align="start center" flex="100" flex-gt-xs="33">
           <div layout="column" flex>
-            <div class="h3 secondary-text pb-8">{{cpc[0].key}}</div>
-            <div class="font-size-32 line-height-32 pb-16">{{vm.GetSum(cpc[0].values) | number : 2}}</div>
+            <div class="h3 secondary-text pb-8">{{ key.label }}</div>
+            <div class="font-size-32 line-height-32 pb-16">{{ vm.sum(vm.values.charts[index][0].values, 1) | number : 2 }}</div>
             <div>
-              <nvd3 ng-if="vm.flags.PPC_CPC" class="h-40" options="vm.options.PPC_CPC" data="cpc"></nvd3>
+              <nvd3 class="h-40" options="vm.options.lineChart" data="vm.values.charts[index]"></nvd3>
             </div>
           </div>
         </div>

@@ -93,12 +93,7 @@
 			vm.options.organic = {
 				chart : {
 					type:'lineChart',
-					margin : {
-						top: 30,
-						right: 60,
-						bottom: 50,
-						left : 70
-					},
+					margin : { top: 30, right: 60, bottom: 50, left : 70 },
 					x: function(d) { return d[0].setFullYear(2016); },
 					y: function(d) { return d[1]; },
 					xScale : d3.time.scale(),
@@ -282,8 +277,8 @@
 					if(result) {
 						Global.dateRange.this = result;
 						Global.dateRange.last = {
-							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years'),
-							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years')
+							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years').toDate (),
+							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
 						};
 
 						vm.dateRange = Global.dateRange;

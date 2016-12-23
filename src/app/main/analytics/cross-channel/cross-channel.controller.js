@@ -234,8 +234,8 @@
 					if(result) {
 						Global.dateRange.this = result;
 						Global.dateRange.last = {
-							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years'),
-							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years')
+							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years').toDate (),
+							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
 						};
 
 						vm.dateRange = Global.dateRange;

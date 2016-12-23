@@ -21,6 +21,10 @@
 		vm.dateRanges	= {};
 
 		// methods
+		vm.onThirtyDays	= onThirtyDays;
+		vm.onSixtyDays	= onSixtyDays;
+		vm.onNinetyDays = onNinetyDays;
+		vm.sum 					= Global.sum;
 
 		function init () {
 
@@ -40,9 +44,28 @@
 				}
 			};
 
+			vm.dateRanges.chart = {
+				dateStart 	: moment ().subtract (30, 'days').toDate (),
+				dateEnd 		: moment ().toDate ()
+			};
+
+			vm.dateRanges.box = {
+				last : {
+					dateStart 	: moment ().subtract (30, 'days').toDate (),
+					dateEnd 		: moment ().toDate ()
+				},
+				prev : {
+					dateStart 	: moment ().subtract (60, 'days').toDate (),
+					dateEnd 		: moment ().subtract (31, 'days').toDate ()
+				}
+			};
+
 			vm.indices = {
 				tableThis : null,
-				tableLast : null
+				tableLast : null,
+
+				boxLast 	: null,
+				boxPrev 	: null
 			}
 
 			vm.options = { 
@@ -65,8 +88,13 @@
 		    		showXAxis		: false,
 		    		showYAxis		: false,
 		    		showLegend	: false,
-		    		x 					: function(d) { return d[0]; },
-		    		y 					: function(d) { return d[1]; }
+		    		x 					: function(d) { return moment (d[0]).toDate (); },
+		    		y 					: function(d) { return Math.round (d[1] * 100) / 100 ; },
+		    		xAxis 			: {},
+		    		tooltip			: {
+		    			headerFormatter : function (d) { return moment (d).format ('MMM DD YYYY'); },
+		    			keyFormatter 		: function (d) { return null; }
+		    		}
 		    	}
 		    }
 			};
@@ -135,130 +163,156 @@
 				}
 			];
 
-			getAllReports (vm.dateRanges.table, Global.currentCampaign.view_ID);
+			vm.keys.chart = [
+				{
+					label 		: 'CTR (%)',
+					metrics 	: 'ga:CTR',
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
+				}, {
+					label 		: 'CPC ($)',
+					metrics 	: 'ga:CPC',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
+				}, {
+					label 		: 'Cost / Conv. ($)',
+					metrics 	: 'ga:adCost, ga:goalCompletionsAll',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
+				}/*, {
+					label 		: 'Conversions / Goal Completions',
+					metrics 	: 'ga:costPerGoalConversion',
+					filter 		: 'number',
+					index 		: null,
+					dimension : null
+				}*/, {
+					label 		: 'Conversions (#)',
+					metrics 	: 'ga:costPerGoalConversion',
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
+				}, {
+					label 		: 'Conv. Rate (%)',
+					metrics 	: 'ga:goalConversionRateAll',
+					filter 		: 'percent',
+					index 		: null,
+					dimension : null
+				}, {
+					label 		: 'Revenue ($)',
+					metrics 	: 'ga:transactionRevenue',
+					filter 		: 'currency',
+					index 		: null,
+					dimension : null
+				}
+			];
 
-			// PPC table
-			// if (angular.isUndefined(Global.analytics.PPC) || Global.analytics.PPC === null) {
-			// 	api.getAnalyticsData ('PPC_Campaign', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC = response.data;
-			// 			vm.values.PPC 	= Global.analytics.PPC;
-			// 			vm.flags.PPC = true;
-			// 		} else {
-			// 			vm.flags.PPC = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC 	= Global.analytics.PPC;
-			// 	vm.flags.PPC = true;
-			// }
+			vm.keys.box = [
+				{
+					label 		: 'Cost',
+					metrics 	: 'ga:adCost',
+					filter 		: 'currency',
+					indexLast	: null,
+					indexPrev	: null
+				}, {
+					label 		: 'Conversions',
+					metrics 	: 'ga:costPerGoalConversion',
+					filter 		: 'number',
+					indexLast	: null,
+					indexPrev	: null
+				}, {
+					label 		: 'Cost / Goal Completion',
+					metrics 	: 'ga:adCost, ga:goalCompletionsAll',
+					filter 		: 'currency',
+					indexLast	: null,
+					indexPrev	: null
+				}, {
+					label 		: 'Conversion Rate',
+					metrics 	: 'ga:goalConversionRateAll',
+					filter 		: 'percent',
+					indexLast	: null,
+					indexPrev	: null
+				}, {
+					label 		: 'CTR',
+					metrics 	: 'ga:CTR',
+					filter 		: 'percent',
+					indexLast	: null,
+					indexPrev	: null
+				}, {
+					label 		: 'CPC',
+					metrics 	: 'ga:CPC',
+					filter 		: 'currency',
+					indexLast	: null,
+					indexPrev	: null
+				}
+			];
 
-			// charts
-			// if (angular.isUndefined(Global.analytics.PPC_CTR) || Global.analytics.PPC_CTR === null) {
-			// 	api.getAnalyticsData ('PPC_CTR', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_CTR = response.data;
-			// 			vm.values.PPC_CTR 	= Global.analytics.PPC_CTR;
-			// 			vm.flags.PPC_CTR = true;
-			// 		} else {
-			// 			vm.flags.PPC_CTR = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_CTR 	= Global.analytics.PPC_CTR;
-			// 	vm.flags.PPC_CTR = true;
-			// }
+			getAllReports (vm.dateRanges, Global.currentCampaign.view_ID);
 
-			// if (angular.isUndefined(Global.analytics.PPC_CPC) || Global.analytics.PPC_CPC === null) {
-			// 	api.getAnalyticsData ('PPC_CPC', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_CPC = response.data;
-			// 			vm.values.PPC_CPC 	= Global.analytics.PPC_CPC;
-			// 			vm.flags.PPC_CPC = true;
-			// 		} else {
-			// 			vm.flags.PPC_CPC = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_CPC 	= Global.analytics.PPC_CPC;
-			// 	vm.flags.PPC_CPC = true;
-			// }
-
-			// box
-			// if (angular.isUndefined(Global.analytics.PPC_Conversion_Rate) || Global.analytics.PPC_Conversion_Rate === null) {
-			// 	api.getAnalyticsData ('PPC_Conversion_Rate', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_Conversion_Rate = response.data;
-			// 			vm.values.PPC_Conversion_Rate 	= Global.analytics.PPC_Conversion_Rate;
-			// 			vm.flags.PPC_Conversion_Rate = true;
-			// 		} else {
-			// 			vm.messages.PPC_Conversion_Rate = response.message;
-			// 			vm.flags.PPC_Conversion_Rate = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_Conversion_Rate 	= Global.analytics.PPC_Conversion_Rate;
-			// 	vm.flags.PPC_Conversion_Rate = true;
-			// }
-
-			// if (angular.isUndefined(Global.analytics.PPC_Cost) || Global.analytics.PPC_Cost === null) {
-			// 	api.getAnalyticsData ('PPC_Cost', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_Cost = response.data;
-			// 			vm.values.PPC_Cost 	= Global.analytics.PPC_Cost;
-			// 			vm.flags.PPC_Cost = true;
-			// 		} else {
-			// 			vm.messages.PPC_Cost = response.message;
-			// 			vm.flags.PPC_Cost = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_Cost 	= Global.analytics.PPC_Cost;
-			// 	vm.flags.PPC_Cost = true;
-			// }
-
-			// if (angular.isUndefined(Global.analytics.PPC_Conversions) || Global.analytics.PPC_Conversions === null) {
-			// 	api.getAnalyticsData ('PPC_Conversions', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_Conversions = response.data;
-			// 			vm.values.PPC_Conversions 	= Global.analytics.PPC_Conversions;
-			// 			vm.flags.PPC_Conversions = true;
-			// 		} else {
-			// 			vm.messages.PPC_Conversions = response.message;
-			// 			vm.flags.PPC_Conversions = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_Conversions 	= Global.analytics.PPC_Conversions;
-			// 	vm.flags.PPC_Conversions = true;
-			// }
-
-			// if (angular.isUndefined(Global.analytics.PPC_CPA_Box) || Global.analytics.PPC_CPA_Box === null) {
-			// 	api.getAnalyticsData ('PPC_CPA_Box', function (response) {
-			// 		if (response.code == 0) {
-			// 			Global.analytics.PPC_CPA_Box = response.data;
-			// 			vm.values.PPC_CPA_Box 	= Global.analytics.PPC_CPA_Box;
-			// 			vm.flags.PPC_CPA_Box = true;
-			// 		} else {
-			// 			vm.messages.PPC_CPA_Box = response.message;
-			// 			vm.flags.PPC_CPA_Box = false;
-			// 		}
-			// 	});
-			// } else {
-			// 	vm.values.PPC_CPA_Box 	= Global.analytics.PPC_CPA_Box;
-			// 	vm.flags.PPC_CPA_Box = true;
-			// }
-
-			
 		};
 
-		vm.GetSum = function (data) {
-			if (angular.isUndefined(data) || data === null) return null;
-			var sum = 0;
-			angular.forEach(data, function(d) {
-				sum += +d[1];
+		function onThirtyDays () {
+			vm.dateRanges.chart = {
+				dateStart 	: moment ().subtract (30, 'days').toDate (),
+				dateEnd 		: moment ().toDate ()
+			};
+			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+		}
+
+		function onSixtyDays () {
+			vm.dateRanges.chart = {
+				dateStart 	: moment ().subtract (60, 'days').toDate (),
+				dateEnd 		: moment ().toDate ()
+			};
+			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+		}
+		
+		function onNinetyDays () {
+			vm.dateRanges.chart = {
+				dateStart 	: moment ().subtract (90, 'days').toDate (),
+				dateEnd 		: moment ().toDate ()
+			};
+			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+		}
+
+		function getChartReports (dateRange, viewID) {
+			$rootScope.loadingProgress = true;
+
+			var tasks = [];
+
+			var query = {
+				table_id		: 'ga:' + viewID,
+				metrics			: '',
+				start_date	: moment(dateRange.dateStart).format('YYYY-MM-DD'),
+				end_date		: moment(dateRange.dateEnd).format('YYYY-MM-DD'),
+				dimensions	: 'ga:date'
+			};
+
+			angular.forEach (vm.keys.chart, function (key, index) {
+				query.metrics 							= key.metrics;
+				vm.keys.chart[index].index 	= tasks.push (Global.getReport (query)) - 1;
 			});
-			return sum;
+			
+			$q.all(tasks).then (function (response) {
+				
+				// chart
+				vm.values.charts = [];
+				angular.forEach (vm.keys.chart, function (key, index) {
+					vm.values.charts.push ([{
+						key 		: key.label,
+						values 	: response [key.index].data
+					}]);
+				});
+
+				vm.options.lineChart.chart.xAxis.domain = d3.extent(vm.values.charts[0][0].values, function (d) { return d[0]; });
+
+				$rootScope.loadingProgress = false;
+			}, function (error) {
+				$rootScope.loadingProgress = false;
+				console.log('paid media error', error);
+			});
 		}
 
 		function getAllReports (dateRanges, viewID) {
@@ -272,8 +326,8 @@
 			query = {
 				table_id		: 'ga:' + viewID,
 				metrics			: '',
-				start_date	: moment(dateRanges.thisMonth.dateStart).format('YYYY-MM-DD'),
-				end_date		: moment(dateRanges.thisMonth.dateEnd).format('YYYY-MM-DD'),
+				start_date	: moment(dateRanges.table.thisMonth.dateStart).format('YYYY-MM-DD'),
+				end_date		: moment(dateRanges.table.thisMonth.dateEnd).format('YYYY-MM-DD'),
 				dimensions	: ''
 			};
 
@@ -298,10 +352,49 @@
 			vm.indices.tableThis = tasks.push (Global.getReport (query)) - 1;
 
 			// for last month
-			query.start_date 	= moment(dateRanges.lastMonth.dateStart).format('YYYY-MM-DD');
-			query.end_date 		= moment(dateRanges.lastMonth.dateEnd).format('YYYY-MM-DD');
+			query.start_date 	= moment(dateRanges.table.lastMonth.dateStart).format('YYYY-MM-DD');
+			query.end_date 		= moment(dateRanges.table.lastMonth.dateEnd).format('YYYY-MM-DD');
 
 			vm.indices.tableLast = tasks.push (Global.getReport (query)) - 1;
+
+			// for charts
+			query = {
+				table_id		: 'ga:' + viewID,
+				metrics			: '',
+				start_date	: moment(dateRanges.chart.dateStart).format('YYYY-MM-DD'),
+				end_date		: moment(dateRanges.chart.dateEnd).format('YYYY-MM-DD'),
+				dimensions	: 'ga:date'
+			};
+
+			angular.forEach (vm.keys.chart, function (key, index) {
+				query.metrics 							= key.metrics;
+				vm.keys.chart[index].index 	= tasks.push (Global.getReport (query)) - 1;
+			});
+
+			// for box
+			// last
+			query = {
+				table_id		: 'ga:' + viewID,
+				metrics			: '',
+				start_date	: moment(dateRanges.box.last.dateStart).format('YYYY-MM-DD'),
+				end_date		: moment(dateRanges.box.last.dateEnd).format('YYYY-MM-DD'),
+				dimensions	: ''
+			};
+
+			angular.forEach (vm.keys.chart, function (key, index) {
+				if (key.metrics != null) {
+					query.metrics += key.metrics;
+					query.metrics += ',';
+				}
+			});
+
+			query.metrics 			= query.metrics.slice(0, -1);
+			vm.indices.boxLast 	= tasks.push (Global.getReport (query)) - 1;
+
+			// prev
+			query.start_date 		= moment(dateRanges.box.prev.dateStart).format('YYYY-MM-DD');
+			query.end_date 			= moment(dateRanges.box.prev.dateEnd).format('YYYY-MM-DD');
+			vm.indices.boxPrev 	= tasks.push (Global.getReport (query)) - 1;
 			
 			$q.all(tasks).then (function (response) {
 				
@@ -320,6 +413,7 @@
 							cost.last = +vm.values.tableLast[index][vm.keys.table[i].index];
 						}
 					}
+
 					roi.this = cost.this == 0 ? 0 : (revenue.this - cost.this) / cost.this;
 					roi.last = cost.last == 0 ? 0 : (revenue.last - cost.last) / cost.last;
 
@@ -327,7 +421,21 @@
 					vm.keys.table[vm.keys.table.length - 1].index = vm.values.tableLast[index].push(roi.last) - 1;
 				});
 
-				console.log(vm.values);
+				// chart
+				vm.values.charts = [];
+				angular.forEach (vm.keys.chart, function (key, index) {
+					vm.values.charts.push ([{
+						key 		: key.label,
+						values 	: response [key.index].data
+					}]);
+				});
+				vm.options.lineChart.chart.xAxis.domain = d3.extent(vm.values.charts[0][0].values, function (d) { return d[0]; });
+
+				// box
+				vm.values.box = {
+					last : response[vm.indices.boxLast].data[0],
+					prev : response[vm.indices.boxPrev].data[0]
+				};
 
 				$rootScope.loadingProgress = false;
 			}, function (error) {

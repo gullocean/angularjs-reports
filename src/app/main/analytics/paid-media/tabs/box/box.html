@@ -1,57 +1,39 @@
 <div class="widget-group" layout="row" flex="100" layout-wrap>
-      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
-        <ms-widget-front class="white-bg">
-          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
-            <div class="h3">PPC Cost</div>
-          </div>
-          <div ng-if="vm.flags.PPC_Cost" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Cost | number : 2}}%</div>
-          </div>
-          <div ng-if="!vm.flags.PPC_Cost" class="pt-32 pb-32" layout="column" layout-align="center center">
-            <div class="h3">{{vm.messages.PPC_Cost}}</div>
-          </div>
-        </ms-widget-front>
-      </ms-widget>
+  <ms-widget flippable="false" layout="column" flex="100">
+    <ms-widget-front class="white-bg">
+      <div class="p-24 h3">{{vm.dateRanges.box.last.dateStart | date : 'MMM dd yyyy'}} - {{vm.dateRanges.box.last.dateEnd | date : 'MMM dd yyyy'}} vs {{vm.dateRanges.box.prev.dateStart | date : 'MMM dd yyyy'}} - {{vm.dateRanges.box.prev.dateEnd | date : 'MMM dd yyyy'}}</div>
+    </ms-widget-front>
+  </ms-widget>
+  <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="33" ng-repeat="(index, key) in vm.keys.box">
+    <ms-widget-front class="h-170 p-16 light-blue-bg">
+      <div class="pb-8" layout="row" layout-align="space-between center">
+        <div class="h3 font-weight-500 secondary-text pv-16">{{ key.label }}</div>
+        <!-- <md-menu>
+          <md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+            <md-icon md-font-icon="icon-dots-vertical"></md-icon>
+          </md-button>
+          <md-menu-content width="2">
+            <md-menu-item>
+              <md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu> -->
+      </div>
+      <div class="white-fg" layout="column" layout-align="space-between" flex>
+        <div class="md-display-1" layout="row" layout-align="start center">
+          <span ng-if="key.filter!='currency'">{{ vm.values.box.last[index] | number }}</span>
+          <span ng-if="key.filter=='percent'">%</span>
+          <span ng-if="key.filter=='currency'">{{ vm.values.box.last[index] | currency }}</span>
 
-      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
-        <ms-widget-front class="white-bg">
-          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
-            <div class="h3">PPC Conversions</div>
-          </div>
-          <div ng-if="vm.flags.PPC_Conversions" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversions | number : 2}}%</div>
-          </div>
-          <div ng-if="!vm.flags.PPC_Conversions" class="pt-32 pb-32" layout="column" layout-align="center center">
-            <div class="h3">{{vm.messages.PPC_Conversions}}</div>
-          </div>
-        </ms-widget-front>
-      </ms-widget>
-
-      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
-        <ms-widget-front class="white-bg">
-          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
-            <div class="h3">PPC CPA</div>
-          </div>
-          <div ng-if="vm.flags.PPC_CPA_Box" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_CPA_Box | number : 2}}%</div>
-          </div>
-          <div ng-if="!vm.flags.PPC_CPA_Box" class="pt-32 pb-32" layout="column" layout-align="center center">
-            <div class="h3">{{vm.messages.PPC_CPA_Box}}</div>
-          </div>
-        </ms-widget-front>
-      </ms-widget>
-
-      <ms-widget flippable="false" layout="row" flex="100" flex-gt-xs="50" flex-gt-md="25">
-        <ms-widget-front class="white-bg">
-          <div class="pl-16 pr-8 pv-16 h-55" layout="row" layout-align="space-between center">
-            <div class="h3">PPC Conversion Rate</div>
-          </div>
-          <div ng-if="vm.flags.PPC_Conversion_Rate" class="pt-8 pb-32" layout="column" layout-align="center center">
-            <div class="light-blue-fg font-size-72 line-height-72">{{vm.values.PPC_Conversion_Rate | number : 2}}%</div>
-          </div>
-          <div ng-if="!vm.flags.PPC_Conversion_Rate" class="pt-32 pb-32" layout="column" layout-align="center center">
-            <div class="h3">{{vm.messages.PPC_Conversion_Rate}}</div>
-          </div>
-        </ms-widget-front>
-      </ms-widget>
-    </div>
+          <span> (</span>
+          <span ng-if="vm.values.box.prev[index] != 0">{{ (vm.values.box.last[index] - vm.values.box.prev[index]) * 100 / vm.values.box.prev[index] | number}}</span>
+          <span ng-if="vm.values.box.prev[index] == 0">0</span>
+          <span>%)</span>
+        </div>
+      </div>
+    </ms-widget-front>
+  </ms-widget>
+</div>
