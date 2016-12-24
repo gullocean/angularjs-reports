@@ -41,6 +41,9 @@ md-dialog {
         margin-top: 0;
         label {
           text-transform: capitalize;
+          .error {
+            color: red;
+          }
         }
       }
       md-icon {

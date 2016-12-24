@@ -46,7 +46,7 @@
       $mdDialog.show({
           controller: 'UserDialogController',
           controllerAs: 'vm',
-          templateUrl: 'app/main/dashboard/dialogs/user/user-dialog.html',
+          templateUrl: 'app/main/dialogs/user/user-dialog.html',
           parent: angular.element($document.find('#content-container')),
           targetEvent: ev,
           clickOutsideToClose: true,
@@ -91,7 +91,7 @@
       $mdDialog.show({
           controller: 'UserDialogController',
           controllerAs: 'vm',
-          templateUrl: 'app/main/dashboard/dialogs/user/user-dialog.html',
+          templateUrl: 'app/main/dialogs/user/user-dialog.html',
           parent: angular.element($document.find('#content-container')),
           targetEvent: ev,
           clickOutsideToClose: true,

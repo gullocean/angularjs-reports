@@ -6,11 +6,13 @@
     .factory('api', apiService);
 
   /** @ngInject */
-  function apiService($resource, $http, $cookieStore, $state) {
+  function apiService($resource, $http, $cookieStore, $state, $rootScope, $mdDialog, $q) {
+
     var api = {};
 
     // Base Url
     api.baseUrl = 'http://reports.trafficdev.net/api/index.php';
+    api.key     = 'AIzaSyAxPOleU-4DCd0oWx7sTAXuCH2ftnJw7qM';
 
     // functions
     api.auth              = auth;
@@ -22,6 +24,11 @@
     api.getAnalytics      = getAnalytics;
     api.getParticleData   = getParticleData;
     api.getCampaigns      = getCampaigns;
+    api.getScreenshot     = getScreenshot;
+    api.getScreenshots    = getScreenshots;
+    api.decodeGoogle      = decodeGoogle;
+    api.addCampaign       = addCampaign;
+    api.getReport         = getReport;
 
     function auth (data, callback) {
       $http({
@@ -139,6 +146,21 @@
       });
     }
 
+    function addCampaign (campaign, callback) {
+      $http({
+        method: 'POST',
+        data : $.param (campaign),
+        url: api.baseUrl + '/campaigns/add',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('add campaigns error : ', error);
+      });
+    }
+
     function getCampaigns (callback) {
       $http({
         method: 'GET',
@@ -151,6 +173,61 @@
       }).error(function(error) {
         console.log('get campaigns error : ', error);
       });
+    }
+
+    function getScreenshot (url, callback, errorCallback) {
+      $http({
+        method: 'GET',
+        url : 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + url + '&key' + api.key + '&screenshot=true',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success (function (response) {
+        callback (response);
+      }).error (function (error) {
+        errorCallback (error);
+        console.log('can not get screenshot of ' + url + ' error : ' + error);
+      });
+    }
+
+    function getScreenshots (url) {
+      var promise = $q.defer ();
+
+      getScreenshot (url, function (response) {
+        if (response.code == 0) {
+          promise.resolve (response);
+        } else {
+          promise.reject (response);
+        }
+      }, function (error) {
+        console.log (error);
+      });
+
+      return promise.promise;
+    }
+
+    function decodeGoogle (str) {
+      if (angular.isUndefined (str) || str === null) {
+        return null;
+      }
+
+      var ret = str.replace(/_/g, '/');
+      ret = ret.replace(/-/g, '+');
+      return ret;
+    }
+
+    function getReport (query) {
+      var promise = $q.defer();
+
+      getAnalytics (query, function (response) {
+        if (response.code == 0) {
+          promise.resolve (response);
+        } else {
+          promise.reject (response);
+        } 
+      });
+
+      return promise.promise;
     }
 
     return api;

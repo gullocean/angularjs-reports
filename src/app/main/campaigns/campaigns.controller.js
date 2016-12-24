@@ -5,9 +5,10 @@
     .module('app.campaigns')
     .controller('CampaignsController', CampaignsController);
 
-  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document'];
+  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$q'];
   /** @ngInject */
-  function CampaignsController($state, Global, api, $mdDialog, $document) {
+  function CampaignsController($state, Global, api, $mdDialog, $document, $q) {
+
     var vm = this;
 
     // variables
@@ -24,7 +25,20 @@
       if (angular.isUndefined(Global.campaigns) || Global.campaigns === null) {
         api.getCampaigns (function(response) {
           if (response.code === 0) {
-            Global.campaigns = response.data;
+            Global.campaigns  = response.data;
+            // var tasks = [];
+
+            // angular.forEach (Global.campaigns, function (campaign) {
+            //   tasks.push (api.getScreenshots (campaign.url));
+            // });
+
+            // $q.all (tasks).then (function (response) {
+            //   angular.forEach (response, function (r, index) {
+            //     console.log(r);
+            //     Global.campaigns[index].thumbnail = r;
+            //   });
+            // });
+
             vm.campaigns = Global.campaigns;
           } else {
             console.log( 'campaigns getting error!' );
@@ -39,7 +53,7 @@
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dashboard/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
@@ -59,7 +73,7 @@
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dashboard/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
@@ -100,6 +114,19 @@
 
     function goToUsers () {
       $state.go('app.users');
+    }
+
+    function getScreenshot (url) {
+      if (angular.isUndefined (url)) return;
+      vm.progress = true;
+      api.getScreenshot (url, function (response) {
+        vm.error.url = false;
+        vm.progress = false
+        vm.imgCampaign = 'data:' + response.screenshot.mime_type + ';base64,' + api.decodeGoogle (response.screenshot.data);
+      }, function (error) {
+        vm.error.url = true;
+        vm.progress = false
+      });
     }
 
     init ();

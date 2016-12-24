@@ -5,10 +5,10 @@
 		.module('app.analytics.organic')
 		.controller('OrganicController', OrganicController);
 
-	OrganicController.$inject = ['Global', '$rootScope', '$mdDateRangePicker', 'moment', '$q', '$state'];
+	OrganicController.$inject = ['Global', '$rootScope', '$mdDateRangePicker', 'moment', '$q', '$state', 'api'];
 	
 	/** @ngInject */
-	function OrganicController(Global, $rootScope, $mdDateRangePicker, moment, $q, $state) {
+	function OrganicController(Global, $rootScope, $mdDateRangePicker, moment, $q, $state, api) {
 		
 		var vm = this;
 
@@ -20,6 +20,7 @@
 		vm.keys 			= {};
 		vm.dateRange 	= {};
 		vm.isCompare	= true;
+		vm.isLoading 	= true;
 
 		// methods
 		vm.updateOrganicDateRange = updateOrganicDateRange;
@@ -132,6 +133,7 @@
 		function getAllReports (dateRange, viewID, isCompare) {
 
 			$rootScope.loadingProgress = true;
+			vm.isLoading = true;
 
 			var tasks = [];
 			var query = {
@@ -148,13 +150,13 @@
 			query.end_date 		= moment(dateRange.this.dateEnd).format('YYYY-MM-DD');
 			query.dimensions 	= 'ga:date';
 			
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport (query));
 
 			// sessions for same period of previous year
 			query.start_date 	= moment(dateRange.last.dateStart).format('YYYY-MM-DD');
 			query.end_date 		= moment(dateRange.last.dateEnd).format('YYYY-MM-DD');
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// for pages table
 			query.metrics 		= '';
@@ -174,7 +176,7 @@
 			query.metrics 		= query.metrics.slice(0, -1);
 			query.dimensions 	= query.dimensions.slice(0, -1);
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			angular.forEach (vm.keys.compare, function (item) {
 
@@ -186,7 +188,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(Global.getReport(query));
+				tasks.push(api.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -196,7 +198,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(Global.getReport(query));
+				tasks.push(api.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -206,7 +208,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(Global.getReport(query));
+				tasks.push(api.getReport(query));
 
 				query = {
 					table_id		: 'ga:' + viewID,
@@ -216,7 +218,7 @@
 					dimensions	: null
 				};
 
-				tasks.push(Global.getReport(query));
+				tasks.push(api.getReport(query));
 			});
 
 			$q.all(tasks).then (function (response) {
@@ -263,6 +265,7 @@
 				}
 
 				$rootScope.loadingProgress = false;
+				vm.isLoading = false;
 
 			}, function (error) {
 				console.log(error);

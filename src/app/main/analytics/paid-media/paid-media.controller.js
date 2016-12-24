@@ -292,7 +292,7 @@
 
 			angular.forEach (vm.keys.chart, function (key, index) {
 				query.metrics 							= key.metrics;
-				vm.keys.chart[index].index 	= tasks.push (Global.getReport (query)) - 1;
+				vm.keys.chart[index].index 	= tasks.push (api.getReport (query)) - 1;
 			});
 			
 			$q.all(tasks).then (function (response) {
@@ -349,13 +349,13 @@
 			query.metrics 		= query.metrics.slice(0, -1);
 			query.dimensions 	= query.dimensions.slice(0, -1);
 
-			vm.indices.tableThis = tasks.push (Global.getReport (query)) - 1;
+			vm.indices.tableThis = tasks.push (api.getReport (query)) - 1;
 
 			// for last month
 			query.start_date 	= moment(dateRanges.table.lastMonth.dateStart).format('YYYY-MM-DD');
 			query.end_date 		= moment(dateRanges.table.lastMonth.dateEnd).format('YYYY-MM-DD');
 
-			vm.indices.tableLast = tasks.push (Global.getReport (query)) - 1;
+			vm.indices.tableLast = tasks.push (api.getReport (query)) - 1;
 
 			// for charts
 			query = {
@@ -368,7 +368,7 @@
 
 			angular.forEach (vm.keys.chart, function (key, index) {
 				query.metrics 							= key.metrics;
-				vm.keys.chart[index].index 	= tasks.push (Global.getReport (query)) - 1;
+				vm.keys.chart[index].index 	= tasks.push (api.getReport (query)) - 1;
 			});
 
 			// for box
@@ -389,12 +389,12 @@
 			});
 
 			query.metrics 			= query.metrics.slice(0, -1);
-			vm.indices.boxLast 	= tasks.push (Global.getReport (query)) - 1;
+			vm.indices.boxLast 	= tasks.push (api.getReport (query)) - 1;
 
 			// prev
 			query.start_date 		= moment(dateRanges.box.prev.dateStart).format('YYYY-MM-DD');
 			query.end_date 			= moment(dateRanges.box.prev.dateEnd).format('YYYY-MM-DD');
-			vm.indices.boxPrev 	= tasks.push (Global.getReport (query)) - 1;
+			vm.indices.boxPrev 	= tasks.push (api.getReport (query)) - 1;
 			
 			$q.all(tasks).then (function (response) {
 				

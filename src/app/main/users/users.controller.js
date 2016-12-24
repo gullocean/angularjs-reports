@@ -46,7 +46,7 @@
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dashboard/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
@@ -66,7 +66,7 @@
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dashboard/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,

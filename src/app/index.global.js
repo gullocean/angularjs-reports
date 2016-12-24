@@ -7,22 +7,8 @@
 
       var vm = this;
 
-      vm.getReport  = getReport;
-      vm.sum        = sum;
-
-      function getReport (query) {
-        var promise = $q.defer();
-
-        api.getAnalytics (query, function (response) {
-          if (response.code == 0) {
-            promise.resolve (response);
-          } else {
-            promise.reject (response);
-          } 
-        });
-
-        return promise.promise;
-      }
+      // methods
+      vm.sum       = sum;
 
       function sum (data, index) {
         if (angular.isUndefined(data) || data === null) return null;

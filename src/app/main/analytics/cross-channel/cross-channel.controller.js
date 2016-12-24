@@ -131,7 +131,7 @@
 				dimensions	: 'ga:channelGrouping'
 			};
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// sessions by device
 			query = {
@@ -142,7 +142,7 @@
 				dimensions	: 'ga:deviceCategory'
 			};
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// sessions by source
 			query = {
@@ -153,7 +153,7 @@
 				dimensions	: 'ga:source'
 			};
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// sessions by Landing Page
 			query = {
@@ -164,7 +164,7 @@
 				dimensions	: 'ga:landingPagePath'
 			};
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// sessions by devices
 			query.metrics 		= '';
@@ -187,13 +187,13 @@
 			query.metrics 		= query.metrics.slice(0, -1);
 			query.dimensions 	= query.dimensions.slice(0, -1);
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			// sessions by devices
 			query.start_date 	= moment(dateRange.last.dateStart).format('YYYY-MM-DD');
 			query.end_date 		= moment(dateRange.last.dateEnd).format('YYYY-MM-DD');
 
-			tasks.push(Global.getReport(query));
+			tasks.push(api.getReport(query));
 
 			$q.all(tasks).then (function (response) {
 

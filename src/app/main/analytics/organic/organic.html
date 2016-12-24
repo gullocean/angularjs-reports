@@ -50,8 +50,11 @@
           </div>
           <div class="white-fg" layout="column" layout-align="space-between" flex>
             <div class="md-display-1" layout="row" layout-align="start center">
-              <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span>
-              <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
+              <span ng-if="metric.label != 'Avg. Session Duration' && !vm.isLoading">
+                <span>{{ vm.values.compare[4 * key].value | number }}</span>
+                <span ng-if="metric.label=='Bounce Rate'">%</span>
+              </span>
+              <span ng-if="metric.label == 'Avg. Session Duration' && !vm.isLoading">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
               <div ng-if="vm.isCompare">
                 <md-icon ng-if="vm.values.compare[4 * key].value > vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-up" class="s36 ml-16"></md-icon>
                 <md-icon ng-if="vm.values.compare[4 * key].value < vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-down" class="s36 ml-16"></md-icon>
