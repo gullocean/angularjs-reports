@@ -30,7 +30,7 @@
           <input ng-model="vm.campaign.company" type="text" required md-autofocus>
         </md-input-container>
         <md-input-container class="md-icon-float md-block">
-          <label>url<span ng-if="!form.url.$pristine && vm.error.url" class="error">(invalid url)</span></label>
+          <label>site url<span ng-if="!form.url.$pristine && vm.error.url" class="error">(invalid url)</span></label>
           <input ng-model="vm.campaign.url" type="url" name="url" ng-blur="vm.getScreenshot (vm.campaign.url);" required>
         </md-input-container>
         <div class="circle-progress" layout="row" layout-align="center center" flex>
@@ -46,21 +46,30 @@
           <!-- <ng-analytics-view view-selector-container="view-selector-container" auth-container="embed-api-auth-container"></ng-analytics-view> -->
         <!-- </md-input-container> -->
         <md-input-container class="md-icon-float md-block">
-          <label>view id</label>
-          <input ng-model="vm.campaign.view_ID" type="number" ng-minlength="8" ng-maxlength="10" required md-autofocus>
+          <label>view id<span ng-if="!form.url.$pristine && vm.error.permission" class="error">(no permission)</span></label>
+          <input ng-model="vm.campaign.view_ID" type="number" ng-minlength="8" ng-maxlength="10" ng-blur="vm.checkViewID (vm.campaign.view_ID);" required md-autofocus>
         </md-input-container>
+        <div class="circle-progress" layout="row" layout-align="center center" flex>
+          <md-progress-circular id="url-progress" ng-disabled="!vm.progress" class="md-accent" md-diameter="32"></md-progress-circular>
+        </div>
       </md-dialog-content>
     </div>
 
     <div ng-if="vm.isLastStep ()">
       <md-dialog-content ms-scroll>
         <div class="pl-24 pv-8" layout="column" layout-align="center start" flex>
-          <label>{{ vm.campaign.company }}</label>
-          <label>{{ vm.campaign.url }}</label>
-          <label>{{ vm.campaign.view_ID }}</label>
-        </div>
-        <div class="circle-progress" layout="row" layout-align="center center" flex>
-          <md-progress-circular id="url-progress" ng-disabled="!vm.progress" class="md-accent" md-diameter="32"></md-progress-circular>
+          <div layout="row" layout-align="center start" flex>
+            <label class="w-80 text-right">company : </label>
+            <label>{{ vm.campaign.company }}</label>
+          </div>
+          <div layout="row" layout-align="center start" flex>
+            <label class="w-80 text-right">site url : </label>
+            <label>{{ vm.campaign.url }}</label>
+          </div>
+          <div layout="row" layout-align="center start" flex>
+            <label class="w-80 text-right">view ID : </label>
+            <label>{{ vm.campaign.view_ID }}</label>
+          </div>
         </div>
       </md-dialog-content>
     </div>
@@ -72,13 +81,13 @@
         <md-button type="submit" ng-if="!vm.newCampaign" ng-click="vm.saveCampaign()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="SAVE">
           SAVE
         </md-button>
-        <md-button ng-if="vm.newCampaign&&!vm.isFirstStep()" ng-click="vm.backStep()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="Back">
+        <md-button ng-if="vm.newCampaign&&!vm.isFirstStep()" ng-click="vm.backStep()" class="send-button md-accent md-raised" aria-label="Back">
           back
         </md-button>
-        <md-button type="submit" ng-if="vm.newCampaign&&vm.isLastStep()" ng-click="vm.addNewCampaign(vm.campaign);" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine" aria-label="Add Campaign">
+        <md-button type="submit" ng-if="vm.newCampaign&&vm.isLastStep()" ng-click="vm.addNewCampaign(vm.campaign);" class="send-button md-accent md-raised" aria-label="Add Campaign">
           ADD campaign
         </md-button>
-        <md-button ng-if="vm.newCampaign&&!vm.isLastStep()" ng-click="vm.nextStep()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || form.$pristine || vm.error.url" aria-label="Next">
+        <md-button ng-if="vm.newCampaign&&!vm.isLastStep()" ng-click="vm.nextStep()" class="send-button md-accent md-raised" ng-disabled="form.$invalid || vm.error.step" aria-label="Next">
           next
         </md-button>
       </div>

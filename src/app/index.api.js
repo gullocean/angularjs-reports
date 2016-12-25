@@ -29,6 +29,7 @@
     api.decodeGoogle      = decodeGoogle;
     api.addCampaign       = addCampaign;
     api.getReport         = getReport;
+    api.checkViewID       = checkViewID;
 
     function auth (data, callback) {
       $http({
@@ -228,6 +229,20 @@
       });
 
       return promise.promise;
+    }
+
+    function checkViewID (viewID, callback) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/analytics/checkID/' + viewID,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success (function (response) {
+        callback (response);
+      }).error (function (error) {
+        console.log('viewID check error', error);
+      });
     }
 
     return api;

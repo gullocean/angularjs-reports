@@ -6,7 +6,7 @@
     .controller('CampaignDialogController', CampaignDialogController);
 
   /** @ngInject */
-  function CampaignDialogController($mdDialog, msUtils, ROLE, Campaign, api) {
+  function CampaignDialogController($mdDialog, msUtils, ROLE, Campaign, api, $scope) {
     var vm = this;
 
     // variables
@@ -28,8 +28,8 @@
     vm.isLastStep     = isLastStep;
     vm.nextStep       = nextStep;
     vm.backStep       = backStep;
-    vm.checkUrl       = checkUrl;
     vm.getScreenshot  = getScreenshot;
+    vm.checkViewID    = checkViewID;
 
     if (!vm.campaign) {
       vm.campaign = {
@@ -101,6 +101,7 @@
      * Go to next step
      */
     function nextStep () {
+       vm.error.step = true;
       vm.currentStep ++;
     }
 
@@ -111,17 +112,12 @@
       vm.currentStep --;
     }
 
-    function checkUrl (url) {
-      api.checkUrl (url, function (response) {
-        console.log (response);
-      });
-    }
-
     function getScreenshot (url) {
       if (angular.isUndefined (url)) return;
       vm.progress = true;
       api.getScreenshot (url, function (response) {
         vm.error.url = false;
+        vm.error.step = false;
         vm.progress = false
         vm.campaign.thumbnail = 'data:' + response.screenshot.mime_type + ';base64,' + api.decodeGoogle (response.screenshot.data);
       }, function (error) {
@@ -130,8 +126,25 @@
       });
     }
 
+    function checkViewID (viewID) {
+      if (angular.isUndefined (viewID)) return;
+      vm.progress = true;
+      api.checkViewID (viewID, function (response) {
+        vm.progress = false
+        if (response.code == 0) {
+          vm.error.permission = false;
+          vm.error.step = false;
+        } else {
+          vm.error.permission = true;
+          vm.error.step = true;
+        }
+      });
+    }
+
     function init () {
+      vm.error.step = true;
       vm.error.url = true;
+      vm.error.permission = true;
       vm.progress = false
     }
 
