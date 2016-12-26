@@ -5,9 +5,9 @@
     .module('app.campaigns')
     .controller('CampaignsController', CampaignsController);
 
-  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$q'];
+  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$q', '$rootScope'];
   /** @ngInject */
-  function CampaignsController($state, Global, api, $mdDialog, $document, $q) {
+  function CampaignsController($state, Global, api, $mdDialog, $document, $q, $rootScope) {
 
     var vm = this;
 
@@ -26,18 +26,6 @@
         api.getCampaigns (function(response) {
           if (response.code === 0) {
             Global.campaigns  = response.data;
-            // var tasks = [];
-
-            // angular.forEach (Global.campaigns, function (campaign) {
-            //   tasks.push (api.getScreenshots (campaign.url));
-            // });
-
-            // $q.all (tasks).then (function (response) {
-            //   angular.forEach (response, function (r, index) {
-            //     console.log(r);
-            //     Global.campaigns[index].thumbnail = r;
-            //   });
-            // });
 
             vm.campaigns = Global.campaigns;
           } else {
@@ -49,7 +37,7 @@
       }
     }
     
-    function addCampaign (ev) {
+    function addCampaign(ev) {
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
@@ -60,15 +48,26 @@
         locals: {
           Campaign: null
         }
-      })
-      .then(function(newCampaign) {
-        if (!angular.isUndefined(newCampaign)) {
-          vm.campaigns.unshift(newCampaign);
+      }).then(function(campaign) {
+        $rootScope.loadingProgress = true;
+        if (angular.isDefined (campaign)) {
+          api.addCampaign(campaign, function (response) {
+            console.log('response', response);
+            if (response.code == 0) {
+              campaign.id = response.data.id;
+              console.log('campaign', campaign);
+              console.log('response', response);
+              vm.campaigns.unshift(campaign);
+            }
+            $rootScope.loadingProgress = false;
+          });
+        } else {
+          $rootScope.loadingProgress = false;
         }
       });
     }
 
-    function editCampaign (ev, key) {
+    function editCampaign(ev, key) {
       var campaign = vm.campaigns[key];
       $mdDialog.show({
         controller: 'CampaignDialogController',
@@ -80,30 +79,39 @@
         locals: {
           Campaign: campaign
         }
-      })
-      .then(function(newUser) {
-        if (!angular.isUndefined(newUser)) {
-          vm.users.unshift(newUser);
+      }).then(function(campaign) {
+        $rootScope.loadingProgress = true;
+        if (angular.isDefined(campaign)) {
+          api.updateCampaign(campaign, function(response) {
+            if (response.code == 0) {
+              vm.campaigns[key] = campaign;
+            }
+            $rootScope.loadingProgress = false;
+          });
+        } else {
+          $rootScope.loadingProgress = false;
         }
       });
     }
 
     function deleteCampaign (ev, key) {
-      var campaign = vm.campaigns[key];
-      var confirm = $mdDialog.confirm()
-        .title('Are you sure want to delete the user?')
-        .htmlContent('<b>' + campaign.title + '</b>' + ' will be deleted.')
-        .ariaLabel('delete user')
+      var campaign  = vm.campaigns[key];
+      var confirm   = $mdDialog.confirm()
+        .title('Are you sure to delete this campaign?')
+        .htmlContent('<b>' + campaign.company + '</b>' + ' will be deleted.')
+        .ariaLabel('delete campaign')
         .targetEvent(ev)
         .ok('OK')
         .cancel('CANCEL');
 
       $mdDialog.show(confirm).then(function() {
-        // api.deleteUser({ email: user.email }, function(response) {
-        //   if (response.code == 0) {
-        //     // vm.users.splice(i, 1);
-        //   }
-        // });
+        $rootScope.loadingProgress = true;
+        api.deleteCampaign (campaign.id, function(response) {
+          $rootScope.loadingProgress = false;
+          if (response.code == 0) {
+            vm.campaigns.splice (key, 1);
+          }
+        });
       });
     }
 

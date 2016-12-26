@@ -248,19 +248,19 @@
 				for (var i = 0; i < vm.keys.compare.length; i ++) {
 					vm.values.compare.push ({
 						key : vm.keys.compare[i].label + '_this_year',
-						value : +response[3 + 4 * i].data[0][0]
+						value : response[3 + 4 * i].data === null ? 0 : +response[3 + 4 * i].data[0][0]
 					});
 					vm.values.compare.push ({
 						key : vm.keys.compare[i].label + '_last_year',
-						value : +response[4 + 4 * i].data[0][0]
+						value : response[4 + 4 * i].data === null ? 0 : +response[4 + 4 * i].data[0][0]
 					});
 					vm.values.compare.push ({
 						key : vm.keys.compare[i].label + '_this_week',
-						value : +response[5 + 4 * i].data[0][0]
+						value : response[5 + 4 * i].data === null ? 0 : +response[5 + 4 * i].data[0][0]
 					});
 					vm.values.compare.push ({
 						key : vm.keys.compare[i].label + '_last_week',
-						value : +response[6 + 4 * i].data[0][0]
+						value : response[6 + 4 * i].data === null ? 0 : +response[6 + 4 * i].data[0][0]
 					});
 				}
 

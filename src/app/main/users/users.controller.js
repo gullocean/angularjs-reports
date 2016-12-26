@@ -17,7 +17,7 @@
     vm.currentUser = {};
 
     // functions
-    vm.addCampaign    = addCampaign;
+    vm.addUser    = addUser;
     vm.deleteCampaign = deleteCampaign;
     vm.editCampaign   = editCampaign;
     vm.selectCampaign = selectCampaign;
@@ -42,21 +42,21 @@
       }
     }
     
-    function addCampaign (ev) {
+    function addUser (ev) {
       $mdDialog.show({
-        controller: 'CampaignDialogController',
+        controller: 'UserDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/user/user-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
         locals: {
-          Campaign: null
+          User: null
         }
       })
-      .then(function(newCampaign) {
-        if (!angular.isUndefined(newCampaign)) {
-          vm.campaigns.unshift(newCampaign);
+      .then(function(user) {
+        if (angular.isDefined(user)) {
+          vm.users.unshift(user);
         }
       });
     }
@@ -66,12 +66,12 @@
       $mdDialog.show({
         controller: 'CampaignDialogController',
         controllerAs: 'vm',
-        templateUrl: 'app/main/dialogs/campaign/campaign-dialog.html',
+        templateUrl: 'app/main/dialogs/user/user-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
         locals: {
-          Campaign: campaign
+          Campaign: user
         }
       })
       .then(function(newUser) {
@@ -82,10 +82,10 @@
     }
 
     function deleteCampaign (ev, key) {
-      var campaign = vm.campaigns[key];
+      var user = vm.users[key];
       var confirm = $mdDialog.confirm()
         .title('Are you sure want to delete the user?')
-        .htmlContent('<b>' + campaign.title + '</b>' + ' will be deleted.')
+        .htmlContent('<b>' + user.title + '</b>' + ' will be deleted.')
         .ariaLabel('delete user')
         .targetEvent(ev)
         .ok('OK')
@@ -100,8 +100,8 @@
       });
     }
 
-    function selectCampaign (campaign) {
-      Global.currentCampaign = angular.copy(campaign);
+    function selectCampaign (user) {
+      Global.currentCampaign = angular.copy(user);
       $state.go('app.dashboard');
     }
 

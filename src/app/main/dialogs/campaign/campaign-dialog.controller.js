@@ -18,6 +18,7 @@
     vm.imgCampaign  = null;
     vm.error        = {};
     vm.progress     = false;
+    vm.accounts     = [];
 
     // methods
     vm.addNewCampaign = addNewCampaign;
@@ -29,7 +30,6 @@
     vm.nextStep       = nextStep;
     vm.backStep       = backStep;
     vm.getScreenshot  = getScreenshot;
-    vm.checkViewID    = checkViewID;
 
     if (!vm.campaign) {
       vm.campaign = {
@@ -46,34 +46,17 @@
     /**
      * Add new campaign
      */
-    function addNewCampaign() {
+    function addNewCampaign (campaign) {
       vm.progress = true;
-      api.addCampaign (vm.campaign, function (response) {
-        if (response.code == 0) {
-          console.log(vm.campaign);
-          closeDialog (vm.campaign);
-        } else {
-          closeDialog ();
-        }
-        vm.progress = false;
-      });
+      closeDialog (campaign);
     }
 
     /**
-     * Save user
+     * Save campaign
      */
-    function saveCampaign() {
-      var editedCampaign = {};
-      editedCampaign.company = vm.campaign.company;
-      editedCampaign.url = vm.campaign.url;
-
-      // api.updateUser(editedCampaign, function(response) {
-      //   if (response.code == 0) {
-      //     closeDialog(editedCampaign);
-      //   } else {
-      //     closeDialog();
-      //   }
-      // });
+    function saveCampaign (campaign) {
+      vm.progress = true;
+      closeDialog (campaign);
     }
 
     /**
@@ -101,7 +84,7 @@
      * Go to next step
      */
     function nextStep () {
-       vm.error.step = true;
+      vm.error.step = true;
       vm.currentStep ++;
     }
 
@@ -116,36 +99,37 @@
       if (angular.isUndefined (url)) return;
       vm.progress = true;
       api.getScreenshot (url, function (response) {
-        vm.error.url = false;
+        vm.error.url  = false;
         vm.error.step = false;
-        vm.progress = false
+        vm.progress   = false;
         vm.campaign.thumbnail = 'data:' + response.screenshot.mime_type + ';base64,' + api.decodeGoogle (response.screenshot.data);
       }, function (error) {
-        vm.error.url = true;
-        vm.progress = false
+        vm.error.url  = true;
+        vm.progress   = false;
       });
     }
 
-    function checkViewID (viewID) {
-      if (angular.isUndefined (viewID)) return;
-      vm.progress = true;
-      api.checkViewID (viewID, function (response) {
-        vm.progress = false
+    function getAnalyticsAccountList () {
+      vm.progress   = true;
+      api.getAnalyticsAccountList (function (response) {
+        vm.progress = false;
         if (response.code == 0) {
-          vm.error.permission = false;
-          vm.error.step = false;
-        } else {
-          vm.error.permission = true;
-          vm.error.step = true;
+          angular.forEach (response.data, function (r) {
+            vm.accounts.push ({
+              name  : r.name,
+              id    : r.id
+            });
+          });
         }
       });
     }
 
     function init () {
       vm.error.step = true;
-      vm.error.url = true;
-      vm.error.permission = true;
-      vm.progress = false
+      vm.error.url  = true;
+      vm.progress   = false;
+
+      getAnalyticsAccountList ();
     }
 
     init ();

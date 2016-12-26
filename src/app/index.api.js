@@ -28,8 +28,11 @@
     api.getScreenshots    = getScreenshots;
     api.decodeGoogle      = decodeGoogle;
     api.addCampaign       = addCampaign;
+    api.updateCampaign    = updateCampaign;
+    api.deleteCampaign    = deleteCampaign;
     api.getReport         = getReport;
     api.checkViewID       = checkViewID;
+    api.getAnalyticsAccountList = getAnalyticsAccountList;
 
     function auth (data, callback) {
       $http({
@@ -162,6 +165,35 @@
       });
     }
 
+    function updateCampaign(campaign, callback) {
+      $http({
+        method: 'POST',
+        data : $.param (campaign),
+        url: api.baseUrl + '/campaigns/update',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success(function(response) {
+        callback(response);
+      }).error(function(error) {
+        console.log('add campaigns error : ', error);
+      });
+    }
+
+    function deleteCampaign (campaignID, callback) {
+      $http({
+        method: 'DELETE',
+        url: api.baseUrl + '/campaigns/delete/' + campaignID,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success (function (response) {
+        callback (response);
+      }).error (function (error) {
+        console.log ('delete campaign error', campaignID);
+      });
+    }
+
     function getCampaigns (callback) {
       $http({
         method: 'GET',
@@ -179,7 +211,7 @@
     function getScreenshot (url, callback, errorCallback) {
       $http({
         method: 'GET',
-        url : 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + url + '&key' + api.key + '&screenshot=true',
+        url : 'https://www.googleapis.com/pagespeedonline/v1/runPagespeed?url=' + url + '&key' + api.key + '&screenshot=true&rule=USABILITY',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -242,6 +274,20 @@
         callback (response);
       }).error (function (error) {
         console.log('viewID check error', error);
+      });
+    }
+
+    function getAnalyticsAccountList (callback) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/analytics/getAccountList',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).success (function (response) {
+        callback (response);
+      }).error (function (error) {
+        console.log ('can not get analytics account list!');
       });
     }
 

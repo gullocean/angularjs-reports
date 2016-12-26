@@ -6,17 +6,17 @@
     .controller('UserDialogController', UserDialogController);
 
   /** @ngInject */
-  function UserDialogController($mdDialog, msUtils, ROLE, User, Role, api) {
+  function UserDialogController($mdDialog, msUtils, User, api) {
     var vm = this;
 
-    vm.ROLE = ROLE;
-    vm.role = Role;
+    vm.ROLE = {};
+    vm.role = {};
     vm.role_label = [];
     vm.oldEmail = '';
 
-    angular.forEach(ROLE, function(r, k) {
-      vm.role_label[r] = k;
-    });
+    // angular.forEach(ROLE, function(r, k) {
+    //   vm.role_label[r] = k;
+    // });
 
     // Data
     vm.title = 'Edit User';
@@ -30,7 +30,7 @@
         'username': '',
         'avatar': 'assets/images/avatars/profile.jpg',
         'email': '',
-        'role': ROLE.CLIENT
+        'role': vm.CLIENT
       };
 
       vm.title      = 'New User';

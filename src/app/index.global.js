@@ -8,7 +8,7 @@
       var vm = this;
 
       // methods
-      vm.sum       = sum;
+      vm.sum = sum;
 
       function sum (data, index) {
         if (angular.isUndefined(data) || data === null) return null;
