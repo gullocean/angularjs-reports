@@ -55,7 +55,6 @@
      * Save campaign
      */
     function saveCampaign (campaign) {
-      vm.progress = true;
       closeDialog (campaign);
     }
 

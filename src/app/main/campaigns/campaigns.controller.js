@@ -52,11 +52,8 @@
         $rootScope.loadingProgress = true;
         if (angular.isDefined (campaign)) {
           api.addCampaign(campaign, function (response) {
-            console.log('response', response);
             if (response.code == 0) {
               campaign.id = response.data.id;
-              console.log('campaign', campaign);
-              console.log('response', response);
               vm.campaigns.unshift(campaign);
             }
             $rootScope.loadingProgress = false;

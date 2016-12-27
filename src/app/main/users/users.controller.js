@@ -5,22 +5,21 @@
     .module('app.users')
     .controller('UsersController', UsersController);
 
-  UsersController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE'];
+  UsersController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE', '$rootScope'];
   /** @ngInject */
-  function UsersController($state, Global, api, $mdDialog, $document, $cookieStore, ROLE) {
+  function UsersController($state, Global, api, $mdDialog, $document, $cookieStore, ROLE, $rootScope) {
     var vm = this;
 
     // variables
-    vm.users = [];
-    vm.ROLE = ROLE;
-    vm.role_label = [];
-    vm.currentUser = {};
+    vm.users        = [];
+    vm.ROLE         = ROLE;
+    vm.role_label   = [];
+    vm.currentUser  = {};
 
     // functions
-    vm.addUser    = addUser;
-    vm.deleteCampaign = deleteCampaign;
-    vm.editCampaign   = editCampaign;
-    vm.selectCampaign = selectCampaign;
+    vm.addUser        = addUser;
+    vm.deleteUser     = deleteUser;
+    vm.editUser       = editUser;
     vm.goToCampaigns  = goToCampaigns;
 
     vm.init = function () {
@@ -55,54 +54,68 @@
         }
       })
       .then(function(user) {
+        $rootScope.loadingProgress = true;
         if (angular.isDefined(user)) {
-          vm.users.unshift(user);
+          api.addUser(user, function (response) {
+            if (response.code == 0) {
+              user.id = response.data.id;
+              vm.users.unshift(user);
+            }
+            $rootScope.loadingProgress = false;
+          });
+        } else {
+          $rootScope.loadingProgress = false;
         }
       });
     }
 
-    function editCampaign (ev, key) {
-      var campaign = vm.campaigns[key];
+    function editUser (ev, key) {
+      var user = vm.users[key];
       $mdDialog.show({
-        controller: 'CampaignDialogController',
+        controller: 'UserDialogController',
         controllerAs: 'vm',
         templateUrl: 'app/main/dialogs/user/user-dialog.html',
         parent: angular.element($document.find('#content-container')),
         targetEvent: ev,
         clickOutsideToClose: false,
         locals: {
-          Campaign: user
+          User: user
         }
       })
-      .then(function(newUser) {
-        if (!angular.isUndefined(newUser)) {
-          vm.users.unshift(newUser);
+      .then(function(user) {
+        $rootScope.loadingProgress = true;
+        if (angular.isDefined(user)) {
+          api.updateUser(user, function (response) {
+            if (response.code == 0) {
+              vm.users[key] = angular.copy(user);
+            }
+            $rootScope.loadingProgress = false;
+          });
+        } else {
+          $rootScope.loadingProgress = false;
         }
       });
     }
 
-    function deleteCampaign (ev, key) {
+    function deleteUser (ev, key) {
       var user = vm.users[key];
       var confirm = $mdDialog.confirm()
-        .title('Are you sure want to delete the user?')
-        .htmlContent('<b>' + user.title + '</b>' + ' will be deleted.')
+        .title('Are you sure to delete this user?')
+        .htmlContent('<b>' + user.username + '</b>' + ' will be deleted.')
         .ariaLabel('delete user')
         .targetEvent(ev)
         .ok('OK')
         .cancel('CANCEL');
 
       $mdDialog.show(confirm).then(function() {
-        // api.deleteUser({ email: user.email }, function(response) {
-        //   if (response.code == 0) {
-        //     // vm.users.splice(i, 1);
-        //   }
-        // });
+        $rootScope.loadingProgress = true;
+        api.deleteUser(user.id, function(response) {
+          $rootScope.loadingProgress = false;
+          if (response.code == 0) {
+            vm.users.splice(key, 1);
+          }
+        });
       });
-    }
-
-    function selectCampaign (user) {
-      Global.currentCampaign = angular.copy(user);
-      $state.go('app.dashboard');
     }
 
     function goToCampaigns () {

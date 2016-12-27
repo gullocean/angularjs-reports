@@ -2,100 +2,62 @@
   'use strict';
 
   angular
-    .module('app.dashboard')
+    .module('app.users')
     .controller('UserDialogController', UserDialogController);
 
-  /** @ngInject */
-  function UserDialogController($mdDialog, msUtils, User, api) {
+  /**
+   * @ngInject
+   */
+  function UserDialogController($mdDialog, User, api, ROLE, Global, $cookieStore) {
     var vm = this;
 
-    vm.ROLE = {};
-    vm.role = {};
-    vm.role_label = [];
-    vm.oldEmail = '';
+    // variables
+    vm.ROLE         = {};
+    vm.user         = {};
+    vm.roleLabel    = [];
+    vm.oldEmail     = '';
+    vm.title        = '';
+    vm.role         = '';
+    vm.isNewUser    = false;
+    vm.isDuplicatedEmail = false;
 
-    // angular.forEach(ROLE, function(r, k) {
-    //   vm.role_label[r] = k;
-    // });
-
-    // Data
-    vm.title = 'Edit User';
-    vm.user  = angular.copy(User);
-    
-    vm.newUser   = false;
-    vm.allFields = false;
-
-    if (!vm.user) {
-      vm.user = {
-        'username': '',
-        'avatar': 'assets/images/avatars/profile.jpg',
-        'email': '',
-        'role': vm.CLIENT
-      };
-
-      vm.title      = 'New User';
-      vm.newUser    = true;
-      vm.user.tags  = [];
-    }
-
-    if (!vm.newUser) {
-      vm.user.role    = +vm.user.role;
-      vm.oldEmail     = vm.user.email;
-      vm.user.avatar  = 'assets/images/avatars/profile.jpg';
-    }
-
-    // Methods
-    vm.addNewUser     = addNewUser;
-    vm.saveUser       = saveUser;
-    vm.closeDialog    = closeDialog;
-    vm.toggleInArray  = msUtils.toggleInArray;
-    // vm.exists = msUtils.exists;
-
-    //////////
+    // methods
+    vm.closeDialog  = closeDialog;
+    vm.addNewUser   = addNewUser;
+    vm.saveUser     = saveUser;
 
     /**
      * Add new user
      */
-    function addNewUser() {
+    function addNewUser(user) {
       var newUser = {};
-      newUser.username  = vm.user.username;
-      newUser.email     = vm.user.email;
-      newUser.password  = vm.user.newPassword;
+      newUser.username  = user.username;
+      newUser.email     = user.email;
+      newUser.password  = user.newPassword;
       if (vm.role == vm.ROLE.ADMIN) {
         newUser.role    = vm.user.role;
       } else {
         newUser.role    = vm.ROLE.CLIENT;
       }
-      api.addUser(newUser, function(response) {
-        if (response.code == 0) {
-          closeDialog(newUser);
-        } else {
-          closeDialog();
-        }
-      });
+      closeDialog(newUser);
     }
 
     /**
      * Save user
      */
-    function saveUser() {
+    function saveUser(user) {
       var editedUser = {};
-      editedUser.oldEmail  = vm.oldEmail;
-      editedUser.username  = vm.user.username;
-      editedUser.email     = vm.user.email;
-      editedUser.password  = vm.user.newPassword;
+      editedUser.id        = user.id;
+      editedUser.username  = user.username;
+      editedUser.email     = user.email;
+      if (angular.isDefined(user.newPassword))
+        editedUser.password  = user.newPassword;
       if (vm.role == vm.ROLE.ADMIN) {
         editedUser.role = vm.user.role;
       } else {
         editedUser.role = vm.ROLE.CLIENT;
       }
-      api.updateUser(editedUser, function(response) {
-        if (response.code == 0) {
-          closeDialog(editedUser);
-        } else {
-          closeDialog();
-        }
-      });
+      closeDialog(editedUser);
     }
 
     /**
@@ -105,5 +67,39 @@
       $mdDialog.hide(data);
     }
 
+    /**
+     * initialize variables
+     */
+    function init() {
+      vm.role   = angular.copy($cookieStore.get('currentUser')).role;
+      vm.ROLE   = angular.copy(ROLE);
+      vm.user   = angular.copy(User);
+      vm.title  = 'Edit User';
+
+      angular.forEach(ROLE, function(r, k) {
+        vm.roleLabel[r] = k;
+      });
+
+      if (angular.isUndefined(vm.user) || vm.user === null) {
+        vm.user = {
+          'username': '',
+          'avatar': 'assets/images/avatars/profile.jpg',
+          'email': '',
+          'role': ROLE.CLIENT
+        };
+
+        vm.title      = 'New User';
+        vm.isNewUser  = true;
+        vm.user.tags  = [];
+      }
+
+      if (!vm.isNewUser) {
+        vm.user.role    = +vm.user.role;
+        vm.oldEmail     = vm.user.email;
+        vm.user.avatar  = 'assets/images/avatars/profile.jpg';
+      }
+    }
+
+    init();
   }
 })();

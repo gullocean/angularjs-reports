@@ -6,8 +6,8 @@
     .controller('ToolbarController', ToolbarController);
 
   /** @ngInject */
-  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', '$cookieStore'];
-  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, $cookieStore) {
+  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', '$cookieStore', 'Global'];
+  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, $cookieStore, Global) {
     var vm = this;
 
     // Data
@@ -67,6 +67,7 @@
     vm.toggleMsNavigationFolded = toggleMsNavigationFolded;
     vm.search = search;
     vm.searchResultClick = searchResultClick;
+    vm.checkCampaign = checkCampaign;
 
     //////////
 
@@ -218,6 +219,16 @@
           $state.go(item.state);
         }
       }
+    }
+
+    /**
+     * check if a campaign is selected
+     */
+    function checkCampaign() {
+      if (  angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null )
+        return false;
+      else
+        return true;
     }
   }
 

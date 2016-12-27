@@ -31,14 +31,19 @@ md-dialog {
     md-dialog-content {
       display: block;
       position: relative;
-      .textarea-wrapper {
-        md-input-container {
-          margin-top: 0;
+
+      md-input-container {
+        margin-top: 0;
+
+        label {
+          .error {
+            color : red;
+          }
         }
-        md-icon {
-          color: rgba(0, 0, 0, 0.87);
-          margin: 0 8px 0 0;
-        }
+      }
+      md-icon {
+        color: rgba(0, 0, 0, 0.87);
+        margin: 0 8px 0 0;
       }
     }
     md-dialog-actions {

@@ -32,6 +32,7 @@
     api.deleteCampaign    = deleteCampaign;
     api.getReport         = getReport;
     api.checkViewID       = checkViewID;
+    api.checkEmail        = checkEmail;
     api.getAnalyticsAccountList = getAnalyticsAccountList;
 
     function auth (data, callback) {
@@ -79,11 +80,10 @@
       });
     }
 
-    function deleteUser (data, callback) {
+    function deleteUser (id, callback) {
       $http({
-        method: 'POST',
-        url: api.baseUrl + '/users/delete',
-        data: $.param(data),
+        method: 'DELETE',
+        url: api.baseUrl + '/users/delete/' + id,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -288,6 +288,22 @@
         callback (response);
       }).error (function (error) {
         console.log ('can not get analytics account list!');
+      });
+    }
+
+    function checkEmail(email, callback) {
+      $http({
+        method  : 'POST',
+        url     : api.baseUrl + '/users/check',
+        data    : $.param({email : email}),
+        headers : {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(function(response) {
+        callback(response);
+      }, function(error) {
+        $rootScope.loadingProgress = true;
+        console.log('can not check email : ' + email);
       });
     }
 

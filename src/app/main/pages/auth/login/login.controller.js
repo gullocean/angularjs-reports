@@ -5,10 +5,10 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api', 'ROLE'];
+  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api', 'ROLE', 'Global'];
 
   /** @ngInject */
-  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api, ROLE) {
+  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api, ROLE, Global) {
 
     var vm = this;
     vm.currentUser = {};
@@ -36,6 +36,7 @@
         if (response.code == 0) {
           vm.currentUser = response.data;
           vm.currentUser.role = +vm.currentUser.role;
+          Global.currentUser = vm.currentUser;
           $cookieStore.put('currentUser', vm.currentUser);
 
           if (vm.currentUser.role === ROLE.ADMIN) {
