@@ -63,9 +63,9 @@
 
             <div layout="row" layout-align="start center">
               <span>
-                Last week: 
-                <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span>
-                <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value * 1000 | date : "mm:ss" }}</span>
+                {{ vm.dateRange.this.dateStart | date : 'yyyy.MM.dd' }}:{{ vm.dateRange.this.dateEnd | date : 'yyyy.MM.dd' }}
+                <!-- <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span> -->
+                <!-- <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value * 1000 | date : "mm:ss" }}</span> -->
               </span>
               <span ng-if="vm.isCompare" class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
             </div>
@@ -77,7 +77,7 @@
       <ms-widget flippable="false" layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-            <div class="h3">Pages</div>
+            <div class="h3">Landing Pages</div>
           </div>
           <div class="border-bottom">
             <div class="white-bg md-whiteframe-4dp">

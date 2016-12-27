@@ -38,11 +38,11 @@
 				Global.dateRange = {
 					this : {
 						dateStart: 	moment().subtract(1, 'months').toDate(),
-						dateEnd: 		moment().toDate()
+						dateEnd: 		moment().subtract(1, 'days').toDate()
 					},
 					last : {
 						dateStart: 	moment().subtract(1, 'years').subtract(1, 'months').toDate(),
-						dateEnd: 		moment().subtract(1, 'years').toDate()
+						dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 					}
 				};
 			}
@@ -59,9 +59,6 @@
 				}, {
 					label 		: 'Bounce Rate',
 					metrics 	: 'ga:bounceRate'
-				}, {
-					label 		: 'Pages Per Session',
-					metrics 	: 'ga:pageviewsPerSession'
 				}, {
 					label 		: 'Average Session Duration',
 					metrics 	: 'ga:avgSessionDuration'
@@ -294,12 +291,12 @@
 		function onThirtyDays () {
 			Global.dateRange = {
 				this : {
-					dateStart: 	moment().subtract(30, 'days').toDate(),
-					dateEnd: 		moment().toDate()
+					dateStart: 	moment().subtract(31, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'days').toDate()
 				},
 				last : {
-					dateStart: 	moment().subtract(1, 'years').subtract(30, 'days').toDate(),
-					dateEnd: 		moment().subtract(1, 'years').toDate()
+					dateStart: 	moment().subtract(1, 'years').subtract(31, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 				}
 			};
 			vm.dateRange = Global.dateRange;
@@ -309,12 +306,12 @@
 		function onNinetyDays () {
 			Global.dateRange = {
 				this : {
-					dateStart: 	moment().subtract(90, 'days').toDate(),
-					dateEnd: 		moment().toDate()
+					dateStart: 	moment().subtract(91, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'days').toDate()
 				},
 				last : {
-					dateStart: 	moment().subtract(1, 'years').subtract(90, 'days').toDate(),
-					dateEnd: 		moment().subtract(1, 'years').toDate()
+					dateStart: 	moment().subtract(1, 'years').subtract(91, 'days').toDate(),
+					dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 				}
 			};
 			vm.dateRange = Global.dateRange;

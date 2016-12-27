@@ -15,7 +15,7 @@
 
     vm.init = init;
 
-    function init () {
+    function init() {
       $cookieStore.remove('currentUser');
 
       api.getParticleData(function(particleData) {
@@ -39,10 +39,10 @@
           Global.currentUser = vm.currentUser;
           $cookieStore.put('currentUser', vm.currentUser);
 
-          if (vm.currentUser.role === ROLE.ADMIN) {
+          if(vm.currentUser.role === ROLE.ADMIN) {
             $state.go('app.campaigns');
-          } else {
-            $state.go('app.dashboard');
+          } else if(vm.currentUser.role === ROLE.CLIENT) {
+            $state.go('app.task_summaries');
           }
         } else {
           $state.go('app.pages_auth_login');

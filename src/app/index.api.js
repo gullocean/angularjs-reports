@@ -194,10 +194,10 @@
       });
     }
 
-    function getCampaigns (callback) {
+    function getCampaigns (id, callback) {
       $http({
         method: 'GET',
-        url: api.baseUrl + '/campaigns/get',
+        url: api.baseUrl + '/campaigns/get/' + id,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

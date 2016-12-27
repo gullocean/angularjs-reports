@@ -21,9 +21,10 @@
     vm.selectCampaign = selectCampaign;
     vm.goToUsers      = goToUsers;
 
-    function init () {
+    function init() {
+      Global.currentCampaign = null;
       if (angular.isUndefined(Global.campaigns) || Global.campaigns === null) {
-        api.getCampaigns (function(response) {
+        api.getCampaigns ('', function(response) {
           if (response.code === 0) {
             Global.campaigns  = response.data;
 
@@ -91,7 +92,7 @@
       });
     }
 
-    function deleteCampaign (ev, key) {
+    function deleteCampaign(ev, key) {
       var campaign  = vm.campaigns[key];
       var confirm   = $mdDialog.confirm()
         .title('Are you sure to delete this campaign?')
@@ -112,16 +113,16 @@
       });
     }
 
-    function selectCampaign (campaign) {
+    function selectCampaign(campaign) {
       Global.currentCampaign = angular.copy(campaign);
       $state.go('app.task_summaries');
     }
 
-    function goToUsers () {
+    function goToUsers() {
       $state.go('app.users');
     }
 
-    function getScreenshot (url) {
+    function getScreenshot(url) {
       if (angular.isUndefined (url)) return;
       vm.progress = true;
       api.getScreenshot (url, function (response) {
