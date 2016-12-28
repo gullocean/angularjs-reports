@@ -24,12 +24,12 @@
       </div>
       <div class="white-fg" layout="column" layout-align="space-between" flex>
         <div class="md-display-1" layout="row" layout-align="start center">
-          <span ng-if="key.filter!='currency'">{{ vm.values.box.last[index] | number }}</span>
+          <span ng-if="key.filter!='currency'">{{ vm.values.box.last[index] | number : 2 }}</span>
           <span ng-if="key.filter=='percent'">%</span>
           <span ng-if="key.filter=='currency'">{{ vm.values.box.last[index] | currency }}</span>
 
           <span> (</span>
-          <span ng-if="vm.values.box.prev[index] != 0">{{ (vm.values.box.last[index] - vm.values.box.prev[index]) * 100 / vm.values.box.prev[index] | number}}</span>
+          <span ng-if="vm.values.box.prev[index] != 0">{{ (vm.values.box.last[index] - vm.values.box.prev[index]) * 100 / vm.values.box.prev[index] | number : 2}}</span>
           <span ng-if="vm.values.box.prev[index] == 0">0</span>
           <span>%)</span>
         </div>

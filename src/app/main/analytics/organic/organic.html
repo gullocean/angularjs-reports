@@ -55,7 +55,7 @@
                 <span ng-if="metric.filter=='number'">{{ vm.values.compare[4 * key].value | number : 2 }}</span>
                 <span ng-if="metric.filter=='percent'">{{ vm.values.compare[4 * key].value | number : 2 }}</span>
                 <span ng-if="metric.filter=='time'">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
-                
+
                 <span ng-if="metric.filter=='percent'">%</span>
               </span>
               
@@ -98,8 +98,10 @@
                 <tbody>
                   <tr ng-repeat="value in vm.values.pages">
                     <td ng-repeat="(k, v) in value track by $index">
-                      <span ng-if="k==0">{{ v }}</span>
-                      <span ng-if="k!=0">{{ v | number : 2 }}</span>
+                      <span ng-if="vm.keys.pages[k].filter=='string'">{{ v }}</span>
+                      <span ng-if="vm.keys.pages[k].filter=='number'">{{ v | number : 2 }}</span>
+                      <span ng-if="vm.keys.pages[k].filter=='percent'">{{ v | number : 2 }}%</span>
+                      <span ng-if="vm.keys.pages[k].filter=='time'">{{ v * 1000 | date : "mm:ss" }}</span>
                     </td>
                   </tr>
                 </tbody>

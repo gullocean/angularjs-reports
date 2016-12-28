@@ -66,8 +66,8 @@
                   <td class="text-center border" ng-style="{color : '#3B49FF'}">{{ vm.dateRange.this.dateStart | date : 'MM/dd/yyyy' }} - {{ vm.dateRange.this.dateEnd | date : 'MM/dd/yyyy' }}</td>
                   <td ng-repeat="(k, v) in vm.values.tableSessionDeviceThis[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
                     <span ng-if="vm.keys.sessionsDevice[k].filter=='text'">{{ v }}</span>
-                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number }}</span>
-                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number }}%</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number : 2 }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number : 2 }}%</span>
                     <span ng-if="vm.keys.sessionsDevice[k].filter=='time'">{{ v * 1000 | date : "mm:ss" }}</span>
                   </td>
                 </tr>
@@ -76,8 +76,8 @@
                   <td class="text-center border" ng-style="{color : '#FFB169'}">{{ vm.dateRange.last.dateStart | date : 'MM/dd/yyyy' }} - {{ vm.dateRange.last.dateEnd | date : 'MM/dd/yyyy' }}</td>
                   <td ng-repeat="(k, v) in vm.values.tableSessionDeviceLast[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
                     <span ng-if="vm.keys.sessionsDevice[k].filter=='text'">{{ v }}</span>
-                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number }}</span>
-                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number }}%</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='number'">{{ v | number : 2 }}</span>
+                    <span ng-if="vm.keys.sessionsDevice[k].filter=='percent'">{{ v | number : 2 }}%</span>
                     <span ng-if="vm.keys.sessionsDevice[k].filter=='time'">{{ v * 1000 | date : "mm:ss" }}</span>
                   </td>
                 </tr>
@@ -85,8 +85,8 @@
                 <tr>
                   <td class="text-center border">% change</td>
                   <td ng-repeat="(k, v) in vm.values.tableSessionDeviceLast[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
-                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v > 0" ng-style="{color : '#6AB4A9'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number }}%</span>
-                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v < 0" ng-style="{color : '#CB6A79'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number }}%</span>
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v > 0" ng-style="{color : '#6AB4A9'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number : 2 }}%</span>
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v < 0" ng-style="{color : '#CB6A79'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number : 2 }}%</span>
                     <span ng-if="v == 0" ng-style="{color : 'black'}">0.0%</span>
                   </td>
                 </tr>

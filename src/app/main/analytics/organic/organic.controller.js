@@ -52,16 +52,20 @@
 			vm.keys.pages = [
 				{
 					label 		: 'Landing Page',
-					dimension : 'ga:landingPagePath'
+					dimension : 'ga:landingPagePath',
+					filter 		: 'string'
 				}, {
 					label 		: 'Sessions',
-					metrics 	: 'ga:sessions'
+					metrics 	: 'ga:sessions',
+					filter 		: 'string'
 				}, {
 					label 		: 'Bounce Rate',
-					metrics 	: 'ga:bounceRate'
+					metrics 	: 'ga:bounceRate',
+					filter 		: 'percent'
 				}, {
 					label 		: 'Average Session Duration',
-					metrics 	: 'ga:avgSessionDuration'
+					metrics 	: 'ga:avgSessionDuration',
+					filter 		: 'time'
 				}
 			];
 

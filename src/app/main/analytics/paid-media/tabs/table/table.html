@@ -23,11 +23,11 @@
                     <span ng-if="key.dimension != null">{{ value[key.index] }}</span>
                     <span ng-if="key.dimension == null && key.filter=='text'">{{ value[key.index] }}</span>
                     <span ng-if="key.dimension == null && key.filter=='currency'">{{ value[key.index] | currency }}</span>
-                    <span ng-if="key.dimension == null && key.filter=='percent'">{{ value[key.index] | number }}%</span>
+                    <span ng-if="key.dimension == null && key.filter=='percent'">{{ value[key.index] | number : 2 }}%</span>
 
-                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] > 0" class="compare" ng-style="{color :  'green'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number }}%)</span>
-                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] < 0" class="compare" ng-style="{color :  'red'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number }}%)</span>
-                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] == 0" class="compare" ng-style="{color :  'black'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] > 0" class="compare" ng-style="{color :  'green'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number : 2 }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] < 0" class="compare" ng-style="{color :  'red'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number : 2 }}%)</span>
+                    <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] != 0 && (value[key.index] - vm.values.tableLast[iValue][key.index]) / vm.values.tableLast[iValue][key.index] == 0" class="compare" ng-style="{color :  'black'}">({{ (value[key.index] - vm.values.tableLast[iValue][key.index]) * 100 / vm.values.tableLast[iValue][key.index] | number : 2 }}%)</span>
                     <span ng-if="key.dimension == null && +vm.values.tableLast[iValue][key.index] == 0" class="compare" ng-style="{color : 'black'}">(0%)</span>
                   </span>
                 </td>
