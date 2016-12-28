@@ -1,5 +1,9 @@
 #cross-channel {
 	position: relative;
+
+	.nv-legend-text {
+		text-transform: capitalize;
+	}
 	
 	#widgets {
 		

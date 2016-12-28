@@ -9,7 +9,6 @@
     /** @ngInject */
     function fuseThemingService($cookies, $log, $mdTheming)
     {
-
         var service = {
             getRegisteredPalettes: getRegisteredPalettes,
             getRegisteredThemes  : getRegisteredThemes,

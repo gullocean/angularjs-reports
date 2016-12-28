@@ -20,6 +20,7 @@
     vm.role         = '';
     vm.isNewUser    = false;
     vm.isDuplicatedEmail = false;
+    vm.campaigns    = [];
 
     // methods
     vm.closeDialog  = closeDialog;
@@ -75,6 +76,7 @@
       vm.ROLE   = angular.copy(ROLE);
       vm.user   = angular.copy(User);
       vm.title  = 'Edit User';
+      vm.campaigns = Global.campaigns;
 
       angular.forEach(ROLE, function(r, k) {
         vm.roleLabel[r] = k;

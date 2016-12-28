@@ -5,7 +5,7 @@
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="end center">
             <div>
-              <md-label class="pr-8">Date range : </md-label>
+              <md-label class="pr-8">Date Range : </md-label>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
               <md-label class="pl-15 pr-8">Period : </md-label>
@@ -19,7 +19,7 @@
       <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-            <div class="h3">Sessions by channel</div>
+            <div class="h3">Sessions by Channel</div>
           </div>
           <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.pieChart" data="vm.values.channel"></nvd3>
@@ -29,7 +29,7 @@
       <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
-            <div class="h3">Sessions by device</div>
+            <div class="h3">Sessions by Device</div>
           </div>
           <div class="border-bottom">
             <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.pieChart" data="vm.values.device"></nvd3>
@@ -85,8 +85,8 @@
                 <tr>
                   <td class="text-center border">% change</td>
                   <td ng-repeat="(k, v) in vm.values.tableSessionDeviceLast[iDevice] track by $index" ng-if="k!=0" class="text-center border" ng-style="vm.style.tableDevice">
-                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v > 0" ng-style="{color : '#6AB4A9'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) / v | number }}%</span>
-                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v < 0" ng-style="{color : '#CB6A79'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) / v | number }}%</span>
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v > 0" ng-style="{color : '#6AB4A9'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number }}%</span>
+                    <span ng-if="(vm.values.tableSessionDeviceThis[iDevice][k] - v) / v < 0" ng-style="{color : '#CB6A79'}">{{ (vm.values.tableSessionDeviceThis[iDevice][k] - v) * 100 / v | number }}%</span>
                     <span ng-if="v == 0" ng-style="{color : 'black'}">0.0%</span>
                   </td>
                 </tr>

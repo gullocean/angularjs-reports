@@ -6,8 +6,8 @@
     .controller('ToolbarController', ToolbarController);
 
   /** @ngInject */
-  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', '$cookieStore', 'Global'];
-  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, $cookieStore, Global) {
+  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', '$cookieStore', 'Global', 'ROLE'];
+  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, $cookieStore, Global, ROLE) {
     var vm = this;
 
     // Data
@@ -68,6 +68,7 @@
     vm.search = search;
     vm.searchResultClick = searchResultClick;
     vm.checkCampaign = checkCampaign;
+    vm.onLogo = onLogo;
 
     //////////
 
@@ -225,10 +226,21 @@
      * check if a campaign is selected
      */
     function checkCampaign() {
-      if (  angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null )
+      if ( angular.isUndefined(Global.currentCampaign) || Global.currentCampaign === null )
         return false;
       else
         return true;
+    }
+
+    /**
+     * when click logo
+     */
+    function onLogo() {
+      if ( angular.isUndefined( Global.currentUser ) || Global.currentUser === null )
+        $state.go( 'app.pages_auth_login' );
+
+      if ( Global.currentUser.role !== ROLE.CLIENT )
+        $state.go( 'app.campaigns' );
     }
   }
 

@@ -7,7 +7,7 @@
             <div>
               <md-label class="pr-8">Compare : </md-label>
               <md-checkbox class="md-caption" ng-model="vm.isCompare" aria-label="compare"></md-checkbox>
-              <md-label class="pr-8">Date range : </md-label>
+              <md-label class="pr-8">Date Range : </md-label>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onThirtyDays($event);">30</md-button>
               <md-button class="md-raised reference-button" href="" target="_blank" ng-click="vm.onNinetyDays($event);">90</md-button>
               <md-label class="pl-15 pr-8">Period : </md-label>
@@ -50,24 +50,28 @@
           </div>
           <div class="white-fg" layout="column" layout-align="space-between" flex>
             <div class="md-display-1" layout="row" layout-align="start center">
-              <span ng-if="metric.label != 'Avg. Session Duration' && !vm.isLoading">
-                <span>{{ vm.values.compare[4 * key].value | number }}</span>
-                <span ng-if="metric.label=='Bounce Rate'">%</span>
+              <span ng-if="!vm.isLoading">
+                <span ng-if="metric.filter=='string'">{{ vm.values.compare[4 * key].value }}</span>
+                <span ng-if="metric.filter=='number'">{{ vm.values.compare[4 * key].value | number : 2 }}</span>
+                <span ng-if="metric.filter=='percent'">{{ vm.values.compare[4 * key].value | number : 2 }}</span>
+                <span ng-if="metric.filter=='time'">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
+                
+                <span ng-if="metric.filter=='percent'">%</span>
               </span>
-              <span ng-if="metric.label == 'Avg. Session Duration' && !vm.isLoading">{{ vm.values.compare[4 * key].value * 1000 | date : "mm:ss" }}</span>
+              
               <div ng-if="vm.isCompare">
                 <md-icon ng-if="vm.values.compare[4 * key].value > vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-up" class="s36 ml-16"></md-icon>
                 <md-icon ng-if="vm.values.compare[4 * key].value < vm.values.compare[4 * key + 1].value" md-font-icon="icon-trending-down" class="s36 ml-16"></md-icon>
               </div>
             </div>
 
-            <div layout="row" layout-align="start center">
+            <div layout="row" layout-align="start center" ng-if="vm.isCompare">
               <span>
                 {{ vm.dateRange.this.dateStart | date : 'yyyy.MM.dd' }}:{{ vm.dateRange.this.dateEnd | date : 'yyyy.MM.dd' }}
                 <!-- <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span> -->
                 <!-- <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value * 1000 | date : "mm:ss" }}</span> -->
               </span>
-              <span ng-if="vm.isCompare" class="text-boxed-light">{{ (vm.values.compare[4 * key + 2].value - vm.values.compare[4 * key + 3].value) * 100 / vm.values.compare[4 * key + 3].value | number }}%</span>
+              <span class="text-boxed-light">{{ (vm.values.compare[4 * key].value - vm.values.compare[4 * key + 1].value) * 100 / vm.values.compare[4 * key + 1].value | number : 2 }}%</span>
             </div>
           </div>
         </ms-widget-front>
@@ -95,7 +99,7 @@
                   <tr ng-repeat="value in vm.values.pages">
                     <td ng-repeat="(k, v) in value track by $index">
                       <span ng-if="k==0">{{ v }}</span>
-                      <span ng-if="k!=0">{{v | number : 2}}</span>
+                      <span ng-if="k!=0">{{ v | number : 2 }}</span>
                     </td>
                   </tr>
                 </tbody>

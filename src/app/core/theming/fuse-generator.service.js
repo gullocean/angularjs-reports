@@ -43,7 +43,6 @@
                 // Iterate through color types (primary, accent, warn & background)
                 angular.forEach(registeredTheme.colors, function (colorType, colorTypeName)
                 {
-
                     themes[registeredTheme.name][colorTypeName] = {
                         'name'  : colorType.name,
                         'levels': {

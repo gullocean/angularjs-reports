@@ -7,7 +7,7 @@
         .controller('IndexController', IndexController);
 
     /** @ngInject */
-    function IndexController(fuseTheming, $cookieStore, $state)
+    function IndexController(fuseTheming, $cookieStore, $state, DEFAULT_THEME)
     {
         var vm = this;
 
@@ -15,5 +15,6 @@
         vm.themes = fuseTheming.themes;
 
         //////////
+        fuseTheming.setActiveTheme(DEFAULT_THEME);
     }
 })();

@@ -34,12 +34,21 @@
         <md-icon></md-icon>
         <input ng-model="vm.user.username" type="text" required>
       </md-input-container>
-      <md-input-container class="md-icon-float md-block" ng-if="vm.role==vm.ROLE.ADMIN">
+      <md-input-container class="md-icon-float md-block pb-24" ng-if="vm.role==vm.ROLE.ADMIN">
         <label>Role</label>
         <md-icon></md-icon>
         <md-select ng-model="vm.user.role">
           <md-option ng-repeat="(key, label) in vm.roleLabel" value="{{ key }}">
             {{ label }}
+          </md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="md-icon-float md-block pb-24" ng-if="vm.role!=vm.ROLE.CLIENT">
+        <label>Campaign</label>
+        <md-icon></md-icon>
+        <md-select ng-model="vm.user.campaign">
+          <md-option ng-repeat="(key, campaign) in vm.campaigns" value="{{ key }}">
+            {{ campaign.company }}
           </md-option>
         </md-select>
       </md-input-container>

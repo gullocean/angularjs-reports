@@ -68,16 +68,20 @@
 			vm.keys.compare = [
 				{
 					label 	: 'Sessions',
-					metrics : 'ga:sessions'
+					metrics : 'ga:sessions',
+					filter 	: 'string'
 				}, {
 					label 	: 'Bounce Rate',
-					metrics : 'ga:bounceRate'
+					metrics : 'ga:bounceRate',
+					filter 	: 'percent'
 				}, {
 					label 	: 'Avg. Session Duration',
-					metrics : 'ga:avgSessionDuration'
+					metrics : 'ga:avgSessionDuration',
+					filter 	: 'time'
 				}, {
 					label 	: 'Pages / Session',
-					metrics : 'ga:pageviewsPerSession'
+					metrics : 'ga:pageviewsPerSession',
+					filter 	: 'number'
 				}
 			];
 
@@ -91,7 +95,7 @@
 			vm.options.organic = {
 				chart : {
 					type:'lineChart',
-					margin : { top: 30, right: 60, bottom: 50, left : 70 },
+					margin : { top: 30, right: 30, bottom: 50, left : 50 },
 					x: function(d) { return d[0].setFullYear(2016); },
 					y: function(d) { return d[1]; },
 					xScale : d3.time.scale(),

@@ -3,7 +3,7 @@
     <md-button ng-if="vm.checkCampaign()" id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')" hide-gt-sm aria-label="Toggle navigation" translate translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
       <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
     </md-button>
-    <a ui-sref="app.campaigns" href=""><img class="logo-small" src="assets/images/logos/traffic-logo-black.png"></a>
+    <a href="" ng-click="vm.onLogo();"><img class="logo-small" src="assets/images/logos/traffic-logo-black.png"></a>
   </div>
   <div layout="row" layout-align="start center">
     <md-progress-circular id="toolbar-progress" ng-disabled="!$root.loadingProgress" class="md-accent" md-diameter="32"></md-progress-circular>

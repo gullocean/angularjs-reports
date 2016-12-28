@@ -19,6 +19,8 @@
       $cookieStore.remove('currentUser');
 
       api.getParticleData(function(particleData) {
+        particleData.particles.color.value = '#2392CD';
+        particleData.particles.line_linked.color = '#2392CD';
         particlesJS('particles-js', particleData);
       });
     }
