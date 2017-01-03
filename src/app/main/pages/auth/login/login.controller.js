@@ -5,10 +5,10 @@
     .module('app.pages.auth.login')
     .controller('LoginController', LoginController);
 
-  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', '$cookieStore', 'api', 'ROLE', 'Global'];
+  LoginController.$inject = ['$rootScope', '$scope', '$state', '$http', 'api', 'ROLE', 'Global'];
 
   /** @ngInject */
-  function LoginController($rootScope, $scope, $state, $http, $cookieStore, api, ROLE, Global) {
+  function LoginController($rootScope, $scope, $state, $http, api, ROLE, Global) {
 
     var vm = this;
     vm.currentUser = {};
@@ -16,7 +16,7 @@
     vm.init = init;
 
     function init() {
-      $cookieStore.remove('currentUser');
+      Global.removeAll();
 
       api.getParticleData(function(particleData) {
         particleData.particles.color.value = '#2392CD';
@@ -38,8 +38,7 @@
         if (response.code == 0) {
           vm.currentUser = response.data;
           vm.currentUser.role = +vm.currentUser.role;
-          Global.currentUser = vm.currentUser;
-          $cookieStore.put('currentUser', vm.currentUser);
+          Global.set( 'currentUser' , vm.currentUser );
 
           if(vm.currentUser.role === ROLE.ADMIN) {
             $state.go('app.campaigns');

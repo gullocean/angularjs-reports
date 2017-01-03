@@ -6,8 +6,8 @@
     .controller('ToolbarController', ToolbarController);
 
   /** @ngInject */
-  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', '$cookieStore', 'Global', 'ROLE'];
-  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, $cookieStore, Global, ROLE) {
+  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', 'Global', 'ROLE'];
+  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, Global, ROLE) {
     var vm = this;
 
     // Data
@@ -60,7 +60,7 @@
 
     // Methods
     vm.toggleSidenav = toggleSidenav;
-    vm.logout = logout;
+    vm.logout = Global.logout;
     vm.changeLanguage = changeLanguage;
     vm.setUserStatus = setUserStatus;
     vm.toggleHorizontalMobileMenu = toggleHorizontalMobileMenu;
@@ -81,9 +81,10 @@
       // Select the first status as a default
       vm.userStatus = vm.userStatusOptions[0];
 
-      vm.currentUser = $cookieStore.get('currentUser');
-      if (angular.isUndefined(vm.currentUser) || vm.currentUser === null) {
-        logout();
+      if ( Global.check( 'currentUser' ) ) {
+        vm.currentUser = Global.get( 'currentUser' );
+      } else {
+        Global.logout();
       }
 
       // Get the selected language directly from angular-translate module setting
@@ -108,12 +109,7 @@
       vm.userStatus = status;
     }
 
-    /**
-     * Logout Function
-     */
-    function logout() {
-      $state.go('app.pages_auth_login');
-    }
+    
 
     /**
      * Change Language
@@ -236,10 +232,10 @@
      * when click logo
      */
     function onLogo() {
-      if ( angular.isUndefined( Global.currentUser ) || Global.currentUser === null )
-        $state.go( 'app.pages_auth_login' );
+      if ( !Global.check( 'currentUser' ) )
+        Global.logout();
 
-      if ( Global.currentUser.role !== ROLE.CLIENT )
+      if ( vm.currentUser.role !== ROLE.CLIENT )
         $state.go( 'app.campaigns' );
     }
   }

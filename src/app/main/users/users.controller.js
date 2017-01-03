@@ -5,9 +5,9 @@
     .module('app.users')
     .controller('UsersController', UsersController);
 
-  UsersController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE', '$rootScope'];
+  UsersController.$inject = ['Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE', '$rootScope'];
   /** @ngInject */
-  function UsersController($state, Global, api, $mdDialog, $document, $cookieStore, ROLE, $rootScope) {
+  function UsersController( Global, api, $mdDialog, $document, $cookieStore, ROLE, $rootScope ) {
     var vm = this;
 
     // variables
@@ -20,28 +20,44 @@
     vm.addUser        = addUser;
     vm.deleteUser     = deleteUser;
     vm.editUser       = editUser;
-    vm.goToCampaigns  = goToCampaigns;
+    vm.goToCampaigns  = Global.goToCampaigns;
 
-    vm.init = function () {
+    function init() {
       angular.forEach(ROLE, function(r, k) {
         vm.role_label[r] = k;
       });
 
-      vm.currentUser = $cookieStore.get('currentUser');
+      if ( Global.check( 'currentUser' ) ) {
+        vm.currentUser = Global.get( 'currentUser' );
+      } else {
+        Global.logout();
+      }
 
-      if (angular.isUndefined(Global.users) || Global.users === null) {
-        api.getUsers(vm.currentUser, function(response) {
-          if (response.code == 0) {
-            Global.users = response.data;
-            vm.users = Global.users;
+      if ( Global.check( 'users' ) ) {
+        vm.users = Global.get( 'users' );
+      } else {
+        var data = {};
+        data.id = null;
+        
+        if ( vm.currentUser.role === Global.CLIENT )
+          return;
+
+        if ( vm.currentUser.role === Global.ADMIN )
+          data.role = null;
+        else
+          data.role = Global.CLIENT;
+
+        api.getUsers( data, function( response ) {
+          if ( response.code == 0 ) {
+            vm.users = response.data;
+
+            Global.set( 'users', vm.users );
           }
         });
-      } else {
-        vm.users = Global.users;
       }
     }
     
-    function addUser (ev) {
+    function addUser( ev ) {
       $mdDialog.show({
         controller: 'UserDialogController',
         controllerAs: 'vm',
@@ -53,7 +69,7 @@
           User: null
         }
       })
-      .then(function(user) {
+      .then( function( user ) {
         $rootScope.loadingProgress = true;
         if (angular.isDefined(user)) {
           api.addUser(user, function (response) {
@@ -69,7 +85,7 @@
       });
     }
 
-    function editUser (ev, key) {
+    function editUser( ev, key ) {
       var user = vm.users[key];
       $mdDialog.show({
         controller: 'UserDialogController',
@@ -82,7 +98,7 @@
           User: user
         }
       })
-      .then(function(user) {
+      .then( function( user ) {
         $rootScope.loadingProgress = true;
         if (angular.isDefined(user)) {
           api.updateUser(user, function (response) {
@@ -97,7 +113,7 @@
       });
     }
 
-    function deleteUser (ev, key) {
+    function deleteUser(ev, key) {
       var user = vm.users[key];
       var confirm = $mdDialog.confirm()
         .title('Are you sure to delete this user?')
@@ -107,21 +123,17 @@
         .ok('OK')
         .cancel('CANCEL');
 
-      $mdDialog.show(confirm).then(function() {
+      $mdDialog.show( confirm ).then( function() {
         $rootScope.loadingProgress = true;
-        api.deleteUser(user.id, function(response) {
+        api.deleteUser( user.id, function( response ) {
           $rootScope.loadingProgress = false;
-          if (response.code == 0) {
+          if ( response.code == 0 ) {
             vm.users.splice(key, 1);
           }
         });
       });
     }
 
-    function goToCampaigns () {
-      $state.go('app.campaigns');
-    }
-
-    vm.init();
+    init();
   }
 })();

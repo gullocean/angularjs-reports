@@ -19,6 +19,7 @@
 		vm.indices 		= {};
 		vm.messages 	= {};
 		vm.dateRanges	= {};
+		vm.currentCampaign = {};
 
 		// methods
 		vm.onThirtyDays	= onThirtyDays;
@@ -28,7 +29,9 @@
 
 		function init () {
 
-			if ( angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null ) {
+			if ( Global.check( 'currentCampaign' ) ) {
+				vm.currentCampaign = Global.get( 'currentCampaign' );
+			} else {
 				$state.go('app.campaigns');
 				return;
 			}
@@ -249,7 +252,7 @@
 				}
 			];
 
-			getAllReports (vm.dateRanges, Global.currentCampaign.view_ID);
+			getAllReports (vm.dateRanges, vm.currentCampaign.view_ID);
 
 		};
 
@@ -258,7 +261,7 @@
 				dateStart 	: moment ().subtract (30, 'days').toDate (),
 				dateEnd 		: moment ().toDate ()
 			};
-			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+			getChartReports (vm.dateRanges.chart, vm.currentCampaign.view_ID);
 		}
 
 		function onSixtyDays () {
@@ -266,7 +269,7 @@
 				dateStart 	: moment ().subtract (60, 'days').toDate (),
 				dateEnd 		: moment ().toDate ()
 			};
-			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+			getChartReports (vm.dateRanges.chart, vm.currentCampaign.view_ID);
 		}
 		
 		function onNinetyDays () {
@@ -274,7 +277,7 @@
 				dateStart 	: moment ().subtract (90, 'days').toDate (),
 				dateEnd 		: moment ().toDate ()
 			};
-			getChartReports (vm.dateRanges.chart, Global.currentCampaign.view_ID);
+			getChartReports (vm.dateRanges.chart, vm.currentCampaign.view_ID);
 		}
 
 		function getChartReports (dateRange, viewID) {

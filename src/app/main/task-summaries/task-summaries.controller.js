@@ -42,18 +42,15 @@
     }
 
     function init() {
-      if (angular.isUndefined(Global.currentUser) || Global.currentUser === null){
+      if ( !Global.check( 'currentUser' ) || !Global.check( 'currentCampaign' ) ) {
         $state.go('app.pages_auth_login');
         return;
       }
 
-      if (angular.isDefined(Global.currentCampaign) && Global.currentCampaign != null)
-        return;
-
-      if (Global.currentUser.role === ROLE.CLIENT) {
+      if ( Global.get( 'currentUser').role === ROLE.CLIENT ) {
         api.getCampaigns(1, function(response) {
           if (response.code === 0) {
-            Global.currentCampaign  = response.data;
+            Global.set( 'currentCampaign', response.data);
           } else {
             console.log( 'campaigns getting error!' );
           }

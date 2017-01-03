@@ -22,19 +22,20 @@
     vm.goToUsers      = goToUsers;
 
     function init() {
-      Global.currentCampaign = null;
-      if (angular.isUndefined(Global.campaigns) || Global.campaigns === null) {
-        api.getCampaigns ('', function(response) {
-          if (response.code === 0) {
-            Global.campaigns  = response.data;
+      Global.remove( 'currentCampaign' );
 
-            vm.campaigns = Global.campaigns;
+      if ( Global.check( 'campaigns' ) ) {
+        vm.campaigns = Global.get( 'campaigns' );
+      } else {
+        api.getCampaigns ( '', function( response ) {
+          if ( response.code === 0 ) {
+            vm.campaigns = response.data;
+            
+            Global.set( 'campaigns', vm.campaigns );
           } else {
             console.log( 'campaigns getting error!' );
           }
         });
-      } else {
-        vm.campaigns = Global.campaigns;
       }
     }
     
@@ -113,16 +114,16 @@
       });
     }
 
-    function selectCampaign(campaign) {
-      Global.currentCampaign = angular.copy(campaign);
-      $state.go('app.task_summaries');
+    function selectCampaign( campaign ) {
+      Global.set( 'currentCampaign', campaign );
+      $state.go( 'app.task_summaries' );
     }
 
     function goToUsers() {
       $state.go('app.users');
     }
 
-    function getScreenshot(url) {
+    function getScreenshot( url ) {
       if (angular.isUndefined (url)) return;
       vm.progress = true;
       api.getScreenshot (url, function (response) {

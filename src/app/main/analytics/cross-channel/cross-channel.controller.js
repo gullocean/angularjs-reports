@@ -18,6 +18,7 @@
 		vm.dateRange 	= {};
 		vm.keys  			= {};
 		vm.style			= {};
+		vm.currentCampaign = {};
 
 		// methods
 		vm.updateOrganicDateRange = updateOrganicDateRange;
@@ -26,27 +27,32 @@
 
 		vm.init = function () {
 
-			if ( angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null ) {
+			if ( Global.check( 'currentCampaign' ) ) {
+				vm.currentCampaign = Global.get( 'currentCampaign' );
+			} else {
 				$state.go('app.campaigns');
 				return;
+			}
+			
+			if ( Global.check( 'dateRange' ) ) {
+				vm.dateRange = Global.get( 'dateRange' );
+			} else {
+				vm.dateRange = {
+					this : {
+						dateStart: 	moment().subtract(1, 'months').toDate(),
+						dateEnd: 		moment().subtract(1, 'days').toDate()
+					},
+					last : {
+						dateStart: 	moment().subtract(1, 'years').subtract(1, 'months').toDate(),
+						dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
+					}
+				};
+				Global.set( 'dateRange', vm.dateRange );
 			}
 
 			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
 				Global.analytics = {};
 			};
-
-			if ( angular.isUndefined (Global.dateRange) || Global.dateRange === null ) {
-				Global.dateRange = {
-					this : {
-						dateStart: 	moment().subtract(1, 'months').toDate(),
-						dateEnd: 		moment().toDate()
-					},
-					last : {
-						dateStart: 	moment().subtract(1, 'years').subtract(1, 'months').toDate(),
-						dateEnd: 		moment().subtract(1, 'years').toDate()
-					}
-				};
-			}
 
 			vm.keys.sessionsDevice = [
 				{
@@ -93,7 +99,7 @@
 				'max-width'	: 100/( vm.keys.sessionsDevice.length + 0.5) + '%',
 			};
 
-			vm.dateRange = Global.dateRange;
+			vm.dateRange = vm.dateRange;
 
 			vm.options = {
 				pieChart: {
@@ -110,7 +116,7 @@
 				}
 			};
 
-			getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 		}
 
 		function getAllReports (dateRange, viewID, isCompare) {
@@ -229,24 +235,24 @@
 
 		function updateOrganicDateRange ($event, showTemplate) {
 			$mdDateRangePicker
-				.show({targetEvent:$event, model:Global.dateRange.this} )
+				.show({targetEvent:$event, model:vm.dateRange.this} )
 				.then(function(result){
 					if(result) {
-						Global.dateRange.this = result;
-						Global.dateRange.last = {
-							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years').toDate (),
-							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
+						vm.dateRange.this = result;
+						vm.dateRange.last = {
+							dateStart : moment(vm.dateRange.this.dateStart).subtract(1, 'years').toDate (),
+							dateEnd 	: moment(vm.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
 						};
 
-						vm.dateRange = Global.dateRange;
+						vm.dateRange = vm.dateRange;
 						
-						getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+						getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 					}
 				});
 		}
 
 		function onThirtyDays () {
-			Global.dateRange = {
+			vm.dateRange = {
 				this : {
 					dateStart: 	moment().subtract(30, 'days').toDate(),
 					dateEnd: 		moment().toDate()
@@ -256,12 +262,12 @@
 					dateEnd: 		moment().subtract(1, 'years').toDate()
 				}
 			};
-			vm.dateRange = Global.dateRange;
-			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+			vm.dateRange = vm.dateRange;
+			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 		}
 
 		function onNinetyDays () {
-			Global.dateRange = {
+			vm.dateRange = {
 				this : {
 					dateStart: 	moment().subtract(90, 'days').toDate(),
 					dateEnd: 		moment().toDate()
@@ -271,8 +277,8 @@
 					dateEnd: 		moment().subtract(1, 'years').toDate()
 				}
 			};
-			vm.dateRange = Global.dateRange;
-			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+			vm.dateRange = vm.dateRange;
+			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 		}
 
 		vm.init();

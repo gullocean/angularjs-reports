@@ -6,7 +6,7 @@
     .factory('api', apiService);
 
   /** @ngInject */
-  function apiService($resource, $http, $cookieStore, $state, $rootScope, $mdDialog, $q) {
+  function apiService($resource, $http, $state, $rootScope, $mdDialog, $q) {
 
     var api = {};
 
@@ -35,32 +35,32 @@
     api.checkEmail        = checkEmail;
     api.getAnalyticsAccountList = getAnalyticsAccountList;
 
-    function auth (data, callback) {
+    function auth( data, callback ) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/auth',
-        data: $.param(data),
+        data: $.param( data ),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }).success(function(response) {
-        callback(response);
-      }).error(function(error) {
+      }).success( function( response ) {
+        callback( response );
+      }).error( function( error ) {
         console.log('login error : ', error);
       });
     }
 
-    function getUsers (data, callback) {
+    function getUsers( data, callback ) {
       $http({
         method: 'POST',
         url: api.baseUrl + '/users/get',
-        data: $.param(data),
+        data: $.param( data ),
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }).success(function(response) {
-        callback(response);
-      }).error(function(error) {
+      }).success( function( response ) {
+        callback( response );
+      }).error( function( error ) {
         console.log('get user error : ', error);
       });
     }

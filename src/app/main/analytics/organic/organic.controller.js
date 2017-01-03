@@ -21,6 +21,7 @@
 		vm.dateRange 	= {};
 		vm.isCompare	= true;
 		vm.isLoading 	= true;
+		vm.currentCampaign = {};
 
 		// methods
 		vm.updateOrganicDateRange = updateOrganicDateRange;
@@ -29,13 +30,17 @@
 
 		vm.init = function () {
 
-			if ( angular.isUndefined (Global.currentCampaign) || Global.currentCampaign === null ) {
+			if ( Global.check( 'currentCampaign' ) ) {
+				vm.currentCampaign = Global.get( 'currentCampaign' );
+			} else {
 				$state.go('app.campaigns');
 				return;
 			}
 			
-			if ( angular.isUndefined (Global.dateRange) || Global.dateRange === null ) {
-				Global.dateRange = {
+			if ( Global.check( 'dateRange' ) ) {
+				vm.dateRange = Global.get( 'dateRange' );
+			} else {
+				vm.dateRange = {
 					this : {
 						dateStart: 	moment().subtract(1, 'months').toDate(),
 						dateEnd: 		moment().subtract(1, 'days').toDate()
@@ -45,9 +50,8 @@
 						dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 					}
 				};
+				Global.set( 'dateRange', vm.dateRange );
 			}
-
-			vm.dateRange = Global.dateRange;
 
 			vm.keys.pages = [
 				{
@@ -100,7 +104,7 @@
 				chart : {
 					type:'lineChart',
 					margin : { top: 30, right: 30, bottom: 50, left : 50 },
-					x: function(d) { return d[0].setFullYear(2016); },
+					x: function(d) { return d[0]; },
 					y: function(d) { return d[1]; },
 					xScale : d3.time.scale(),
 					xAxis: {
@@ -131,7 +135,7 @@
 			}
 
 			if (angular.isUndefined(Global.analytics.organic) || Global.analytics.organic === null ) {
-				getAllReports (Global.dateRange, Global.currentCampaign.view_ID);
+				getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 			}
 		}
 
@@ -227,12 +231,15 @@
 			});
 
 			$q.all(tasks).then (function (response) {
-				
-				// sessions
+				// sessions in last period
 				vm.chart.values[0].values = response[0].data;
 
-				// page / session
+				// sessions in same period of previous year
 				vm.chart.values[1].values = response[1].data;
+
+				for (var i = 0; i < vm.chart.values[0].values.length; i++) {
+					vm.chart.values[1].values[i][0] = vm.chart.values[0].values[i][0];
+				}
 
 				// for pages table
 				vm.values.pages = response[2].data;
@@ -280,24 +287,24 @@
 
 		function updateOrganicDateRange ($event, showTemplate) {
 			$mdDateRangePicker
-				.show({targetEvent:$event, model:Global.dateRange.this} )
+				.show({targetEvent:$event, model:vm.dateRange.this} )
 				.then(function(result){
 					if(result) {
-						Global.dateRange.this = result;
-						Global.dateRange.last = {
-							dateStart : moment(Global.dateRange.this.dateStart).subtract(1, 'years').toDate (),
-							dateEnd 	: moment(Global.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
+						vm.dateRange.this = result;
+						vm.dateRange.last = {
+							dateStart : moment(vm.dateRange.this.dateStart).subtract(1, 'years').toDate (),
+							dateEnd 	: moment(vm.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
 						};
 
-						vm.dateRange = Global.dateRange;
+						vm.dateRange = vm.dateRange;
 
-						getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+						getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 					}
 				});
 		}
 
 		function onThirtyDays () {
-			Global.dateRange = {
+			vm.dateRange = {
 				this : {
 					dateStart: 	moment().subtract(31, 'days').toDate(),
 					dateEnd: 		moment().subtract(1, 'days').toDate()
@@ -307,12 +314,12 @@
 					dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 				}
 			};
-			vm.dateRange = Global.dateRange;
-			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+			vm.dateRange = vm.dateRange;
+			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 		}
 
 		function onNinetyDays () {
-			Global.dateRange = {
+			vm.dateRange = {
 				this : {
 					dateStart: 	moment().subtract(91, 'days').toDate(),
 					dateEnd: 		moment().subtract(1, 'days').toDate()
@@ -322,8 +329,8 @@
 					dateEnd: 		moment().subtract(1, 'years').subtract(1, 'days').toDate()
 				}
 			};
-			vm.dateRange = Global.dateRange;
-			getAllReports (vm.dateRange, Global.currentCampaign.view_ID);
+			vm.dateRange = vm.dateRange;
+			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
 		}
 
 		vm.init();

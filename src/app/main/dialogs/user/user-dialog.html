@@ -43,11 +43,11 @@
           </md-option>
         </md-select>
       </md-input-container>
-      <md-input-container class="md-icon-float md-block pb-24" ng-if="vm.role!=vm.ROLE.CLIENT">
+      <md-input-container class="md-icon-float md-block pb-24" ng-if="vm.user.role==vm.ROLE.CLIENT">
         <label>Campaign</label>
         <md-icon></md-icon>
-        <md-select ng-model="vm.user.campaign">
-          <md-option ng-repeat="(key, campaign) in vm.campaigns" value="{{ key }}">
+        <md-select ng-model="vm.user.campaignID">
+          <md-option ng-repeat="campaign in vm.campaigns" value="{{ campaign.id }}">
             {{ campaign.company }}
           </md-option>
         </md-select>

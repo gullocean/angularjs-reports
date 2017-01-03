@@ -30,59 +30,72 @@
     /**
      * Add new user
      */
-    function addNewUser(user) {
+    function addNewUser( user ) {
       var newUser = {};
       newUser.username  = user.username;
       newUser.email     = user.email;
       newUser.password  = user.newPassword;
-      if (vm.role == vm.ROLE.ADMIN) {
+      newUser.campaignID= user.campaignID;
+
+      if ( vm.role === vm.ROLE.ADMIN ) {
         newUser.role    = vm.user.role;
       } else {
         newUser.role    = vm.ROLE.CLIENT;
       }
-      closeDialog(newUser);
+
+      closeDialog( newUser );
     }
 
     /**
      * Save user
      */
-    function saveUser(user) {
+    function saveUser( user ) {
       var editedUser = {};
       editedUser.id        = user.id;
       editedUser.username  = user.username;
       editedUser.email     = user.email;
-      if (angular.isDefined(user.newPassword))
+      editedUser.campaignID= user.campaignID;
+
+      if ( angular.isDefined( user.newPassword ) )
         editedUser.password  = user.newPassword;
-      if (vm.role == vm.ROLE.ADMIN) {
+
+      if ( vm.role == vm.ROLE.ADMIN ) {
         editedUser.role = vm.user.role;
       } else {
         editedUser.role = vm.ROLE.CLIENT;
       }
-      closeDialog(editedUser);
+
+      closeDialog( editedUser );
     }
 
     /**
      * Close dialog
      */
-    function closeDialog(data) {
-      $mdDialog.hide(data);
+    function closeDialog( data ) {
+      $mdDialog.hide( data );
     }
 
     /**
      * initialize variables
      */
     function init() {
-      vm.role   = angular.copy($cookieStore.get('currentUser')).role;
+      vm.role   = angular.copy( Global.get( 'currentUser') ).role;
       vm.ROLE   = angular.copy(ROLE);
       vm.user   = angular.copy(User);
       vm.title  = 'Edit User';
-      vm.campaigns = Global.campaigns;
 
-      angular.forEach(ROLE, function(r, k) {
+      if ( Global.check( 'campaigns' ) ) {
+        vm.campaigns = Global.get( 'campaigns' );
+      } else {
+        Global.logout();
+        return;
+      }
+
+      angular.forEach( ROLE, function( r, k ) {
         vm.roleLabel[r] = k;
       });
 
-      if (angular.isUndefined(vm.user) || vm.user === null) {
+      if ( angular.isUndefined( vm.user ) || vm.user === null ) {
         vm.user = {
           'username': '',
           'avatar': 'assets/images/avatars/profile.jpg',
@@ -95,9 +108,10 @@
         vm.user.tags  = [];
       }
 
-      if (!vm.isNewUser) {
+      if ( !vm.isNewUser ) {
         vm.user.role    = +vm.user.role;
         vm.oldEmail     = vm.user.email;
+        vm.campaignID   = +vm.campaignID;
         vm.user.avatar  = 'assets/images/avatars/profile.jpg';
       }
     }
