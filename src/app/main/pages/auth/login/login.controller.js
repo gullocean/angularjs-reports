@@ -36,14 +36,16 @@
 
       api.auth(data, function(response) {
         if (response.code == 0) {
-          vm.currentUser = response.data;
+          vm.currentUser      = response.data;
           vm.currentUser.role = +vm.currentUser.role;
-          Global.set( 'currentUser' , vm.currentUser );
 
-          if(vm.currentUser.role === ROLE.ADMIN) {
-            $state.go('app.campaigns');
-          } else if(vm.currentUser.role === ROLE.CLIENT) {
+          Global.set( 'currentUser' , vm.currentUser );
+          Global.currentUser = vm.currentUser;
+
+          if(vm.currentUser.role === ROLE.CLIENT) {
             $state.go('app.task_summaries');
+          } else {
+            $state.go('app.campaigns');
           }
         } else {
           $state.go('app.pages_auth_login');

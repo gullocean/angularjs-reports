@@ -56,7 +56,10 @@
           api.addCampaign(campaign, function (response) {
             if (response.code == 0) {
               campaign.id = response.data.id;
-              vm.campaigns.unshift(campaign);
+
+              vm.campaigns.unshift(response.data);
+
+              Global.set( 'campaigns', vm.campaigns );
             }
             $rootScope.loadingProgress = false;
           });
@@ -84,7 +87,9 @@
           api.updateCampaign(campaign, function(response) {
             if (response.code == 0) {
               vm.campaigns[key] = campaign;
+              Global.set( 'campaigns', vm.campaigns );
             }
+            
             $rootScope.loadingProgress = false;
           });
         } else {
@@ -109,6 +114,7 @@
           $rootScope.loadingProgress = false;
           if (response.code == 0) {
             vm.campaigns.splice (key, 1);
+            Global.set( 'campaigns', vm.campaigns );
           }
         });
       });
@@ -116,6 +122,7 @@
 
     function selectCampaign( campaign ) {
       Global.set( 'currentCampaign', campaign );
+      Global.currentCampaign = angular.copy( campaign );
       $state.go( 'app.task_summaries' );
     }
 

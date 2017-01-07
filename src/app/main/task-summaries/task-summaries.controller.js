@@ -14,6 +14,8 @@
     // variables
     vm.tasks = [];
     vm.task = {};
+    vm.currentUser = {};
+    vm.users = [];
 
     // methods
     vm.openTaskDialog = openTaskDialog;
@@ -42,13 +44,15 @@
     }
 
     function init() {
-      if ( !Global.check( 'currentUser' ) || !Global.check( 'currentCampaign' ) ) {
+      if ( !Global.check( 'currentUser' ) ) {
         $state.go('app.pages_auth_login');
         return;
       }
 
-      if ( Global.get( 'currentUser').role === ROLE.CLIENT ) {
-        api.getCampaigns(1, function(response) {
+      vm.currentUser = Global.get( 'currentUser' );
+
+      if ( vm.currentUser.role === ROLE.CLIENT ) {
+        api.getCampaigns( vm.currentUser.campaignID, function(response) {
           if (response.code === 0) {
             Global.set( 'currentCampaign', response.data);
           } else {

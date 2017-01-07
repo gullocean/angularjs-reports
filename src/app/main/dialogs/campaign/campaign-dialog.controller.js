@@ -95,7 +95,8 @@
     }
 
     function getScreenshot (url) {
-      if (angular.isUndefined (url)) return;
+      // if (angular.isUndefined (url)) return;
+      if (!url) return;
       vm.progress = true;
       api.getScreenshot (url, function (response) {
         vm.error.url  = false;

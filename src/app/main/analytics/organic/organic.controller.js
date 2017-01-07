@@ -237,6 +237,7 @@
 				// sessions in same period of previous year
 				vm.chart.values[1].values = response[1].data;
 
+				// set dates as same dates
 				for (var i = 0; i < vm.chart.values[0].values.length; i++) {
 					vm.chart.values[1].values[i][0] = vm.chart.values[0].values[i][0];
 				}

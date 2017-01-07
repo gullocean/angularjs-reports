@@ -6,8 +6,8 @@
     .controller('ToolbarController', ToolbarController);
 
   /** @ngInject */
-  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', 'Global', 'ROLE'];
-  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, Global, ROLE) {
+  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', 'Global', 'ROLE', '$scope'];
+  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, Global, ROLE, $scope) {
     var vm = this;
 
     // Data
@@ -58,6 +58,11 @@
       }
     };
 
+    vm.currentUser      = {};
+    vm.currentCampaign  = {};
+    vm.users            = [];
+    vm.selectedUser     = {};
+
     // Methods
     vm.toggleSidenav = toggleSidenav;
     vm.logout = Global.logout;
@@ -69,6 +74,7 @@
     vm.searchResultClick = searchResultClick;
     vm.checkCampaign = checkCampaign;
     vm.onLogo = onLogo;
+    vm.isClient = isClient;
 
     //////////
 
@@ -82,7 +88,15 @@
       vm.userStatus = vm.userStatusOptions[0];
 
       if ( Global.check( 'currentUser' ) ) {
-        vm.currentUser = Global.get( 'currentUser' );
+        vm.currentUser      = Global.get( 'currentUser' );
+        vm.currentCampaign  = Global.get( 'currentCampaign' );
+        // angular.forEach( angular.copy( Global.get( 'users' ) ), function(user, key) {
+        //   if ( +user.role === ROLE.CLIENT ) {
+        //     vm.users.push( user );
+        //   }
+        // });
+
+        // vm.selectedUser = vm.users[0];
       } else {
         Global.logout();
       }
@@ -90,7 +104,6 @@
       // Get the selected language directly from angular-translate module setting
       vm.selectedLanguage = vm.languages[$translate.preferredLanguage()];
     }
-
 
     /**
      * Toggle sidenav
@@ -108,8 +121,6 @@
     function setUserStatus(status) {
       vm.userStatus = status;
     }
-
-    
 
     /**
      * Change Language
@@ -222,10 +233,7 @@
      * check if a campaign is selected
      */
     function checkCampaign() {
-      if ( angular.isUndefined(Global.currentCampaign) || Global.currentCampaign === null )
-        return false;
-      else
-        return true;
+      return Global.check( 'currentCampaign' );
     }
 
     /**
@@ -238,6 +246,29 @@
       if ( vm.currentUser.role !== ROLE.CLIENT )
         $state.go( 'app.campaigns' );
     }
+
+    /**
+     * check if currentUser is client or not
+     */
+    function isClient() {
+      if ( vm.currentUser.role === ROLE.CLIENT )
+        return true;
+      return false;
+    }
+
+    /**
+     * watch if Global.currentCampaign and currentUser is changed or not
+     */
+    $scope.$watch(function(){
+      return Global.currentCampaign;
+    }, function(newValue, oldValue){
+      vm.currentCampaign = angular.copy( Global.currentCampaign );
+    });
+    $scope.$watch(function(){
+      return Global.currentUser;
+    }, function(newValue, oldValue){
+      vm.currentUser = angular.copy( Global.currentUser );
+    });
   }
 
 })();

@@ -76,6 +76,7 @@
             if (response.code == 0) {
               user.id = response.data.id;
               vm.users.unshift(user);
+              Global.set( 'users', vm.users );
             }
             $rootScope.loadingProgress = false;
           });
@@ -104,7 +105,9 @@
           api.updateUser(user, function (response) {
             if (response.code == 0) {
               vm.users[key] = angular.copy(user);
+              Global.set( 'users', vm.users );
             }
+            
             $rootScope.loadingProgress = false;
           });
         } else {
@@ -129,6 +132,7 @@
           $rootScope.loadingProgress = false;
           if ( response.code == 0 ) {
             vm.users.splice(key, 1);
+            Global.set( 'users', vm.users );
           }
         });
       });
