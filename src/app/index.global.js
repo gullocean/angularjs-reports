@@ -7,6 +7,9 @@
 
       var vm = this;
 
+      // variables
+      vm.black_logo_path = 'assets/images/logos/traffic-logo-black.png';
+
       // methods
       vm.sum        = sum;
       vm.set        = set;
@@ -14,7 +17,6 @@
       vm.check      = isExist;
       vm.remove     = remove;
       vm.removeAll  = removeAll;
-      vm.logout     = logout;
       vm.isValid    = isValid;
       vm.goToCampaigns = goToCampaigns;
 
@@ -107,13 +109,6 @@
         angular.forEach( getAll(), function( cookie, key ) {
           remove( key );
         });
-      }
-
-      /**
-       * Logout Function
-       */
-      function logout() {
-        $state.go('app.pages_auth_login');
       }
 
       function goToCampaigns() {

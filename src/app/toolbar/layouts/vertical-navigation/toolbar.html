@@ -3,7 +3,7 @@
     <md-button ng-if="vm.checkCampaign()" id="navigation-toggle" class="md-icon-button" ng-click="vm.toggleSidenav('navigation')" hide-gt-sm aria-label="Toggle navigation" translate translate-attr-aria-label="TOOLBAR.TOGGLE_NAVIGATION">
       <md-icon md-font-icon="icon-menu" class="icon"></md-icon>
     </md-button>
-    <a class="ph-8" href="" ng-click="vm.onLogo();"><img class="logo-small" src="assets/images/logos/traffic-logo-black.png"></a>
+    <a class="ph-8" href="" ng-click="vm.onLogo();"><img class="logo-small" ng-src="{{ vm.black_logo_path }}"></a>
     <div class="toolbar-separator"></div>
     <div ng-if="vm.checkCampaign()" layout="row" layout-align="start center" flex>
       <!-- <md-label class="pl-8">Campaign : </md-label> -->

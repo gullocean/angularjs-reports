@@ -8,5 +8,5 @@
       PM: 1,
       CLIENT: 2
     })
-    .constant('DEFAULT_THEME', 'tempTheme');
+    .constant('DEFAULT_THEME', 'trafficTheme');
 })();

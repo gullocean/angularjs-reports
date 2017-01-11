@@ -11,21 +11,21 @@
   function LoginController($rootScope, $scope, $state, $http, api, ROLE, Global) {
 
     var vm = this;
-    vm.currentUser = {};
 
-    vm.init = init;
+    // methods
+    vm.login = login;
 
     function init() {
       Global.removeAll();
 
       api.getParticleData(function(particleData) {
-        particleData.particles.color.value = '#2392CD';
-        particleData.particles.line_linked.color = '#2392CD';
+        // particleData.particles.color.value = '#2392CD';
+        // particleData.particles.line_linked.color = '#2392CD';
         particlesJS('particles-js', particleData);
       });
     }
 
-    $scope.login = function() {
+    function login() {
 
       $rootScope.loadingProgress  = true;
 
@@ -36,13 +36,17 @@
 
       api.auth(data, function(response) {
         if (response.code == 0) {
-          vm.currentUser      = response.data;
-          vm.currentUser.role = +vm.currentUser.role;
+          var currentUser = response.data;
+          var token       = response.token;
 
-          Global.set( 'currentUser' , vm.currentUser );
-          Global.currentUser = vm.currentUser;
+          currentUser.role = +currentUser.role;
 
-          if(vm.currentUser.role === ROLE.CLIENT) {
+          Global.set( 'currentUser' , currentUser );
+          Global.set( 'token', token );
+          
+          Global.currentUser = currentUser;
+
+          if(currentUser.role === ROLE.CLIENT) {
             $state.go('app.task_summaries');
           } else {
             $state.go('app.campaigns');
@@ -55,6 +59,6 @@
       });
     }
 
-    vm.init ();
+    init ();
   }
 })();

@@ -36,18 +36,18 @@
       if ( Global.check( 'users' ) ) {
         vm.users = Global.get( 'users' );
       } else {
-        var data = {};
-        data.id = null;
+        // var data = {};
+        // data.id = null;
         
         if ( vm.currentUser.role === Global.CLIENT )
           return;
 
-        if ( vm.currentUser.role === Global.ADMIN )
-          data.role = null;
-        else
-          data.role = Global.CLIENT;
+        // if ( vm.currentUser.role === Global.ADMIN )
+        //   data.role = null;
+        // else
+        //   data.role = Global.CLIENT;
 
-        api.getUsers( data, function( response ) {
+        api.getUsers( function( response ) {
           if ( response.code == 0 ) {
             vm.users = response.data;
 

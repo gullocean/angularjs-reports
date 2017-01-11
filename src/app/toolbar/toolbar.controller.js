@@ -6,14 +6,16 @@
     .controller('ToolbarController', ToolbarController);
 
   /** @ngInject */
-  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', 'Global', 'ROLE', '$scope'];
-  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, Global, ROLE, $scope) {
+  ToolbarController.$inject = ['$rootScope', '$q', '$state', '$timeout', '$mdSidenav', '$translate', '$mdToast', 'msNavigationService', 'Global', 'ROLE', '$scope', 'api'];
+  function ToolbarController($rootScope, $q, $state, $timeout, $mdSidenav, $translate, $mdToast, msNavigationService, Global, ROLE, $scope, api) {
     var vm = this;
 
     // Data
     $rootScope.global = {
       search: ''
     };
+
+    vm.black_logo_path = Global.black_logo_path;
 
     vm.bodyEl = angular.element('body');
     vm.userStatusOptions = [{
@@ -64,17 +66,17 @@
     vm.selectedUser     = {};
 
     // Methods
-    vm.toggleSidenav = toggleSidenav;
-    vm.logout = Global.logout;
+    vm.toggleSidenav  = toggleSidenav;
+    vm.logout         = logout;
     vm.changeLanguage = changeLanguage;
-    vm.setUserStatus = setUserStatus;
+    vm.setUserStatus  = setUserStatus;
     vm.toggleHorizontalMobileMenu = toggleHorizontalMobileMenu;
-    vm.toggleMsNavigationFolded = toggleMsNavigationFolded;
-    vm.search = search;
+    vm.toggleMsNavigationFolded   = toggleMsNavigationFolded;
+    vm.search         = search;
     vm.searchResultClick = searchResultClick;
-    vm.checkCampaign = checkCampaign;
-    vm.onLogo = onLogo;
-    vm.isClient = isClient;
+    vm.checkCampaign  = checkCampaign;
+    vm.onLogo         = onLogo;
+    vm.isClient       = isClient;
 
     //////////
 
@@ -256,18 +258,23 @@
       return false;
     }
 
+    function logout() {
+      api.logout( vm.currentUser.id );
+      $state.go('app.pages_auth_login');
+    }
+
     /**
      * watch if Global.currentCampaign and currentUser is changed or not
      */
     $scope.$watch(function(){
       return Global.currentCampaign;
     }, function(newValue, oldValue){
-      vm.currentCampaign = angular.copy( Global.currentCampaign );
+      vm.currentCampaign = angular.copy( Global.get( 'currentCampaign' ) );
     });
     $scope.$watch(function(){
       return Global.currentUser;
     }, function(newValue, oldValue){
-      vm.currentUser = angular.copy( Global.currentUser );
+      vm.currentUser = angular.copy( Global.get( 'currentUser' ) );
     });
   }
 

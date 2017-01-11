@@ -6,9 +6,9 @@
       <div class="title" translate="LOGIN.INTRO_TITLE">
         Performance Portal
       </div>
-      <!-- <div class="description" translate="LOGIN.INTRO_DESCRIPTION">
+      <div class="description" translate="LOGIN.INTRO_DESCRIPTION">
         © 2016 TRAFFIC Digital Agency. All Rights Reserved.
-      </div> -->
+      </div>
     </div>
   </div>
   <div id="login-form-wrapper" class="flex-scrollable md-whiteframe-8dp" ms-scroll>
@@ -18,7 +18,7 @@
       </div>
       <div class="title" translate="LOGIN.TITLE">Log in to your account</div>
       <div class="description" translate="LOGIN.DESCRIPTION">With your provided email and password combination</div>
-      <form name="loginForm" ng-submit="login()" novalidate>
+      <form name="loginForm" ng-submit="vm.login()" novalidate>
         <md-input-container class="md-block" md-no-float>
           <input type="email" name="email" ng-model="vm.form.email" placeholder="Email" translate translate-attr-placeholder="LOGIN.EMAIL" ng-pattern="/^.+@.+\..+$/" required>
           <div ng-messages="loginForm.email.$error" role="alert" multiple>

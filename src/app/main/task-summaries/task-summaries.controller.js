@@ -15,7 +15,6 @@
     vm.tasks = [];
     vm.task = {};
     vm.currentUser = {};
-    vm.users = [];
 
     // methods
     vm.openTaskDialog = openTaskDialog;
@@ -52,9 +51,10 @@
       vm.currentUser = Global.get( 'currentUser' );
 
       if ( vm.currentUser.role === ROLE.CLIENT ) {
-        api.getCampaigns( vm.currentUser.campaignID, function(response) {
-          if (response.code === 0) {
-            Global.set( 'currentCampaign', response.data);
+        api.getCampaigns( vm.currentUser.campaignID, function( response ) {
+          if ( response.code === 0 ) {
+            Global.currentCampaign = response.data;
+            Global.set( 'currentCampaign', Global.currentCampaign);
           } else {
             console.log( 'campaigns getting error!' );
           }

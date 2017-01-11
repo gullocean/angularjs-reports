@@ -6,7 +6,7 @@
     .factory('api', apiService);
 
   /** @ngInject */
-  function apiService($resource, $http, $state, $rootScope, $mdDialog, $q) {
+  function apiService( $resource, $http, $state, $rootScope, $mdDialog, $q, Global ) {
 
     var api = {};
 
@@ -16,6 +16,8 @@
 
     // functions
     api.auth              = auth;
+    api.logout            = logout;
+    api.getUser           = getUser;
     api.getUsers          = getUsers;
     api.addUser           = addUser;
     api.deleteUser        = deleteUser;
@@ -50,13 +52,41 @@
       });
     }
 
-    function getUsers( data, callback ) {
+    function logout() {
       $http({
-        method: 'POST',
-        url: api.baseUrl + '/users/get',
-        data: $.param( data ),
+        method: 'GET',
+        url: api.baseUrl + '/users/logout',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
+        }
+      }).error( function( error ) {
+        console.log('logout error : ', error);
+      });
+    }
+
+    function getUser( id, callback ) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/users/get/' + id,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
+        }
+      }).success( function( response ) {
+        callback( response );
+      }).error( function( error ) {
+        console.log('get user error : ', error);
+      });
+    }
+
+    function getUsers( callback ) {
+      $http({
+        method: 'GET',
+        url: api.baseUrl + '/users/get',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success( function( response ) {
         callback( response );
@@ -71,7 +101,8 @@
         url: api.baseUrl + '/users/add',
         data: $.param(data),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -85,7 +116,8 @@
         method: 'DELETE',
         url: api.baseUrl + '/users/delete/' + id,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -100,7 +132,8 @@
         url: api.baseUrl + '/users/update',
         data: $.param(data),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -114,7 +147,8 @@
         method: 'GET',
         url: api.baseUrl + '/analytics/getdata/' + option,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -129,7 +163,8 @@
         url: api.baseUrl + '/analytics/get',
         data : $.param(query),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -156,7 +191,8 @@
         data : $.param (campaign),
         url: api.baseUrl + '/campaigns/add',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -171,7 +207,8 @@
         data : $.param (campaign),
         url: api.baseUrl + '/campaigns/update',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -185,7 +222,8 @@
         method: 'DELETE',
         url: api.baseUrl + '/campaigns/delete/' + campaignID,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success (function (response) {
         callback (response);
@@ -199,7 +237,8 @@
         method: 'GET',
         url: api.baseUrl + '/campaigns/get/' + id,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success(function(response) {
         callback(response);
@@ -268,7 +307,8 @@
         method: 'GET',
         url: api.baseUrl + '/analytics/checkID/' + viewID,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success (function (response) {
         callback (response);
@@ -282,7 +322,8 @@
         method: 'GET',
         url: api.baseUrl + '/analytics/getAccountList',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).success (function (response) {
         callback (response);
@@ -297,7 +338,8 @@
         url     : api.baseUrl + '/users/check',
         data    : $.param({email : email}),
         headers : {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'token'       : Global.get( 'token' )
         }
       }).then(function(response) {
         callback(response);
