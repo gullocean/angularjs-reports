@@ -62,12 +62,12 @@
 
     vm.campaigns        = {};
     vm.currentUser      = {};
+    vm.isClient         = false;
     vm.users            = [];
     vm.selectedCampaign = {};
     vm.selectedUser     = {};
 
     // Methods
-    vm.isClient = isClient;
     vm.logout = api.logout;
     vm.toggleSidenav  = toggleSidenav;
     vm.changeLanguage = changeLanguage;
@@ -78,7 +78,6 @@
     vm.searchResultClick = searchResultClick;
     vm.checkCampaign  = checkCampaign;
     vm.onLogo         = onLogo;
-    vm.isClient       = isClient;
     vm.selectCampaign = selectCampaign;
 
     //////////
@@ -100,32 +99,16 @@
         return;
       }
 
-      // if ( Global.check( 'selectedCampaign' ) ) {
-      //   vm.selectedCampaign = Global.get( 'selectedCampaign' );
-      // } else {
-      //   console.log( 'There is no selectedCampaign!' );
-      //   api.logout();
-      //   return;
-      // }
+      if ( Global.check( 'selectedCampaign' ) ) {
+        vm.selectedCampaign = Global.get( 'selectedCampaign' );
+      }
 
-      // if ( Global.check( 'campaigns' ) ) {
-      //   vm.campaigns = Global.get( 'campaigns' );
-      // } else {
-      //   console.log( 'There is no campaigns!' );
-      //   api.logout();
-      //   return;
-      // }
+      if ( Global.check( 'campaigns' ) ) {
+        vm.campaigns = Global.get( 'campaigns' );
+      }
 
       // Get the selected language directly from angular-translate module setting
       vm.selectedLanguage = vm.languages[$translate.preferredLanguage()];
-    }
-
-    /**
-     * Check if role of current user is client
-     * @returns true or false
-     */
-    function isClient() {
-      return vm.currentUser.role === ROLE.CLIENT;
     }
 
     /**
@@ -270,18 +253,9 @@
         $state.go( 'app.campaigns' );
     }
 
-    /**
-     * check if currentUser is client or not
-     */
-    function isClient() {
-      if ( vm.currentUser.role === ROLE.CLIENT )
-        return true;
-      return false;
-    }
-
     function selectCampaign( campaign ) {
       vm.selectedCampaign = campaign;
-      Global.set('selectedCampaign', campaign);
+      Global.set( 'selectedCampaign', campaign );
     }
 
     /**
@@ -290,19 +264,19 @@
     $scope.$watch( function() {
       return Global.currentUser;
     }, function( newValue, oldValue ){
-      vm.currentUser = angular.copy( Global.get( 'currentUser' ) );
+      vm.isClient = (vm.currentUser.role === ROLE.CLIENT);
     });
 
     $scope.$watch( function() {
       return Global.campaigns;
-    }, function( newCampaigns, oldCampaigns ) {
-      vm.campaigns = newCampaigns;
+    }, function( newValue, oldValue ) {
+      // vm.campaigns = angular.copy(newValue);
     });
 
     $scope.$watch( function() {
       return Global.selectedCampaign;
-    }, function( newCampaign, oldCampaign ) {
-      vm.selectedCampaign = newCampaign;
+    }, function( newValue, oldValue ) {
+      vm.selectedCampaign = newValue;
     });
   }
 })();

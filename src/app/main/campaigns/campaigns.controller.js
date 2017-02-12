@@ -30,7 +30,7 @@
         api.logout();
       }
 
-      Global.remove( 'currentCampaign' );
+      Global.remove( 'selectedCampaign' );
 
       if ( Global.check( 'campaigns' ) ) {
         vm.campaigns = Global.get( 'campaigns' );
@@ -161,6 +161,7 @@
      * @returns true or false
      */
     function isClient() {
+      if (!vm.currentUser) return false;
       return vm.currentUser.role === ROLE.CLIENT;
     }
 

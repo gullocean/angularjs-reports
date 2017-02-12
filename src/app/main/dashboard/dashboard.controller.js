@@ -43,6 +43,7 @@
       } else {
         if ( Global.check( 'selectedCampaign' ) ) {
           vm.selectedCampaign = Global.get( 'selectedCampaign' );
+          Global.selectedCampaign = vm.selectedCampaign;
         } else {
           $state.go('app.campaigns');
           return;
