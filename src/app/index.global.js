@@ -9,6 +9,8 @@
 
       // variables
       vm.black_logo_path = 'assets/images/logos/traffic-logo-black.png';
+      vm.campaigns = [];
+      vm.selectedCampaign = {};
 
       // methods
       vm.sum        = sum;

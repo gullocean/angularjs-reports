@@ -32,7 +32,7 @@
       if ( Global.check( 'currentUser' ) ) {
         vm.currentUser = Global.get( 'currentUser' );
       } else {
-        Global.logout();
+        api.logout();
       }
 
       if ( Global.check( 'users' ) ) {

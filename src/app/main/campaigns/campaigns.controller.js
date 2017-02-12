@@ -5,14 +5,15 @@
     .module('app.campaigns')
     .controller('CampaignsController', CampaignsController);
 
-  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$q', '$rootScope'];
+  CampaignsController.$inject = ['$state', 'Global', 'api', '$mdDialog', '$document', '$q', '$rootScope', 'ROLE'];
   /** @ngInject */
-  function CampaignsController($state, Global, api, $mdDialog, $document, $q, $rootScope) {
+  function CampaignsController($state, Global, api, $mdDialog, $document, $q, $rootScope, ROLE) {
 
     var vm = this;
 
     // variables
     vm.campaigns = [];
+    vm.currentUser = {};
 
     // functions
     vm.addCampaign    = addCampaign;
@@ -22,6 +23,13 @@
     vm.goToUsers      = goToUsers;
 
     function init() {
+      if ( Global.check( 'currentUser' ) ) {
+        vm.currentUser = Global.get( 'currentUser' );
+        if (isClient()) api.logout();
+      } else {
+        api.logout();
+      }
+
       Global.remove( 'currentCampaign' );
 
       if ( Global.check( 'campaigns' ) ) {
@@ -126,8 +134,8 @@
     }
 
     function selectCampaign( campaign ) {
-      Global.set( 'currentCampaign', campaign );
-      Global.currentCampaign = angular.copy( campaign );
+      Global.set( 'selectedCampaign', campaign );
+      Global.selectedCampaign = campaign;
       $state.go( 'app.dashboard' );
     }
 
@@ -146,6 +154,14 @@
         vm.error.url = true;
         vm.progress = false
       });
+    }
+
+    /**
+     * Check if role of current user is client
+     * @returns true or false
+     */
+    function isClient() {
+      return vm.currentUser.role === ROLE.CLIENT;
     }
 
     init ();

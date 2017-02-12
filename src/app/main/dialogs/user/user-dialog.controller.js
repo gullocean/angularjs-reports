@@ -87,7 +87,7 @@
       if ( Global.check( 'campaigns' ) ) {
         vm.campaigns = Global.get( 'campaigns' );
       } else {
-        Global.logout();
+        api.logout();
         return;
       }
 

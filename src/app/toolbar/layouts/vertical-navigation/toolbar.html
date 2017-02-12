@@ -7,8 +7,8 @@
     <div class="toolbar-separator"></div>
     <md-menu-bar ng-if="vm.checkCampaign()" id="campaigns-menu" class="no-padding">
       <md-menu md-position-mode="left bottom">
-        <md-button class="campaign-button" ng-click="$mdOpenMenu()" aria-label="Selected Campaign">
-          {{ vm.currentCampaign.company }}
+        <md-button class="campaign-button" ng-click="$mdOpenMenu()" aria-label="Selected Campaign" ng-disabled="vm.isClient();">
+          {{ vm.selectedCampaign.company }}
         </md-button>
         <md-menu-content width="2">
           <md-menu-item ng-repeat="campaign in vm.campaigns">

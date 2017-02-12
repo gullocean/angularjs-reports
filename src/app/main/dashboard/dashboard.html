@@ -17,5 +17,27 @@
         </ms-widget-front>
       </ms-widget>
     </div>
+    <div class="widget-group" layout="row" flex="100" layout-wrap>
+      <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50">
+        <ms-widget-front class="white-bg">
+          <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
+            <div class="h3">Sessions by Channel</div>
+          </div>
+          <div class="border-bottom">
+            <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.pieChart" data="vm.values.channel"></nvd3>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+      <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50">
+        <ms-widget-front class="white-bg">
+          <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
+            <div class="h3">Sessions by Device</div>
+          </div>
+          <div class="border-bottom">
+            <nvd3 class="h-400 remove-x-lines remove-opacity" options="vm.options.pieChart" data="vm.values.device"></nvd3>
+          </div>
+        </ms-widget-front>
+      </ms-widget>
+    </div>
   </div>
 </div>

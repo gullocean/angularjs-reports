@@ -62,13 +62,14 @@
 
     vm.campaigns        = {};
     vm.currentUser      = {};
-    vm.currentCampaign  = {};
     vm.users            = [];
+    vm.selectedCampaign = {};
     vm.selectedUser     = {};
 
     // Methods
+    vm.isClient = isClient;
+    vm.logout = api.logout;
     vm.toggleSidenav  = toggleSidenav;
-    vm.logout         = logout;
     vm.changeLanguage = changeLanguage;
     vm.setUserStatus  = setUserStatus;
     vm.toggleHorizontalMobileMenu = toggleHorizontalMobileMenu;
@@ -92,21 +93,39 @@
       vm.userStatus = vm.userStatusOptions[0];
 
       if ( Global.check( 'currentUser' ) ) {
-        vm.currentUser      = Global.get( 'currentUser' );
-        vm.currentCampaign  = Global.get( 'currentCampaign' );
-        // angular.forEach( angular.copy( Global.get( 'users' ) ), function(user, key) {
-        //   if ( +user.role === ROLE.CLIENT ) {
-        //     vm.users.push( user );
-        //   }
-        // });
-
-        // vm.selectedUser = vm.users[0];
+        vm.currentUser = Global.get( 'currentUser' );
       } else {
-        Global.logout();
+        console.log( 'There is no currentUser!' );
+        api.logout();
+        return;
       }
+
+      // if ( Global.check( 'selectedCampaign' ) ) {
+      //   vm.selectedCampaign = Global.get( 'selectedCampaign' );
+      // } else {
+      //   console.log( 'There is no selectedCampaign!' );
+      //   api.logout();
+      //   return;
+      // }
+
+      // if ( Global.check( 'campaigns' ) ) {
+      //   vm.campaigns = Global.get( 'campaigns' );
+      // } else {
+      //   console.log( 'There is no campaigns!' );
+      //   api.logout();
+      //   return;
+      // }
 
       // Get the selected language directly from angular-translate module setting
       vm.selectedLanguage = vm.languages[$translate.preferredLanguage()];
+    }
+
+    /**
+     * Check if role of current user is client
+     * @returns true or false
+     */
+    function isClient() {
+      return vm.currentUser.role === ROLE.CLIENT;
     }
 
     /**
@@ -237,7 +256,7 @@
      * check if a campaign is selected
      */
     function checkCampaign() {
-      return Global.check( 'currentCampaign' );
+      return Global.check( 'selectedCampaign' );
     }
 
     /**
@@ -245,7 +264,7 @@
      */
     function onLogo() {
       if ( !Global.check( 'currentUser' ) )
-        Global.logout();
+        api.logout();
 
       if ( vm.currentUser.role !== ROLE.CLIENT )
         $state.go( 'app.campaigns' );
@@ -260,24 +279,14 @@
       return false;
     }
 
-    function logout() {
-      api.logout( vm.currentUser.id );
-      $state.go('app.pages_auth_login');
-    }
-
     function selectCampaign( campaign ) {
-      Global.currentCampaign = angular.copy( campaign );
+      vm.selectedCampaign = campaign;
+      Global.set('selectedCampaign', campaign);
     }
 
     /**
      * watch if Global.currentCampaign and currentUser is changed or not
      */
-    $scope.$watch( function() {
-      return Global.currentCampaign;
-    }, function( newValue, oldValue ){
-      vm.currentCampaign = angular.copy( Global.get( 'currentCampaign' ) );
-    });
-
     $scope.$watch( function() {
       return Global.currentUser;
     }, function( newValue, oldValue ){
@@ -287,14 +296,13 @@
     $scope.$watch( function() {
       return Global.campaigns;
     }, function( newCampaigns, oldCampaigns ) {
-      vm.campaigns = angular.copy( newCampaigns );
+      vm.campaigns = newCampaigns;
     });
 
     $scope.$watch( function() {
-      return Global.currentCampaign;
+      return Global.selectedCampaign;
     }, function( newCampaign, oldCampaign ) {
-      vm.currentCampaign = angular.copy( newCampaign );
+      vm.selectedCampaign = newCampaign;
     });
   }
-
 })();

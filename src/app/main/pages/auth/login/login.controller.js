@@ -19,8 +19,6 @@
       Global.removeAll();
 
       api.getParticleData(function(particleData) {
-        // particleData.particles.color.value = '#2392CD';
-        // particleData.particles.line_linked.color = '#2392CD';
         particlesJS('particles-js', particleData);
       });
     }
@@ -47,7 +45,7 @@
           Global.currentUser = currentUser;
 
           if(currentUser.role === ROLE.CLIENT) {
-            $state.go('app.task_summaries');
+            $state.go('app.dashboard');
           } else {
             $state.go('app.campaigns');
           }

@@ -60,6 +60,8 @@
           'Content-Type': 'application/x-www-form-urlencoded',
           'token'       : Global.get( 'token' )
         }
+      }).success( function() {
+        $state.go('app.pages_auth_login');
       }).error( function( error ) {
         console.log('logout error : ', error);
       });
