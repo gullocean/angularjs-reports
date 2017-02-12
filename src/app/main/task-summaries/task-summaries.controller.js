@@ -18,6 +18,7 @@
 
     // methods
     vm.openTaskDialog = openTaskDialog;
+    vm.toggleSidenav = toggleSidenav;
 
     /**
      * Open new task dialog
@@ -30,7 +31,7 @@
       $mdDialog.show({
         controller         : 'TaskDialogController',
         controllerAs       : 'vm',
-        templateUrl        : 'app/main/task-summaries/dialogs/task/task-dialog.html',
+        templateUrl        : 'app/main/dialogs/task/task-dialog.html',
         parent             : angular.element($document.body),
         targetEvent        : ev,
         clickOutsideToClose: true,
@@ -42,6 +43,31 @@
       });
     }
 
+    /**
+     * Toggle completed status of the task
+     *
+     * @param task
+     * @param event
+     */
+    function toggleCompleted(task, event)
+    {
+      event.stopPropagation();
+      task.completed = !task.completed;
+    }
+
+    /**
+     * Toggle sidenav
+     *
+     * @param sidenavId
+     */
+    function toggleSidenav(sidenavId)
+    {
+      $mdSidenav(sidenavId).toggle();
+    }
+
+    /**
+     * Initialize the controller
+     */
     function init() {
       if ( !Global.check( 'currentUser' ) ) {
         $state.go('app.pages_auth_login');

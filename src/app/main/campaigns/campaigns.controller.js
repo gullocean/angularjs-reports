@@ -30,8 +30,13 @@
         api.getCampaigns ( '', function( response ) {
           if ( response.code === 0 ) {
             vm.campaigns = response.data;
+
+            angular.forEach( vm.campaigns, function( campaign ) {
+              campaign.id = +campaign.id;
+            });
             
             Global.set( 'campaigns', vm.campaigns );
+            Global.campaigns = vm.campaigns;
           } else {
             console.log( 'campaigns getting error!' );
           }

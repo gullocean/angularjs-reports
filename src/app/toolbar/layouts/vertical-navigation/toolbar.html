@@ -5,26 +5,18 @@
     </md-button>
     <a class="ph-8" href="" ng-click="vm.onLogo();"><img class="logo-small" ng-src="{{ vm.black_logo_path }}"></a>
     <div class="toolbar-separator"></div>
-    <div ng-if="vm.checkCampaign()" layout="row" layout-align="start center" flex>
-      <!-- <md-label class="pl-8">Campaign : </md-label> -->
-      <!-- <md-button>{{ vm.currentCampaign.company }}</md-button> -->
-      <md-label class="ph-8">{{ vm.currentCampaign.company }}</md-label>
-      <div class="toolbar-separator"></div>
-      <!-- <div ng-if="!vm.isClient()" layout="row" layout-align="start center" flex>
-        <md-label class="pl-8">User : </md-label>
-        <md-menu-bar class="no-padding">
-          <md-menu md-position-mode="left bottom">
-            <md-button class="user-select-button no-margin no-padding" ng-click="$mdOpenMenu()" aria-label="User Select">{{ vm.selectedUser.username }}</md-button>
-            <md-menu-content width="3">
-              <md-menu-item ng-repeat="(key, user) in vm.users">
-                <md-button ng-click="vm.selectedUser=user">{{ user.username }}</md-button>
-              </md-menu-item>
-            </md-menu-content>
-          </md-menu>
-        </md-menu-bar>
-        <div class="toolbar-separator"></div>
-      </div> -->
-    </div>
+    <md-menu-bar ng-if="vm.checkCampaign()" id="campaigns-menu" class="no-padding">
+      <md-menu md-position-mode="left bottom">
+        <md-button class="campaign-button" ng-click="$mdOpenMenu()" aria-label="Selected Campaign">
+          {{ vm.currentCampaign.company }}
+        </md-button>
+        <md-menu-content width="2">
+          <md-menu-item ng-repeat="campaign in vm.campaigns">
+            <md-button ng-click="vm.selectCampaign( campaign )">{{ campaign.company }}</md-button>
+          </md-menu-item>
+        </md-menu-content>
+      </md-menu>
+    </md-menu-bar>
   </div>
   <div layout="row" layout-align="start center">
     <md-progress-circular id="toolbar-progress" ng-disabled="!$root.loadingProgress" class="md-accent" md-diameter="32"></md-progress-circular>

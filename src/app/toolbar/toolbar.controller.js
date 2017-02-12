@@ -60,6 +60,7 @@
       }
     };
 
+    vm.campaigns        = {};
     vm.currentUser      = {};
     vm.currentCampaign  = {};
     vm.users            = [];
@@ -77,6 +78,7 @@
     vm.checkCampaign  = checkCampaign;
     vm.onLogo         = onLogo;
     vm.isClient       = isClient;
+    vm.selectCampaign = selectCampaign;
 
     //////////
 
@@ -263,18 +265,35 @@
       $state.go('app.pages_auth_login');
     }
 
+    function selectCampaign( campaign ) {
+      Global.currentCampaign = angular.copy( campaign );
+    }
+
     /**
      * watch if Global.currentCampaign and currentUser is changed or not
      */
-    $scope.$watch(function(){
+    $scope.$watch( function() {
       return Global.currentCampaign;
-    }, function(newValue, oldValue){
+    }, function( newValue, oldValue ){
       vm.currentCampaign = angular.copy( Global.get( 'currentCampaign' ) );
     });
-    $scope.$watch(function(){
+
+    $scope.$watch( function() {
       return Global.currentUser;
-    }, function(newValue, oldValue){
+    }, function( newValue, oldValue ){
       vm.currentUser = angular.copy( Global.get( 'currentUser' ) );
+    });
+
+    $scope.$watch( function() {
+      return Global.campaigns;
+    }, function( newCampaigns, oldCampaigns ) {
+      vm.campaigns = angular.copy( newCampaigns );
+    });
+
+    $scope.$watch( function() {
+      return Global.currentCampaign;
+    }, function( newCampaign, oldCampaign ) {
+      vm.currentCampaign = angular.copy( newCampaign );
     });
   }
 

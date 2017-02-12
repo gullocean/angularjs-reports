@@ -23,7 +23,12 @@
       <div layout-xs="column" layout="row">
         <div flex class="date-container">
           <label>Start Date</label>
-          <md-datepicker flex ng-model="vm.task.startDate" md-placeholder="Start Date"></md-datepicker>
+          <md-datepicker flex name="startDate" ng-model="vm.task.startDate" md-placeholder="Start Date"></md-datepicker>
+          <div ng-messages="taskForm.startDate.$error" ng-show="taskForm.title.$touched" role="alert">
+            <div ng-message="required">
+              <span>Title field is required</span>
+            </div>
+          </div>
         </div>
 
         <div flex class="date-container">
@@ -36,30 +41,6 @@
         <label>Notes</label>
         <text-angular ng-model="vm.task.notes" ta-toolbar="[['bold']]"></text-angular>
       </div>
-
-      <!-- <div class="attachment-list">
-        <div class="attachment" layout="row" layout-align="space-between center">
-          <div>
-            <span class="filename">attachment-2.doc</span>
-            <span class="size">(12 Kb)</span>
-          </div>
-
-          <md-button class="md-icon-button">
-            <md-icon md-font-icon="icon-close" aria-label="delete attachment" class="s16"></md-icon>
-          </md-button>
-        </div>
-
-        <div class="attachment" layout="row" layout-align="space-between center">
-          <div>
-            <span class="filename">attachment-1.jpg</span>
-            <span class="size">(350 Kb)</span>
-          </div>
-
-          <md-button class="md-icon-button" aria-label="Delete attachment">
-            <md-icon md-font-icon="icon-close" class="s16"></md-icon>
-          </md-button>
-        </div>
-      </div> -->
     </md-dialog-content>
 
     <md-dialog-actions layout="row" layout-align="space-between center">
@@ -67,22 +48,7 @@
         <md-button type="submit" ng-if="!vm.newTask" ng-click="vm.saveTask()" class="send-button md-accent md-raised" ng-disabled="taskForm.$invalid || taskForm.$pristine" aria-label="SAVE">SAVE</md-button>
 
         <md-button type="submit" ng-if="vm.newTask" ng-click="vm.addNewTask()" class="send-button md-accent md-raised" ng-disabled="taskForm.$invalid || taskForm.$pristine" aria-label="Add Task">ADD TASK</md-button>
-
-        <!-- <md-button class="md-icon-button" aria-label="Attach file">
-          <md-icon md-font-icon="icon-paperclip"></md-icon>
-        </md-button>
-
-        <md-button class="md-icon-button" aria-label="Insert picture">
-          <md-icon md-font-icon="icon-file-image-box"></md-icon>
-        </md-button> -->
       </div>
-
-      <!-- <div layout="row">
-        <md-button class="md-icon-button" ng-click="vm.deleteTask($event)" aria-label="Delete">
-          <md-icon md-font-icon="icon-delete"></md-icon>
-          <md-tooltip><span>DELETE</span></md-tooltip>
-        </md-button>
-      </div> -->
     </md-dialog-actions>
   </form>
 </md-dialog>

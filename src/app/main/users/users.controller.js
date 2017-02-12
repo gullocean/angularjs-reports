@@ -5,22 +5,24 @@
     .module('app.users')
     .controller('UsersController', UsersController);
 
-  UsersController.$inject = ['Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE', '$rootScope'];
+  UsersController.$inject = ['$filter', '$state', 'Global', 'api', '$mdDialog', '$document', '$cookieStore', 'ROLE', '$rootScope'];
   /** @ngInject */
-  function UsersController( Global, api, $mdDialog, $document, $cookieStore, ROLE, $rootScope ) {
+  function UsersController( $filter, $state, Global, api, $mdDialog, $document, $cookieStore, ROLE, $rootScope ) {
     var vm = this;
 
     // variables
-    vm.users        = [];
+    vm.currentUser  = {};
     vm.ROLE         = ROLE;
     vm.role_label   = [];
-    vm.currentUser  = {};
+    vm.selectedUser = {};
+    vm.users        = [];
 
     // functions
     vm.addUser        = addUser;
     vm.deleteUser     = deleteUser;
     vm.editUser       = editUser;
     vm.goToCampaigns  = Global.goToCampaigns;
+    vm.selectUser     = selectUser;
 
     function init() {
       angular.forEach(ROLE, function(r, k) {
@@ -36,20 +38,18 @@
       if ( Global.check( 'users' ) ) {
         vm.users = Global.get( 'users' );
       } else {
-        // var data = {};
-        // data.id = null;
-        
         if ( vm.currentUser.role === Global.CLIENT )
           return;
-
-        // if ( vm.currentUser.role === Global.ADMIN )
-        //   data.role = null;
-        // else
-        //   data.role = Global.CLIENT;
 
         api.getUsers( function( response ) {
           if ( response.code == 0 ) {
             vm.users = response.data;
+
+            angular.forEach( vm.users, function( user ) {
+              user.id = +user.id;
+              user.campaignID = +user.campaignID;
+              user.role = +user.role;
+            });
 
             Global.set( 'users', vm.users );
           }
@@ -136,6 +136,23 @@
           }
         });
       });
+    }
+
+    function selectUser( selectedUser ) {
+      vm.selectedUser = selectedUser;
+      if ( vm.selectedUser.role !== ROLE.CLIENT ) return;
+      Global.set( 'selectedUser', vm.selectedUser );
+      var campaigns = Global.get( 'campaigns' );
+      var filteredCampaigns = $filter( 'filter' )( campaigns, { id: selectedUser.campaignID }, true);
+
+      if ( filteredCampaigns.length < 1 ) {
+        console.log( 'There is no campaign!' );
+        return;
+      }
+
+      Global.set( 'currentCampaign', filteredCampaigns[0] );
+      Global.currentCampaign = angular.copy( filteredCampaigns[0] );
+      $state.go( 'app.task_summaries' );
     }
 
     init();
