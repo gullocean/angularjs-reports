@@ -39,6 +39,10 @@
 			
 			if ( Global.check( 'dateRange' ) ) {
 				vm.dateRange = Global.get( 'dateRange' );
+				vm.dateRange.this.dateEnd = moment(vm.dateRange.this.dateEnd).toDate();
+        vm.dateRange.this.dateStart = moment(vm.dateRange.this.dateStart).toDate();
+        vm.dateRange.last.dateEnd = moment(vm.dateRange.last.dateEnd).toDate();
+        vm.dateRange.last.dateStart = moment(vm.dateRange.last.dateStart).toDate();
 			} else {
 				vm.dateRange = {
 					this : {

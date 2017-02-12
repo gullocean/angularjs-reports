@@ -5,125 +5,104 @@
     .module('app.dashboard')
     .controller('DashboardController', DashboardController);
 
-  DashboardController.$inject = ['$scope', '$cookieStore', '$state', 'ROLE', '$mdDialog', '$document', 'api', 'msNavigationService', 'Global'];
+  DashboardController.$inject = ['Global', '$rootScope', '$mdDateRangePicker', 'moment', '$q', '$state', 'api'];
 
   /** @ngInject */
-  function DashboardController($scope, $cookieStore, $state, ROLE, $mdDialog, $document, api, msNavigationServiceProvider, Global) {
+  function DashboardController(Global, $rootScope, $mdDateRangePicker, moment, $q, $state, api) {
+    
     var vm = this;
-    vm.ROLE = ROLE;
-    vm.users = [];
-    vm.role_label = [];
-    vm.currentUser = $cookieStore.get('currentUser');
 
-    angular.forEach(ROLE, function(r, k) {
-      vm.role_label[r] = k;
-    });
+    // variables
+    vm.dateRange  = {};
+    vm.isCompare  = true;
 
-    // Data
-    vm.dtOptions = {
-      dom: '<"top"f>rt<"bottom"<"left"<"length"l>><"right"<"info"i><"pagination"p>>>',
-      pagingType: 'simple',
-      autoWidth: false,
-      responsive: true
-    };
+    // methods
+    vm.onThirtyDays           = onThirtyDays;
+    vm.onNinetyDays           = onNinetyDays;
+    vm.updateOrganicDateRange = updateOrganicDateRange;
 
     vm.init = function() {
-      
+      if ( Global.check( 'currentCampaign' ) ) {
+        vm.currentCampaign = Global.get( 'currentCampaign' );
+      } else {
+        $state.go('app.campaigns');
+        return;
+      }
+
+      if ( Global.check( 'dateRange' ) ) {
+        vm.dateRange = Global.get( 'dateRange' );
+        vm.dateRange.this.dateEnd = moment(vm.dateRange.this.dateEnd).toDate();
+        vm.dateRange.this.dateStart = moment(vm.dateRange.this.dateStart).toDate();
+        vm.dateRange.last.dateEnd = moment(vm.dateRange.last.dateEnd).toDate();
+        vm.dateRange.last.dateStart = moment(vm.dateRange.last.dateStart).toDate();
+      } else {
+        vm.dateRange = {
+          this : {
+            dateStart:  moment().subtract(1, 'months').toDate(),
+            dateEnd:    moment().subtract(1, 'days').toDate()
+          },
+          last : {
+            dateStart:  moment().subtract(1, 'years').subtract(1, 'months').toDate(),
+            dateEnd:    moment().subtract(1, 'years').subtract(1, 'days').toDate()
+          }
+        };
+        Global.set( 'dateRange', vm.dateRange );
+      }
     }
 
-    if (angular.isUndefined(Global.users) || Global.users === null) {
-      api.getUsers(vm.currentUser, function(response) {
-        if (response.code == 0) {
-          Global.users = response.data;
-          vm.users = Global.users;
+    function getAllReports (dateRange, viewID, isCompare) {
+      // 
+    }
+
+    function onThirtyDays () {
+      vm.dateRange = {
+        this : {
+          dateStart:  moment().subtract(31, 'days').toDate(),
+          dateEnd:    moment().subtract(1, 'days').toDate()
+        },
+        last : {
+          dateStart:  moment().subtract(1, 'years').subtract(31, 'days').toDate(),
+          dateEnd:    moment().subtract(1, 'years').subtract(1, 'days').toDate()
         }
-      });
-    } else {
-      vm.users = Global.users;
+      };
+      vm.dateRange = vm.dateRange;
+      getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
     }
 
-    vm.edit = function(ev, i) {
-      $mdDialog.show({
-          controller: 'UserDialogController',
-          controllerAs: 'vm',
-          templateUrl: 'app/main/dialogs/user/user-dialog.html',
-          parent: angular.element($document.find('#content-container')),
-          targetEvent: ev,
-          clickOutsideToClose: true,
-          locals: {
-            User: vm.users[i],
-            Role: vm.currentUser.role
-          }
-        })
-        .then(function(editedUser) {
-          if (!angular.isUndefined(editedUser)) {
-            angular.forEach(editedUser, function(value, key) {
-              vm.users[i][key] = value;
-            })
-          }
-        });
+    function onNinetyDays () {
+      vm.dateRange = {
+        this : {
+          dateStart:  moment().subtract(91, 'days').toDate(),
+          dateEnd:    moment().subtract(1, 'days').toDate()
+        },
+        last : {
+          dateStart:  moment().subtract(1, 'years').subtract(91, 'days').toDate(),
+          dateEnd:    moment().subtract(1, 'years').subtract(1, 'days').toDate()
+        }
+      };
+      vm.dateRange = vm.dateRange;
+      getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
     }
 
-    vm.delete = function(ev, i) {
-      var user = vm.users[i];
-      var confirm = $mdDialog.confirm()
-        .title('Are you sure want to delete the user?')
-        .htmlContent('<b>' + user.username + '</b>' + ' will be deleted.')
-        .ariaLabel('delete user')
-        .targetEvent(ev)
-        .ok('OK')
-        .cancel('CANCEL');
+    function updateOrganicDateRange ($event, showTemplate) {
+      console.log(vm.dateRange);
+      $mdDateRangePicker
+        .show({targetEvent:$event, model:vm.dateRange.this} )
+        .then(function(result){
+          if(result) {
+            vm.dateRange.this = result;
+            vm.dateRange.last = {
+              dateStart : moment(vm.dateRange.this.dateStart).subtract(1, 'years').toDate (),
+              dateEnd   : moment(vm.dateRange.this.dateEnd).subtract(1, 'years').toDate ()
+            };
 
-      $mdDialog.show(confirm).then(function() {
-        api.deleteUser({ email: user.email }, function(response) {
-          if (response.code == 0) {
-            vm.users.splice(i, 1);
+            vm.dateRange = vm.dateRange;
+
+            getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
           }
         });
-      });
-    }
-
-    vm.select = function(i) {
-      // alert('table row : ' + key);
-    }
-
-    vm.add = function(ev, user) {
-      $mdDialog.show({
-          controller: 'UserDialogController',
-          controllerAs: 'vm',
-          templateUrl: 'app/main/dialogs/user/user-dialog.html',
-          parent: angular.element($document.find('#content-container')),
-          targetEvent: ev,
-          clickOutsideToClose: true,
-          locals: {
-            User: user,
-            Role: vm.currentUser.role
-          }
-        })
-        .then(function(newUser) {
-          if (!angular.isUndefined(newUser)) {
-            vm.users.unshift(newUser);
-          }
-        });
-    }
-
-    vm.editCustomData = function(ev, i) {
-      Global.selectedAccount = vm.users[i];
-      $state.go('app.dashboard_customData');
     }
 
     vm.init();
-  }
-
-  function getObjectKeyIndex(obj, keyToFind) {
-    var i = 0, key;
-
-    for (key in obj) {
-      if (key == keyToFind) {
-        return i;
-      }
-      i++;
-    }
-    return null;
   }
 })();

@@ -13,7 +13,7 @@
     // State
     $stateProvider
       .state('app.dashboard', {
-        url: '/manage-users',
+        url: '/dashboard',
         views: {
           'content@app': {
             templateUrl: 'app/main/dashboard/dashboard.html',
@@ -40,76 +40,62 @@
       weight: 1
     });
 
-    // msNavigationServiceProvider.saveItem('fuse.dashboard', {
-    //   title: 'Dashboard',
-    //   icon: 'icon-tile-four',
-    //   translate: 'DASHBOARD.DASHBOARD_NAV',
-    //   state: 'app.dashboard',
-    //   weight: 1
-    // });
+    msNavigationServiceProvider.saveItem('fuse.dashboard', {
+      title: 'Dashboard',
+      icon: 'icon-table',
+      state: 'app.dashboard',
+      weight: 1
+    });
 
-    // msNavigationServiceProvider.saveItem('fuse.dashboard.manageUsers', {
-    //   title: 'Users',
-    //   icon: 'icon-account-multiple',
-    //   state: 'app.dashboard'
-    // });
+    msNavigationServiceProvider.saveItem('fuse.organic', {
+      title: 'Organic',
+      icon: 'icon-poll',
+      state: 'app.analytics_organic',
+      weight: 1
+    });
 
-    msNavigationServiceProvider.saveItem('fuse.summaries', {
-        title: 'Task Summaries',
-        icon: 'icon-table',
-        state: 'app.task_summaries',
-        weight: 1
-      });
+    msNavigationServiceProvider.saveItem('fuse.crossChannel', {
+      title: 'Cross-Channel',
+      icon: 'icon-poll',
+      state: 'app.analytics_crossChannel',
+      weight: 1
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.organic', {
-        title: 'Organic',
-        icon: 'icon-poll',
-        state: 'app.analytics_organic',
-        weight: 1
-      });
+    msNavigationServiceProvider.saveItem('fuse.paidMedia', {
+      title: 'Paid Media',
+      icon: 'icon-poll',
+      state: 'app.analytics_paidMedia',
+      weight: 1
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.crossChannel', {
-        title: 'Cross-Channel',
-        icon: 'icon-poll',
-        state: 'app.analytics_crossChannel',
-        weight: 1
-      });
+    msNavigationServiceProvider.saveItem('fuse.conversions', {
+      title: 'Conversions',
+      icon: 'icon-poll',
+      weight: 1
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.paidMedia', {
-        title: 'Paid Media',
-        icon: 'icon-poll',
-        state: 'app.analytics_paidMedia',
-        weight: 1
-      });
+    msNavigationServiceProvider.saveItem('fuse.conversions.phoneCalls', {
+      title: 'Phone Calls',
+      icon: 'icon-phone',
+      state: 'app.analytics_phoneCalls'
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.conversions', {
-        title: 'Conversions',
-        icon: 'icon-poll',
-        weight: 1
-      });
+    msNavigationServiceProvider.saveItem('fuse.conversions.goalCompletions', {
+      title: 'Goal Completions',
+      icon: 'icon-poll',
+      state: 'app.analytics_goalCompletions'
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.conversions.phoneCalls', {
-        title: 'Phone Calls',
-        icon: 'icon-phone',
-        state: 'app.analytics_phoneCalls'
-      });
+    msNavigationServiceProvider.saveItem('fuse.conversions.value', {
+      title: 'Value',
+      icon: 'icon-poll',
+      state: 'app.analytics_value'
+    });
 
-      msNavigationServiceProvider.saveItem('fuse.conversions.goalCompletions', {
-        title: 'Goal Completions',
-        icon: 'icon-poll',
-        state: 'app.analytics_goalCompletions'
-      });
-
-      msNavigationServiceProvider.saveItem('fuse.conversions.value', {
-        title: 'Value',
-        icon: 'icon-poll',
-        state: 'app.analytics_value'
-      });
-
-      msNavigationServiceProvider.saveItem('fuse.reports', {
-        title: 'Reports',
-        icon: 'icon-file-pdf',
-        state: 'app.reports'
-      });
+    msNavigationServiceProvider.saveItem('fuse.reports', {
+      title: 'Reports',
+      icon: 'icon-file-pdf',
+      state: 'app.reports'
+    });
   }
 })();

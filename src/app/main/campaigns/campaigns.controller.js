@@ -128,7 +128,7 @@
     function selectCampaign( campaign ) {
       Global.set( 'currentCampaign', campaign );
       Global.currentCampaign = angular.copy( campaign );
-      $state.go( 'app.task_summaries' );
+      $state.go( 'app.dashboard' );
     }
 
     function goToUsers() {
