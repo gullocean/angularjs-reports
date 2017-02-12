@@ -18,7 +18,7 @@
 		vm.dateRange 	= {};
 		vm.keys  			= {};
 		vm.style			= {};
-		vm.currentCampaign = {};
+		vm.selectedCampaign = {};
 
 		// methods
 		vm.updateOrganicDateRange = updateOrganicDateRange;
@@ -27,8 +27,8 @@
 
 		vm.init = function () {
 
-			if ( Global.check( 'currentCampaign' ) ) {
-				vm.currentCampaign = Global.get( 'currentCampaign' );
+			if ( Global.check( 'selectedCampaign' ) ) {
+				vm.selectedCampaign = Global.get( 'selectedCampaign' );
 			} else {
 				$state.go('app.campaigns');
 				return;
@@ -53,10 +53,6 @@
 				};
 				Global.set( 'dateRange', vm.dateRange );
 			}
-
-			if (angular.isUndefined(Global.analytics) || Global.analytics === null) {
-				Global.analytics = {};
-			};
 
 			vm.keys.sessionsDevice = [
 				{
@@ -98,9 +94,9 @@
 			];
 
 			vm.style.tableDevice = {
-				'width'			: 100/( vm.keys.sessionsDevice.length + 0.5) + '%',
-				'min-width'	: 100/( vm.keys.sessionsDevice.length + 0.5) + '%',
-				'max-width'	: 100/( vm.keys.sessionsDevice.length + 0.5) + '%',
+				'width'			: 100 / ( vm.keys.sessionsDevice.length + 0.5) + '%',
+				'min-width'	: 100 / ( vm.keys.sessionsDevice.length + 0.5) + '%',
+				'max-width'	: 100 / ( vm.keys.sessionsDevice.length + 0.5) + '%',
 			};
 
 			vm.dateRange = vm.dateRange;
@@ -120,7 +116,7 @@
 				}
 			};
 
-			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 		}
 
 		function getAllReports (dateRange, viewID, isCompare) {
@@ -250,7 +246,7 @@
 
 						vm.dateRange = vm.dateRange;
 						
-						getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+						getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 					}
 				});
 		}
@@ -267,7 +263,7 @@
 				}
 			};
 			vm.dateRange = vm.dateRange;
-			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 		}
 
 		function onNinetyDays () {
@@ -282,7 +278,7 @@
 				}
 			};
 			vm.dateRange = vm.dateRange;
-			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 		}
 
 		vm.init();

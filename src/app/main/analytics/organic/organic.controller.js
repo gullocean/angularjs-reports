@@ -21,7 +21,7 @@
 		vm.dateRange 	= {};
 		vm.isCompare	= true;
 		vm.isLoading 	= true;
-		vm.currentCampaign = {};
+		vm.selectedCampaign = {};
 
 		// methods
 		vm.updateOrganicDateRange = updateOrganicDateRange;
@@ -30,8 +30,8 @@
 
 		vm.init = function () {
 
-			if ( Global.check( 'currentCampaign' ) ) {
-				vm.currentCampaign = Global.get( 'currentCampaign' );
+			if ( Global.check( 'selectedCampaign' ) ) {
+				vm.selectedCampaign = Global.get( 'selectedCampaign' );
 			} else {
 				$state.go('app.campaigns');
 				return;
@@ -139,7 +139,7 @@
 			}
 
 			if (angular.isUndefined(Global.analytics.organic) || Global.analytics.organic === null ) {
-				getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+				getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 			}
 		}
 
@@ -303,7 +303,7 @@
 
 						vm.dateRange = vm.dateRange;
 
-						getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+						getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 					}
 				});
 		}
@@ -320,7 +320,7 @@
 				}
 			};
 			vm.dateRange = vm.dateRange;
-			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 		}
 
 		function onNinetyDays () {
@@ -335,7 +335,7 @@
 				}
 			};
 			vm.dateRange = vm.dateRange;
-			getAllReports (vm.dateRange, vm.currentCampaign.view_ID);
+			getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
 		}
 
 		vm.init();

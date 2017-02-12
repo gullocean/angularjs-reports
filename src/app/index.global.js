@@ -8,6 +8,7 @@
       var vm = this;
 
       // variables
+      vm.analytics = {};
       vm.black_logo_path = 'assets/images/logos/traffic-logo-black.png';
       vm.campaigns = [];
       vm.selectedCampaign = {};
