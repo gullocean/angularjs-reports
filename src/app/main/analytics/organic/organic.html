@@ -1,7 +1,7 @@
 <div id="analytics-organic">
   <div id="widgets">
     <div class="widget-group" layout="row" flex="100" layout-wrap>
-      <ms-widget flippable="false" layout="row" flex="100">
+      <ms-widget layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="end center">
             <div>
@@ -18,7 +18,7 @@
       </ms-widget>
     </div>
     <div class="widget-group" layout="row" flex="100" layout-wrap>
-      <ms-widget flippable="false" layout="row" flex="100">
+      <ms-widget layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
             <div class="h3">Sessions</div>
@@ -30,23 +30,10 @@
       </ms-widget>
     </div>
     <div class="widget-group" layout="row" flex="100" layout-wrap>
-      <ms-widget flippable="true" layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25" ng-repeat="(key, metric) in vm.keys.compare">
+      <ms-widget layout="column" flex="100" flex-gt-xs="50" flex-gt-md="25" ng-repeat="(key, metric) in vm.keys.compare">
         <ms-widget-front class="h-170 p-16 light-blue-bg">
           <div class="pb-8" layout="row" layout-align="space-between center">
             <div class="h4 font-weight-500 secondary-text pv-16">{{ metric.label }}</div>
-            <!-- <md-menu>
-              <md-button aria-label="more" class="md-icon-button" ng-click="$mdOpenMenu($event)">
-                <md-icon md-font-icon="icon-dots-vertical"></md-icon>
-              </md-button>
-              <md-menu-content width="2">
-                <md-menu-item>
-                  <md-button ng-click="vm.editCampaign($event, key)" aria-label="Edit Widget">Setting</md-button>
-                </md-menu-item>
-                <md-menu-item>
-                  <md-button ng-click="vm.deleteCampaign($event, key)" aria-label="Delete Widget">Delete</md-button>
-                </md-menu-item>
-              </md-menu-content>
-            </md-menu> -->
           </div>
           <div class="white-fg" layout="column" layout-align="space-between" flex>
             <div class="md-display-1" layout="row" layout-align="start center">
@@ -67,9 +54,7 @@
 
             <div layout="row" layout-align="start center" ng-if="vm.isCompare">
               <span>
-                {{ vm.dateRange.this.dateStart | date : 'yyyy.MM.dd' }}:{{ vm.dateRange.this.dateEnd | date : 'yyyy.MM.dd' }}
-                <!-- <span ng-if="metric.label != 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value | number }}<span ng-if="metric.label=='Bounce Rate'">%</span></span> -->
-                <!-- <span ng-if="metric.label == 'Avg. Session Duration'">{{ vm.values.compare[4 * key + 2].value * 1000 | date : "mm:ss" }}</span> -->
+                {{ vm.dateRange.this.dateStart | date : 'yyyy.MM.dd' }} : {{ vm.dateRange.this.dateEnd | date : 'yyyy.MM.dd' }}
               </span>
               <span class="text-boxed-light">{{ (vm.values.compare[4 * key].value - vm.values.compare[4 * key + 1].value) * 100 / vm.values.compare[4 * key + 1].value | number : 2 }}%</span>
             </div>
@@ -78,7 +63,7 @@
       </ms-widget>
     </div>
     <div class="widget-group" layout="row" flex="100" layout-wrap>
-      <ms-widget flippable="false" layout="row" flex="100">
+      <ms-widget layout="row" flex="100">
         <ms-widget-front class="white-bg">
           <div class="p-24 border-bottom" layout="row" layout-align="space-between center">
             <div class="h3">Landing Pages</div>

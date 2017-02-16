@@ -61,7 +61,7 @@
           'token'       : Global.get( 'token' )
         }
       }).success( function() {
-        $state.go('app.pages_auth_login');
+        $state.go('app.login');
       }).error( function( error ) {
         console.log('logout error : ', error);
       });

@@ -50,7 +50,7 @@
             $state.go('app.campaigns');
           }
         } else {
-          $state.go('app.pages_auth_login');
+          $state.go('app.login');
           alert('email or password is incorrect!');
         }
         $rootScope.loadingProgress  = false;

@@ -99,8 +99,6 @@
 				'max-width'	: 100 / ( vm.keys.sessionsDevice.length + 0.5) + '%',
 			};
 
-			vm.dateRange = vm.dateRange;
-
 			vm.options = {
 				pieChart: {
 					chart: {
@@ -202,7 +200,6 @@
 			tasks.push(api.getReport(query));
 
 			$q.all(tasks).then (function (response) {
-
 				// sessions by channel
 				Global.analytics.cross_channel.channel 			= response[0].data;
 				// sessions by device
@@ -230,7 +227,6 @@
 				console.log(error);
 				$rootScope.loadingProgress = false;
 			});
-			
 		}
 
 		function updateOrganicDateRange ($event, showTemplate) {

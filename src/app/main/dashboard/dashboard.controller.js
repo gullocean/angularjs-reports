@@ -15,18 +15,55 @@
     // variables
     vm.dateRange  = {};
     vm.isCompare  = true;
+    vm.keys = {};
+    vm.isLoading = true;
     vm.selectedCampaign = {};
 
     // methods
-    vm.onThirtyDays           = onThirtyDays;
-    vm.onNinetyDays           = onNinetyDays;
-    vm.updateOrganicDateRange = updateOrganicDateRange;
+    vm.onThirtyDays     = onThirtyDays;
+    vm.onNinetyDays     = onNinetyDays;
+    vm.updateDateRange  = updateDateRange;
 
-    vm.init = function() {
+    function init() {
       if ( !Global.check( 'currentUser' ) ) {
-        $state.go('app.pages_auth_login');
+        $state.go('app.login');
         return;
       }
+
+      vm.keys.compare = [
+        {
+          label   : 'Sessions',
+          metrics : 'ga:sessions',
+          filter  : 'string'
+        }, {
+          label   : 'Bounce Rate',
+          metrics : 'ga:bounceRate',
+          filter  : 'percent'
+        }, {
+          label   : 'Avg. Session Duration',
+          metrics : 'ga:avgSessionDuration',
+          filter  : 'time'
+        }, {
+          label   : 'Pages / Session',
+          metrics : 'ga:pageviewsPerSession',
+          filter  : 'number'
+        }
+      ];
+
+      vm.options = {
+        pieChart: {
+          chart: {
+            type              : 'pieChart',
+            x                 : function (d) { return d[0]; },
+            y                 : function (d) { return d[1]; },
+            showLabels        : true,
+            transitionDuration: 500,
+            labelType         : 'percent',
+            labelsOutside     : true,
+            valueFormat       : function (d) { return +d; }
+          }
+        }
+      };
 
       vm.currentUser = Global.get( 'currentUser' );
 
@@ -69,10 +106,122 @@
         };
         Global.set( 'dateRange', vm.dateRange );
       }
+
+      getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
     }
 
     function getAllReports (dateRange, viewID, isCompare) {
-      // 
+      $rootScope.loadingProgress = true;
+      vm.isLoading = true;
+
+      Global.analytics.dashboard = {};
+
+      var tasks = [];
+      var query = {};
+
+      // sessions by channel
+      query = {
+        table_id    : 'ga:' + viewID,
+        metrics     : 'ga:sessions',
+        start_date  : moment(dateRange.this.dateStart).format('YYYY-MM-DD'),
+        end_date    : moment(dateRange.this.dateEnd).format('YYYY-MM-DD'),
+        dimensions  : 'ga:channelGrouping'
+      };
+
+      tasks.push(api.getReport(query));
+
+      // sessions by device
+      query = {
+        table_id    : 'ga:' + viewID,
+        metrics     : 'ga:sessions',
+        start_date  : moment(dateRange.this.dateStart).format('YYYY-MM-DD'),
+        end_date    : moment(dateRange.this.dateEnd).format('YYYY-MM-DD'),
+        dimensions  : 'ga:deviceCategory'
+      };
+
+      tasks.push(api.getReport(query));
+
+      angular.forEach (vm.keys.compare, function (item) {
+
+        query = {
+          table_id    : 'ga:' + viewID,
+          metrics     : item.metrics,
+          start_date  : moment(dateRange.this.dateStart).format('YYYY-MM-DD'),
+          end_date    : moment(dateRange.this.dateEnd).format('YYYY-MM-DD'),
+          dimensions  : null
+        };
+
+        tasks.push(api.getReport(query));
+
+        query = {
+          table_id    : 'ga:' + viewID,
+          metrics     : item.metrics,
+          start_date  : moment(dateRange.last.dateStart).format('YYYY-MM-DD'),
+          end_date    : moment(dateRange.last.dateEnd).format('YYYY-MM-DD'),
+          dimensions  : null
+        };
+
+        tasks.push(api.getReport(query));
+
+        query = {
+          table_id    : 'ga:' + viewID,
+          metrics     : item.metrics,
+          start_date  : moment(dateRange.this.dateStart).subtract(1, 'weeks').startOf('week').format('YYYY-MM-DD'),
+          end_date    : moment(dateRange.this.dateEnd).subtract(1, 'weeks').endOf('week').format('YYYY-MM-DD'),
+          dimensions  : null
+        };
+
+        tasks.push(api.getReport(query));
+
+        query = {
+          table_id    : 'ga:' + viewID,
+          metrics     : item.metrics,
+          start_date  : moment(dateRange.this.dateStart).subtract(2, 'weeks').startOf('week').format('YYYY-MM-DD'),
+          end_date    : moment(dateRange.this.dateEnd).subtract(2, 'weeks').endOf('week').format('YYYY-MM-DD'),
+          dimensions  : null
+        };
+
+        tasks.push(api.getReport(query));
+      });
+
+      $q.all(tasks).then (function (response) {
+        // sessions by channel
+        Global.analytics.dashboard.channel  = response[0].data;
+        // sessions by device
+        Global.analytics.dashboard.device   = response[1].data;
+
+        vm.values = { 
+          channel : Global.analytics.dashboard.channel,
+          device  : Global.analytics.dashboard.device,
+        };
+
+        vm.values.compare = [];
+
+        for (var i = 0; i < vm.keys.compare.length; i ++) {
+          vm.values.compare.push ({
+            key : vm.keys.compare[i].label + '_this_year',
+            value : response[2 + 4 * i].data === null ? 0 : +response[2 + 4 * i].data[0][0]
+          });
+          vm.values.compare.push ({
+            key : vm.keys.compare[i].label + '_last_year',
+            value : response[3 + 4 * i].data === null ? 0 : +response[3 + 4 * i].data[0][0]
+          });
+          vm.values.compare.push ({
+            key : vm.keys.compare[i].label + '_this_week',
+            value : response[4 + 4 * i].data === null ? 0 : +response[4 + 4 * i].data[0][0]
+          });
+          vm.values.compare.push ({
+            key : vm.keys.compare[i].label + '_last_week',
+            value : response[5 + 4 * i].data === null ? 0 : +response[5 + 4 * i].data[0][0]
+          });
+        }
+
+        $rootScope.loadingProgress = false;
+        vm.isLoading = false;
+      }, function (error) {
+        console.log(error);
+        $rootScope.loadingProgress = false;
+      });
     }
 
     /**
@@ -113,7 +262,7 @@
       getAllReports (vm.dateRange, vm.selectedCampaign.view_ID);
     }
 
-    function updateOrganicDateRange ($event, showTemplate) {
+    function updateDateRange ($event, showTemplate) {
       $mdDateRangePicker
         .show({targetEvent:$event, model:vm.dateRange.this} )
         .then(function(result){
@@ -131,6 +280,6 @@
         });
     }
 
-    vm.init();
+    init();
   }
 })();
